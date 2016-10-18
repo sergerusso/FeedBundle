@@ -1,0 +1,38 @@
+<div class='viewport' clear-view>
+  <iframe id="viewFrame" ng-src='{{Feeds.getViewFrame().save_url}}'
+          ng-hide='frame_loading || !Feeds.getViewFrame().save_url' view-frame onerror="alert('Failed')"></iframe>
+  <div class='frame_loading' ng-show='frame_loading'>
+    <img src='../../assets/images/loader-large.gif'/>
+
+    <div class='' ng-show='frame_loading_long'>
+      Content is loading too long.<br/>
+      Try to turn on <a href='#/settings/edit/{{Feeds.viewFrame.id}}'>proxy mode</a> for this feed.<br/>
+      <!--<a href>Find the problem</a>-->
+    </div>
+  </div>
+
+  <div class="welcome" ng-show="!frame_loading && !Feeds.viewFrame.id " ng-include="'views/reader/_welcome.html'"></div>
+</div>
+
+<div class='sidebar' disable-select ng-include="'views/reader/_sidebar.html'">
+</div>
+
+<div class='btn-settings dropdown'>
+  <a href class='tools btn btn-default' show_tools data-toggle="dropdown" ng-show='sidebar_expanded'><i class="glyphicon glyphicon-wrench"></i></a>
+  <a href class='btn btn-default toggle_sidebar' ng-hide='sidebar_expanded' toggle-sidebar><i class="glyphicon glyphicon-chevron-left"></i></a>
+
+  <ul class="dropdown-menu" role="menu">
+    <li><a href='#/settings/general'><i class='glyphicon glyphicon-wrench'></i> Settings</a></li>
+    <li><a href toggle-sidebar><i class='glyphicon glyphicon-chevron-right'></i> Hide sidebar</a></li>
+    <!--<li><a href><i class='glyphicon glyphicon-chevron-right'></i> Filters</a></li>-->
+
+    <li><a href ng-click="Settings.set('unread', 0)" ng-show="Settings.unread"><i class='glyphicon glyphicon-eye-close'></i> Hide read
+    </a></li>
+    <li><a href class="" ng-click="Settings.set('unread', 1)" ng-hide="Settings.unread"><i class='glyphicon glyphicon-eye-open'></i>
+      Show read </a></li>
+
+    <li><a href ng-click="Feeds.update()"><i class='glyphicon glyphicon-refresh'></i> Update</a></li>
+    <li><a href ng-click="Feeds.collapse_all()"><i class='glyphicon glyphicon-minus-sign'></i> Collapse all</a></li>
+    <li><a href='#/settings/help/' href><i class=' glyphicon glyphicon-question-sign'></i> Help</a></li>
+  </ul>
+</div>

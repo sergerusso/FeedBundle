@@ -1,0 +1,103 @@
+<div class='wrap'>
+  <div class='folders' folder-list>
+    <div class='inner '>
+      <div class='list'>
+        <div class='folder' ng-repeat='folder in Feeds.get_folders()' ng-class='{selected:folder.id == $parent.Settings.folder}' >
+          <div class='row' ng-hide='$parent.edited_folder == folder'>
+            <div class='col-sm-7 name'ng-click='$parent.Settings.set("folder", folder.id)'>{{folder.name}}</div>
+            <div class='col-sm-3 edit'>
+              <i class='glyphicon glyphicon-pencil' ng-click='$parent.new_folder = folder.name; $parent.edited_folder = folder' ng-hide='folder.system || folder.id == $parent.Settings.folder'> </i>
+              <i class='glyphicon glyphicon-remove' ng-click='Feeds.remove_folder(folder); $parent.new_folder = ""; $parent.edited_folder = false;' ng-hide='folder.system || folder.id == $parent.Settings.folder'></i>&nbsp;
+            </div>
+            <div class='col-sm-2 text-right' >{{$parent.Feeds.unread_in_folder(folder.id)}}</div>
+          </div>
+
+          <div class='new-folder' ng-show='$parent.edited_folder == folder'>
+            <div class='row'>
+              <div class='col-sm-10'>
+                <div class='input_box'>
+                  <input class='form-control' type='text' ng-model='$parent.new_folder' placeholder='Enter new folder name...' />
+                  <i class='glyphicon glyphicon-ok' ng-click='$parent.new_folder = ""; $parent.edited_folder = false;'></i>
+                </div>
+              </div>
+              <div class='col-sm-2' >{{$parent.Feeds.unread_in_folder(folder.id)}}</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+    <div class='title folder row'>
+      <div class='col-sm-10'>
+        <i class='glyphicon glyphicon-folder-open'></i>&nbsp; {{Feeds.get_folder(Settings.folder).name}}
+      </div>
+      <div class="col-sm-2 text-right">{{Feeds.unread_in_folder(Settings.folder)}}</div>
+    </div>
+  </div>
+
+
+  <div class='no_feeds main_ctrls' ng-hide_='Feeds.isset()' ng-hide='Settings.folder == 1'>
+    <div class="btn-group btn-group-sm">
+      <button class='btn btn-dark btn_' onclick='location.hash = "#/settings/new/return" '>Add new source</button>
+      <button class="btn btn-dark btn-small feedback" data-target="#feedbackModal" disqus-modal>Leave feedback</button>
+    </div>
+
+
+  </div>
+
+  <div class='menu' ng-show='Feeds.isset(Settings.folder)'>
+    <div ng-repeat='feed in Feeds.get_feeds(Settings.folder)' ng-hide_='feed.folder != $parent.Settings.folder && $parent.Settings.folder != -1'>  <!-- Feeds.unread(feed.items) == 0 && !Settings.unread || -->
+
+      <div class='title_wrap' ng-class='{collapsed: feed.collapsed}'>
+        <div class='title' ng-click='feed.collapsed = !feed.collapsed'>
+          <i class='glyphicon glyphicon-minus-sign' ng-hide='feed.collapsed'></i>
+          <i class='glyphicon glyphicon-plus-sign' ng-show='feed.collapsed'></i>
+          {{feed.title}}
+        </div>
+
+        <div class="ctrls">
+          <img src='../../assets/images/warning-mini.png' ng-show='feed.error'/>
+          <img src='../../assets/images/loader-mini.gif' ng-show='feed.updating'/>
+            <span class="badge"
+                  ng-class='{"badge-warning": Feeds.unread(feed.items) > 0 }'>{{Feeds.unread(feed.items)}}</span>
+                      <span class='dropdown'>
+                          <span class="badge options" data-toggle="dropdown">
+                              <i class="glyphicon glyphicon-chevron-down"></i>
+                          </span>
+
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href ng-click='Feeds.mark_read(feed.id)' ng-show='Feeds.unread(feed.items) > 0'><i
+                              class='glyphicon glyphicon-eye-open'></i> Mark read</a></li>
+                            <li><a href='#/settings/edit/{{feed.id}}'><i class='glyphicon glyphicon-pencil'></i> Edit</a></li>
+                            <li><a href ng-click='Feeds.remove(feed.id)'><i class='glyphicon glyphicon-remove'></i> Remove</a></li>
+                          </ul>
+                      </span>
+
+        </div>
+      </div>
+
+      <a href=""
+         ng-hide='item.read && !Settings.unread && !Feeds.is_active_item($index, feed)'
+         ng-click='Feeds.setViewFrame(feed.id, $index, item.url)'
+         class='item'
+         ng-class='{active: Feeds.is_active_item($index, feed), read: item.read, full_title:Settings.full_title}'
+         ng-repeat='item in feed.items | visible_news :feed.collapsed'
+         tooltip data-toggle="tooltip" data-placement="left" data-original-title="{{item.title}}">
+        <span>{{item.title}}</span>
+      </a>
+
+      <div class='no_feeds' ng-show='Feeds.unread(feed.items) == 0 && !Settings.unread && !feed.collapsed'>
+        No news<Br/> <a href ng-click="Settings.set('unread', 1)">Show all</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!--<div class='no_feeds' ng-show='Feeds.is_read() && Feeds.isset() && !Settings.unread'>
+      No news :(<Br/> <a href ng-click="Settings.set('unread', 1)">Show all</a>
+  </div>-->
+
+
+</div>

@@ -1,0 +1,57 @@
+
+<h3>Feeds</h3>
+<div class='button_row'>
+  <div class="row">
+
+    <div class='col-sm-2'>
+      <button class='btn btn-default' id="addNewFeed" role="button" ng-click='add_new_feed()'>
+        <i class="glyphicon glyphicon-plus-sign"></i> Add new
+      </button>
+    </div>
+    <div class='col-sm-10 search'>
+
+      <div class="input-group ">
+        <input class="form-control" type="text" ng-model='feed_search' placeholder="Search">
+        <div class="input-group-btn">
+          <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            {{Feeds.get_folder(feeds.folder).name}}
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li ng-repeat='folder in Feeds.get_folders() | available_folders :[1]' ng-class='{active:folder.id == $parent.feeds.folder}' ng-click='$parent.feeds.folder = folder.id'>
+              <a href>{{folder.name}} ({{$parent.Feeds.get_feeds(folder.id).length}})</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered table-condensed" ng-show='(Feeds.get_feeds(feeds.folder) | feed_search :feed_search).length'>
+  <tbody>
+  <tr ng-repeat='feed in Feeds.get_feeds(feeds.folder) | feed_search :feed_search'>
+    <td class='col-sm-10 col-lg-11 title'>{{feed.title}}</td>
+    <td class='col-sm-2 col-lg-1 ctrl text-center'>
+      <div class="btn-group btn-group-xs">
+        <!--<button class="btn btn-default"><i class='glyphicon glyphicon-eye-open'></i></button>-->
+        <button class="btn btn-default" ng-click='edit_feed(feed)'><i class='glyphicon glyphicon-edit'></i></button>
+        <button class="btn btn-default" ng-click='Feeds.remove(feed.id)'><i class='glyphicon glyphicon-remove-sign'></i></button>
+      </div>
+    </td>
+  </tr>
+
+  </tbody>
+</table>
+<table class="table table-striped table-bordered table-condensed" ng-hide='(Feeds.get_feeds(feeds.folder) | feed_search :feed_search).length'>
+  <tbody>
+  <tr >
+    <td class='no_feeds'>
+
+      <div >
+        {{(feed_search && '"'+feed_search + '" is not found' || 'No items') + ' in "'+ Feeds.get_folder(feeds.folder).name + '"'}}
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>

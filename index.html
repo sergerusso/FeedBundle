@@ -1,0 +1,64 @@
+<!-- Developed by Serge P
+https://github.com/sergerusso -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FeedBundle is the most simple and beautiful RSS news reader.</title>
+  <meta name="description" content="Welcome to the most simple and beautiful news reader. Just add your feeds and enjoy!" />
+  <link href="assets/images/favicon.png" rel="shortcut icon">
+
+  <link href="assets/css/twitter/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/twitter/bootstrap-theme.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/application.less" rel="stylesheet/less" type="text/css">
+  <link href="assets/css/reader.less" rel="stylesheet/less" type="text/css">
+  <link href="assets/css/reader_page_welcome.less" rel="stylesheet/less" type="text/css">
+  <link href="assets/css/settings.less" rel="stylesheet/less" type="text/css">
+
+  <link href="/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+  <script src="assets/js/lib/jquery.min.js"></script>
+  <script src="assets/js/lib/jquery-ui.js"></script>
+  <script src="assets/js/lib/underscore.js"></script>
+  <script src="assets/js/lib/angular.1.0.5.min.js"></script>
+  <script src="assets/js/lib/less.min.js"></script>
+  <script src="assets/js/lib/coffeescript.js"></script>
+  <script src="assets/js/lib/bootstrap.min.js"></script>
+
+  <script type="text/coffeescript" src="assets/js/config.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/directives.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/filters.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/ctrl_reader.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/ctrl_settings.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/service_feeds.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/service_settings.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/service_storage.coffee"></script>
+
+  <script type="text/coffeescript">
+    angular.bootstrap document, ['feedBundle']
+  </script>
+
+
+</head>
+<body>
+<!--
+<style type="text/css">
+  #loading-screen{position: absolute;top:0;bottom:0;right:0;left:0;background: #EEE;z-index:999; }
+  #loading-screen .center-block{ width: 73px;height: 75px;margin: -37px 0 0 -37px ;top: 50%;position: absolute;left: 50%;}
+  #loading-screen .center-block img{ width: 100%;height: 100%; }
+</style>
+<div id="loading-screen">
+  <div class="center-block">
+    <img alt="" src="data:image/gif;base64,<%= File.open(Rails.root + 'app/assets/images/loader-large.gif', 'r') { |f| Base64.encode64(f.read).html_safe } %>" />  </div>
+</div>-->
+
+
+<div class='page ng' hotkeys>
+  <div ng-view>
+    <a href="/page/welcome" class='hide'>Welcome</a>
+  </div>
+</div>
+
+
+</body>
+</html>

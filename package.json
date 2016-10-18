@@ -1,0 +1,13 @@
+{
+  "name": "FeedBundle",
+  "version": "0.1",
+  "description": "RSS news feed reader",
+  "main": "index.html",
+  "author": "Serge Russo (contact@sergerusso.com)",
+  "window": {
+    "frame": true,
+    "toolbar": true,
+    "width":1080,
+    "height": 640
+  }
+}

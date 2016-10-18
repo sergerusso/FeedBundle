@@ -1,0 +1,140 @@
+
+<div class='viewport settings' ng-switch on="view" >
+  <div class='feeds' ng-switch-default ng-include="'views/settings/_feeds.html'"></div>
+  <div class='general' ng-switch-when="general" ng-include="'views/settings/_general.html'"></div>
+  <!-- <div class='feedback'  ng-switch-when="feedback"><% render 'pages/feedback' %></div> -->
+  <div class='import'  ng-switch-when="export_import"  ng-include="'views/settings/_export.html'"></div>
+  <div class='help' ng-switch-when="help"  ng-include="'views/settings/_help.html'"></div>
+</div>
+
+<div class='sidebar settings'>
+  <div class='wrap'>
+    <div class='title_wrap' ng-class="menu_class('feeds')"><a href='#/settings/' class='title'><i class="glyphicon glyphicon-list-alt"></i> Feeds</a></div>
+    <div class='title_wrap' ng-class="menu_class('general')"><a href='#/settings/general'  class='title'><i class="glyphicon glyphicon-wrench"></i> Settings</a></div>
+    <div class='title_wrap' ng-class="menu_class('export_import')"><a href='#/settings/export_import' class='title'><i class="glyphicon glyphicon-retweet"></i> Export/import</a></div>
+    <!-- <div class='title_wrap' ng-class="menu_class('feedback')"><a href='#/settings/feedback' class='title'><i class="glyphicon glyphicon-envelope"></i> Send feedback</a></div> -->
+    <!--<div class='title_wrap' ng-class="menu_class('changelog')"><a href='#/settings/changelog' class='title'><i class="glyphicon glyphicon-flag"></i> News</a></div>-->
+    <div class='title_wrap' ng-class="menu_class('help')"><a href='#/settings/help' class='title'><i class="glyphicon glyphicon-question-sign"></i> Help</a></div>
+  </div>
+</div>
+<div class='btn-settings dropdown active'>
+  <a class='btn btn-default' href='#/reader'><i class="glyphicon glyphicon-chevron-left"></i></a>
+</div>
+
+
+<!-- Modal windows -->
+
+
+<div class="modal fade" id="feedModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+
+      <div ng-switch on="modal.feed.step">
+        <!-- add feed -->
+        <div ng-switch-default>
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Add Feed</h4>
+          </div>
+
+          <div class="modal-body">
+
+            Enter feed or site url:<br/> <input class='form-control' name="feed_url" ng-model='modal.feed.new_feed_url' type="text"/>
+
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-primary" ng-click='process_new_feed()'>{{ajax && 'Loading...' || 'Next'}}</button>
+          </div>
+        </div>
+        <!-- edit feed -->
+        <div ng-switch-when="edit">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Edit Feed</h4>
+          </div>
+          <div class="modal-body">
+            <p>
+              Name: <input class='form-control' ng-model="modal.feed.item.title" type="text"/><br/>
+              Url: <input class='form-control' ng-model="modal.feed.item.url" type="text"/><br/>
+              <!--<label class="checkbox">
+                <input type="checkbox" ng-model="modal.feed.item.proxy"> Use proxy (<a href='https://developer.mozilla.org/en-US/docs/HTTP/X-Frame-Options' target='_blank' tooltip  data-placement="bottom"  data-original-title="It is for sites with no frame-browsing support (X-Frame-Options: SAMEORIGIN)">?</a>)
+              </label>-->
+
+            <div class='folders'>
+              <div class='title'><i class='glyphicon glyphicon-folder-open'></i> Folder: {{Feeds.get_folder(modal.feed.item.folder).name}}</div>
+              <div class='inner '>
+                <div class='list'>
+                  <div class='folder row' ng-repeat='folder in Feeds.get_folders() | available_folders'>
+                    <div class='col-sm-10 name' ng-class='{selected: folder.id == $parent.modal.feed.item.folder}' ng-click='$parent.Settings.set("folder", folder.id); $parent.modal.feed.item.folder = folder.id;'>{{folder.name}}</div>
+                    <div class='col-sm-2 text-right' ng-hide='folder.system'>
+                      <i class='glyphicon glyphicon-pencil edit' ng-click='$parent.modal.new_folder = folder.name; $parent.modal.edited_folder = folder'> </i>
+                      <i class='glyphicon glyphicon-remove remove' ng-click='Feeds.remove_folder(folder); $parent.modal.new_folder = ""; $parent.modal.edited_folder = false;'></i>
+                    </div>
+                  </div>
+                </div>
+                <div class='new-folder '>
+                  <input class='form-control' type='text' ng-model='modal.new_folder' placeholder='Enter new folder name...' />
+                  <i class='glyphicon glyphicon-ok' ng-click='modal.new_folder = ""; modal.edited_folder = false;'></i>
+                </div>
+
+
+              </div>
+            </div>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true" ng-click='Feeds.remove(modal.feed.item.id)'>Delete</button>
+            <button class="btn btn-primary" data-dismiss="modal" >Close</button>
+          </div>
+        </div>
+        <!-- show feed -->
+        <div ng-switch-when="error">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Error</h4>
+          </div>
+          <div class="modal-body">
+            <p>
+              Sorry, we cannot parse this feed.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal fade" id="opmlModal" tabindex="-1" role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Import from .opml file</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+        <div ng-repeat='feed in io.opml.result'>
+
+          <h4 ng-hide='feed.outline.type'>{{feed.outline.title}}</h4>
+
+          <div ng-show='feed.outline.type'>
+            <button class='btn btn-xs'>Import {{feed.outline.title}}</button>
+
+          </div>
+        </div>
+        </p>      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
