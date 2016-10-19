@@ -27,7 +27,7 @@ angular
   .directive('viewFrame', [()->
     (scope, elm, attrs)->
 
-      loading_limit = 50000
+      loading_limit = 30000
 
       attrs.$observe 'src', ->
         clearInterval window.frameLoaderInsperctor
@@ -50,6 +50,10 @@ angular
         scope.frame_loading = false
         scope.$apply()
   ])
+  .directive('ngAutofocus', [()->
+    (scope, elm, attrs)->
+      elm.focus()
+  ])
   .directive('disableSelect', ['$location', ($location)->
     (scope, elm, attrs)->
 
@@ -68,8 +72,9 @@ angular
           false
 
   ])
-  .directive('hotkeys', ['Settings', 'Feeds', (Settings, Feeds)->
+  .directive('hotkeys', ['Settings', (Settings)->
     (scope, elm, attrs)->
+      #todo fix
       keyCodes =
         72: 'h'
         77: 'm'
@@ -82,7 +87,7 @@ angular
 
         switch action
           when 'h' then Settings.set('unread', !Settings.unread) #read items
-          when 'm' then Feeds.collapse_all() #collapse items
+          when 'm' then collapseAll() #collapse items #todo check
           when 's' then $(".toggle_sidebar").trigger('click') #sidebar
 
         e.preventDefault()

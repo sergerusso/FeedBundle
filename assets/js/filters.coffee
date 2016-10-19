@@ -9,18 +9,11 @@ angular
       _.filter folders, (i)-> without.indexOf(i.id) == -1
 
   ])
-  .filter('feed_search', [()->
-    (feeds, name = "")->
-      name = name.toLowerCase()
-      _.filter feeds, (i)-> i.title.toLowerCase().indexOf(name) > -1
-
-  ])
   .filter 'visible_news', [()->
-    (feeds, collapsed = false)->
+    (feeds, expanded = false)->
 
       result = []
-      $.each feeds, ->
-        result.push @ unless collapsed
+      $.each feeds, -> result.push @ if expanded
 
       result
 

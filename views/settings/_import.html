@@ -1,0 +1,49 @@
+<div ng-controller="settingsImportCtrl">
+
+  <h3>Export/import</h3>
+  <div class='opml'>
+    <h4></h4>
+    <div class='upload' ng-hide='result'>
+      <label for='opml_upload'>
+        <span class='btn btn-default btn-sm'>Import from .OPML</span>
+      </label>
+      <label>
+        <span class='btn btn-default btn-sm' ng-click="export()">Export to .OPML</span>
+      </label>
+
+      <form method="post" style='visibility:hidden'>
+        <input type='file' name='opml_file' id='opml_upload' onchange="angular.element(this).scope().importFile(this)" />
+      </form>
+    </div>
+
+    <div ng-show='result'>
+      <div class='opml_list' ng-repeat='(key, value) in result'>
+        <h5>{{key}}</h5>
+        <table class="table">
+
+          <tr ng-repeat='feed in value' ng-class='{exist: Feeds.exists(feed.url)}'>
+            <td>
+              <div class="input-group">
+                      <span class="input-group-addon" ng-click='feed.checked = !feed.checked'>
+                        <input type='checkbox'
+                               ng-init = "feed.checked = !Feeds.exists(feed.url)"
+                               ng-model ="feed.checked"
+                               ng-click='feed.checked = !feed.checked'
+                        />
+                      </span>
+                <input type='text' ng-model='feed.title' class='form-control'/>
+              </div><!-- /input-group -->
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+      <div class="text-right">
+        <button class='btn btn-default' ng-click='result = null'>Cancel</button>
+        <button class='btn btn-primary' ng-click='importResult()'>Import</button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -2,20 +2,20 @@
 # https://github.com/sergerusso
 
 angular
-  .module( 'feedBundle', ['feedBundle.directives', 'filters', 'feeds', 'storage', 'settings']) #'feedsBundle.filters'
-  .config( ($routeProvider, $compileProvider)->
+  .module( 'feedBundle', ['feedBundle.directives', 'filters']) #'feedsBundle.filters'
+  .config ($routeProvider, $compileProvider)->
 
     $routeProvider.when('/reader', {templateUrl: 'views/reader/index.html', controller: readerCtrl})
 
-    $routeProvider.when('/settings/', {templateUrl: 'views/settings/index.html', controller: settingsCtrl})
-    $routeProvider.when('/settings/:action', {templateUrl: 'views/settings/index.html', controller: settingsCtrl})
-    $routeProvider.when('/settings/:action/:sub', {templateUrl: 'views/settings/index.html', controller: settingsCtrl})
+    $routeProvider.when('/settings/', {templateUrl: 'views/settings/index.html', controller: settingsRootCtrl})
+    $routeProvider.when('/settings/:action', {templateUrl: 'views/settings/index.html', controller: settingsRootCtrl})
+    $routeProvider.when('/settings/:action/:sub', {templateUrl: 'views/settings/index.html', controller: settingsRootCtrl})
     $routeProvider.otherwise({redirectTo: '/reader'})
 
     $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 
-  )
-  .run( ['Feeds','Storage', 'Settings', '$timeout', (Feeds, Storage, Settings, $timeout)->
+
+  .run (Feeds, Folders, Settings, $timeout, $rootScope, $q)->
 
     updateTimer = ()->
       $timeout ()->
@@ -25,7 +25,12 @@ angular
       , 1000*60* Settings.update_each
     do updateTimer
 
-    Feeds.update()
 
+    $rootScope.Feeds = Feeds
+    $rootScope.Folders = Folders
 
-  ])
+    deferred = $q.defer()
+    $rootScope.loadDefer = deferred.promise
+
+    Promise.all([Feeds.get(), Folders.get()]).then deferred.resolve()
+

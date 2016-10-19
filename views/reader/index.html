@@ -1,17 +1,19 @@
 <div class='viewport' clear-view>
-  <iframe id="viewFrame" ng-src='{{Feeds.getViewFrame().save_url}}'
-          ng-hide='frame_loading || !Feeds.getViewFrame().save_url' view-frame onerror="alert('Failed')"></iframe>
+  <iframe id="viewFrame" ng-src='{{feedItem.url}}'
+          ng-hide='frame_loading || !feedItem.url' view-frame></iframe>
   <div class='frame_loading' ng-show='frame_loading'>
     <img src='../../assets/images/loader-large.gif'/>
 
     <div class='' ng-show='frame_loading_long'>
-      Content is loading too long.<br/>
-      Try to turn on <a href='#/settings/edit/{{Feeds.viewFrame.id}}'>proxy mode</a> for this feed.<br/>
+      Something went wrong.<br/>
+      <!-- <a href="#">Reload</a> TODO reload -->
+
+      <!--Try to turn on <a href='#/settings/edit/{{Feeds.viewFrame.id}}'>proxy mode</a> for this feed.<br/>-->
       <!--<a href>Find the problem</a>-->
     </div>
   </div>
 
-  <div class="welcome" ng-show="!frame_loading && !Feeds.viewFrame.id " ng-include="'views/reader/_welcome.html'"></div>
+  <div class="welcome" ng-show="!frame_loading && !feedItem " ng-include="'views/reader/_welcome.html'"></div>
 </div>
 
 <div class='sidebar' disable-select ng-include="'views/reader/_sidebar.html'">
@@ -32,7 +34,7 @@
       Show read </a></li>
 
     <li><a href ng-click="Feeds.update()"><i class='glyphicon glyphicon-refresh'></i> Update</a></li>
-    <li><a href ng-click="Feeds.collapse_all()"><i class='glyphicon glyphicon-minus-sign'></i> Collapse all</a></li>
+    <li><a href ng-click="collapseAll()"><i class='glyphicon glyphicon-minus-sign'></i> Collapse all</a></li>
     <li><a href='#/settings/help/' href><i class=' glyphicon glyphicon-question-sign'></i> Help</a></li>
   </ul>
 </div>

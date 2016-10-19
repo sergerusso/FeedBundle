@@ -16,23 +16,34 @@ https://github.com/sergerusso -->
 
   <link href="/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-
   <script src="assets/js/lib/jquery.min.js"></script>
-  <script src="assets/js/lib/jquery-ui.js"></script>
   <script src="assets/js/lib/underscore.js"></script>
   <script src="assets/js/lib/angular.1.0.5.min.js"></script>
   <script src="assets/js/lib/less.min.js"></script>
   <script src="assets/js/lib/coffeescript.js"></script>
   <script src="assets/js/lib/bootstrap.min.js"></script>
+  <script src="assets/js/lib/pouchdb-6.0.7.min.js"></script>
+  <script src="assets/js/lib/pouchdb.upsert.min.js"></script>
 
   <script type="text/coffeescript" src="assets/js/config.coffee"></script>
   <script type="text/coffeescript" src="assets/js/directives.coffee"></script>
   <script type="text/coffeescript" src="assets/js/filters.coffee"></script>
-  <script type="text/coffeescript" src="assets/js/ctrl_reader.coffee"></script>
-  <script type="text/coffeescript" src="assets/js/ctrl_settings.coffee"></script>
-  <script type="text/coffeescript" src="assets/js/service_feeds.coffee"></script>
-  <script type="text/coffeescript" src="assets/js/service_settings.coffee"></script>
-  <script type="text/coffeescript" src="assets/js/service_storage.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/ctrl/reader.coffee"></script>
+
+  <script type="text/coffeescript" src="assets/js/ctrl/settings/root.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/ctrl/settings/feeds.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/ctrl/settings/import.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/ctrl/settings/settings.coffee"></script>
+
+  <script type="text/coffeescript" src="assets/js/db.coffee"></script>
+
+  <script type="text/coffeescript" src="assets/js/model/settings.coffee"></script>
+
+  <script type="text/coffeescript" src="assets/js/model/folders.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/model/folder.coffee"></script>
+
+  <script type="text/coffeescript" src="assets/js/model/feeds.coffee"></script>
+  <script type="text/coffeescript" src="assets/js/model/feed.coffee"></script>
 
   <script type="text/coffeescript">
     angular.bootstrap document, ['feedBundle']
