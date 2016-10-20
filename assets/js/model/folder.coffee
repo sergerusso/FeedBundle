@@ -19,7 +19,7 @@ angular.module('feedBundle').factory 'Folder', (db, Feeds)->
 
     getFeeds: ->
 
-      return Feeds.items if @id = 'all'
+      return Feeds.items if @id is 'all'
       Feeds.items.filter (feed)=> feed.folderId == @id
 
     setName: (name)->

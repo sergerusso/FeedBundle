@@ -74,7 +74,6 @@ angular
   ])
   .directive('hotkeys', ['Settings', (Settings)->
     (scope, elm, attrs)->
-      #todo fix
       keyCodes =
         72: 'h'
         77: 'm'

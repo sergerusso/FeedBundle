@@ -9,7 +9,6 @@
         </button>
       </div>
       <div class='col-sm-10 search'>
-        <!-- todo fix outlined border -->
         <div class="input-group ">
           <input class="form-control" type="text" ng-model='search' placeholder="Search">
           <div class="input-group-btn">
@@ -106,7 +105,7 @@
                 <div class='title'><i class='glyphicon glyphicon-folder-open'></i> Folder: {{Folders.getById(modal.feed.item._folderId).name}}</div>
                 <div class='inner '>
                   <div class='list'>
-                    <div class='folder row' ng-repeat='folder in Folders.items'>
+                    <div class='folder row' ng-repeat='folder in Folders.items' ng-hide="folder.isSystem() && folder.id != 'unsorted'">
                       <div class='col-sm-10 name' ng-class='{selected: folder.id == modal.feed.item._folderId}' ng-click='modal.feed.item._folderId = folder.id'>{{folder.name}}</div>
                       <div class='col-sm-2 text-right' ng-hide='folder.isSystem()'>
                         <i class='glyphicon glyphicon-pencil edit' ng-click='editFolder(folder)'> </i>

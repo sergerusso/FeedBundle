@@ -48,12 +48,12 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
         doc
       .catch (err)->console.log 'Error at feed.setUrl', err
 
-    setFolder: (@folderId)->
+    setFolderId: (@folderId)->
 
       db.feeds.upsert @id, (doc)=>
         doc.folderId = @folderId
         doc
-      .catch (err)->console.log 'Error at feed.setFolder', err
+      .catch (err)->console.log 'Error at feed.setFolderId', err
 
     fetch: ()->
       
@@ -62,7 +62,7 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
       delete @error
 
       @getXML (resp)=>
-        urls = (v.url for k, v of @items)
+        titles = (v.title for k, v of @items)
         items = @items.slice(0)
 
         if resp.items?.length
@@ -73,7 +73,7 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
             if item.url.indexOf('http') != 0
               item.url = @url.replace(/^(https?:\/\/.+?)\/.+$/, '\$1') + item.url
 
-            items.unshift({title: item.title, url: item.url}) if urls.indexOf(item.url) == -1
+            items.unshift({title: item.title, url: item.url}) if titles.indexOf(item.title) == -1
 
           @setItems items
 

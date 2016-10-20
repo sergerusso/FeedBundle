@@ -5,8 +5,9 @@ angular.module('feedBundle').factory 'db', ()->
   feeds: new PouchDB('FeedBundle_feeds', auto_compaction: true)
 
   reset: ->
-    @feeds.destroy()
-    @folders.destroy()
+    Promise.all([@feeds.destroy(), @folders.destroy()])
+
+
 
 
 

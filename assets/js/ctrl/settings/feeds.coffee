@@ -1,6 +1,6 @@
 # Created by Serge P <contact@sergerusso.com> on 10/19/16.
 
-angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Folders, $routeParams, $location, Settings, $rootScope )->
+angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Feed, Folders, $routeParams, $location, Settings, $rootScope )->
 
   $scope.modal =
     feed:
@@ -41,6 +41,7 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fol
 
   $scope.addFeed = (e)->
     url = $scope.modal.feed.new_feed_url
+
     return if !url or $scope.modal.processing
     #TODO check for dups
 
@@ -50,7 +51,7 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fol
     callback = (data)->
       delete  $scope.modal.processing
 
-      console.log data
+      #console.log data
       if data.error && data.resp
         #try to find url
         $html = $("<div></div>").append($.parseHTML(data.resp))
@@ -89,7 +90,7 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fol
     item = $scope.modal.feed.item
     item.setTitle item._title
     item.setUrl item._url
-    item.setFolder item._folderId
+    item.setFolderId item._folderId
 
     Settings.set("folder", item._folderId);
 
@@ -106,7 +107,7 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fol
       if $scope.editingFolder.id
         $scope.editingFolder.setName $scope.editingFolder._name
       else
-        #select it
+        #todo select it
         Folders.add $scope.editingFolder._name
         .then -> $scope.$apply()
 

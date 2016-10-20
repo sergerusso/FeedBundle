@@ -40,7 +40,7 @@ angular.module('feedBundle').controller 'settingsImportCtrl', ($scope, Feeds, Fo
           Feeds.insert
             url:@url
             title: @title
-            folder: folder.id
+            folderId: folder.id
           .fetch()
 
     $scope.result = null

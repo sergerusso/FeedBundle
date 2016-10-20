@@ -2,8 +2,6 @@
 
 angular.module('feedBundle').service 'Folders', (Folder, db)->
 
-  #todo remove All feed and bookmars folders?
-
   @sys_folders = [
     new Folder(_id:"all", name:'All feeds')
     new Folder(_id:"unsorted", name:'Unsorted')
@@ -40,8 +38,7 @@ angular.module('feedBundle').service 'Folders', (Folder, db)->
   @remove = (folder)->
     return unless confirm('Are you sure?')
 
-    $.each folder.getFeeds(), ->
-      @setFolder null
+    folder.getFeeds().forEach (feed)-> feed.setFolderId 'unsorted'
 
     @items = _.without(@items, folder)
 

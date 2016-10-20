@@ -13,9 +13,9 @@ angular.module('feedBundle').controller 'settingsCtrl', ($scope, Feeds, Folders,
 
   $scope.deleteAll = ->
     return unless confirm('Are you sure?')
-    db.reset()
     Settings.reset true
-    location.reload()
+    db.reset().then ->
+      location.reload()
 
 
 
