@@ -1,6 +1,6 @@
 # Created by Serge P <contact@sergerusso.com> on 10/18/16.
 
-angular.module('feedBundle').factory 'Folder', (Settings, db, Feeds)->
+angular.module('feedBundle').factory 'Folder', (db, Feeds)->
 
   class Folder
 
@@ -17,22 +17,17 @@ angular.module('feedBundle').factory 'Folder', (Settings, db, Feeds)->
           count++ unless @read
       count
 
-    isSelected: ->
-      @id == Settings.folder #TODO !
-
     getFeeds: ->
 
-      _.filter Feeds.items, (feed)=>
-        feed.folder == @id || @id == "all" #todo remove folder
-
-    select: ->
-      Settings.set("folder", @id)
+      return Feeds.items if @id = 'all'
+      Feeds.items.filter (feed)=> feed.folderId == @id
 
     setName: (name)->
       @name = name
-      db.folders.get(@id).then (doc)->
+      db.folders.upsert @id, (doc)=>
         doc.name = name
-        db.folders.put(doc).catch (err)->console.log 'Error at folders.setName', err
+        doc
+      .catch (err)->console.log 'Error at folder.setName', err
         
     isSystem: -> !parseInt(@id)
 

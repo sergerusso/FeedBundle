@@ -32,5 +32,6 @@ angular
     deferred = $q.defer()
     $rootScope.loadDefer = deferred.promise
 
-    Promise.all([Feeds.get(), Folders.get()]).then deferred.resolve()
+    Promise.all([Feeds.get(), Folders.get()]).then ->
+      deferred.resolve()
 

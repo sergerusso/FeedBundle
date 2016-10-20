@@ -1,13 +1,13 @@
 # Created by Serge P <serge.rsb@gmail.com> on 10/18/16.
 
-angular.module('feedBundle').service 'Folders', ($rootScope, Folder, db, Settings)->
+angular.module('feedBundle').service 'Folders', (Folder, db)->
 
-  #todo remove All feed and bookmars folders
+  #todo remove All feed and bookmars folders?
 
   @sys_folders = [
     new Folder(_id:"all", name:'All feeds')
     new Folder(_id:"unsorted", name:'Unsorted')
-    new Folder(_id:"bookmarks", name:'Bookmarks')  #todo implement
+    new Folder(_id:"bookmarks", name:'Bookmarks')  #todo implement bookmarks
   ]
 
 
@@ -35,7 +35,6 @@ angular.module('feedBundle').service 'Folders', ($rootScope, Folder, db, Setting
       folder = new Folder json
 
       @items.push folder
-      $rootScope.$apply()
       folder
 
   @remove = (folder)->
@@ -44,17 +43,18 @@ angular.module('feedBundle').service 'Folders', ($rootScope, Folder, db, Setting
     $.each folder.getFeeds(), ->
       @setFolder null
 
+    @items = _.without(@items, folder)
+
     db.folders.get(folder.id).then (doc)=>
       db.folders.remove(doc)
       @get()
+
 
   @get = ->
     db.folders.allDocs(include_docs:true).then (result)=>
       @items = @sys_folders.slice(0)
       result.rows.forEach (item)=>
         @items.push new Folder item.doc
-
-      $rootScope.$apply()
       @items
 
   @getById = (id)->
@@ -62,7 +62,5 @@ angular.module('feedBundle').service 'Folders', ($rootScope, Folder, db, Setting
 
   @getByName = (name)->
     @items.find (folder)-> folder.name == name
-
-  @getSelected = -> @getById Settings.folder
 
 

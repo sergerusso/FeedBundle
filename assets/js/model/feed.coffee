@@ -7,7 +7,7 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
       @title = data.title
       @url = data.url
       @id = data._id
-      @folder = data.folder or "unsorted"
+      @folderId = data.folderId or "unsorted"
       @feedSize = 300 #todo feedSize
       @items = data.items or []
 
@@ -27,15 +27,15 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
       slice_to = if items.length > @feedSize then items.length else @feedSize
       @items = items.slice(0, slice_to)
 
-      #TODO get rid of $$hashKey
       db.feeds.upsert @id, (doc)=>
-        doc.items = @items
+        doc.items = @items.map (item)->
+          _.omit(_.clone(item), '$$hashKey')
         doc
       .catch (err)->console.log 'Error at feed.setItems', err
 
 
     setTitle: (@title)->
-      #todo rewrite others as well
+
       db.feeds.upsert @id, (doc)=>
         doc.title = @title
         doc
@@ -48,10 +48,10 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
         doc
       .catch (err)->console.log 'Error at feed.setUrl', err
 
-    setFolder: (@folder)-> #todo rename to fid?
+    setFolder: (@folderId)->
 
       db.feeds.upsert @id, (doc)=>
-        doc.folder = @folder
+        doc.folderId = @folderId
         doc
       .catch (err)->console.log 'Error at feed.setFolder', err
 

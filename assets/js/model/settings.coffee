@@ -32,8 +32,6 @@ angular.module('feedBundle')
   @
 
 
-
-
 ])
 .factory('Storage', ['$rootScope', ($rootScope)->
 

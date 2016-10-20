@@ -37,7 +37,7 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fol
   preserveFeedData = (feed)->
     feed._title = feed.title
     feed._url = feed.url
-    feed._folder = feed.folder
+    feed._folderId = feed.folderId
 
   $scope.addFeed = (e)->
     url = $scope.modal.feed.new_feed_url
@@ -89,9 +89,9 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fol
     item = $scope.modal.feed.item
     item.setTitle item._title
     item.setUrl item._url
-    item.setFolder item._folder
+    item.setFolder item._folderId
 
-    Settings.set("folder", item._folder);
+    Settings.set("folder", item._folderId);
 
 
   $scope.editingFolder = {}
@@ -106,12 +106,14 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fol
       if $scope.editingFolder.id
         $scope.editingFolder.setName $scope.editingFolder._name
       else
+        #select it
         Folders.add $scope.editingFolder._name
+        .then -> $scope.$apply()
 
     $scope.editingFolder = {}
     
   $scope.removeFolder = (folder)->
-    $scope.modal.feed.item._folder = 'unsorted' if $scope.modal.feed.item._folder == folder.id
+    $scope.modal.feed.item._folderId = 'unsorted' if $scope.modal.feed.item._folderId == folder.id
     Folders.remove(folder)
 
 

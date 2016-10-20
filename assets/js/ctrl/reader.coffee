@@ -10,6 +10,15 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
 
   $scope.feedItem = null
 
+  $scope.loadDefer.then ->
+    $scope.selectedFolder = Folders.getById Settings.folder
+
+  $scope.getFolderClass = (folder)->
+    selected: $scope.selectedFolder is folder
+
+  $scope.selectFolder = (folder)->
+    $scope.selectedFolder = folder
+    Settings.set("folder", folder.id)
 
   $scope.editFolder = (folder)->
     folder.newName = folder.name
@@ -27,10 +36,12 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
   $scope.isActiveFeedItem = (item)->
     $scope.feedItem == item
 
-
   $scope.collapseAll = ->
     $.each Feeds.items, ()->
       delete @expanded
+      
+
+    
 
 
 

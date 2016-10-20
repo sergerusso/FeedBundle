@@ -1,29 +1,27 @@
 # Created by Serge P <contact@sergerusso.com> on 10/18/16.
 
-angular.module('feedBundle').service 'Feeds', ($rootScope, Feed, db)->
+angular.module('feedBundle').service 'Feeds', (Feed, db)->
   self = @
 
-  @items = {}  #Todo to array
+  @items = []
 
   @clear = ->
 
   @update = ->
-    $.each @items, ()-> @fetch()
+    $.each @items, -> @fetch()
 
 
   @get = (noUpdate)->
 
     db.feeds.allDocs(include_docs:true).then (result)=>
-      @items = {}
+      @items = []
       result.rows.forEach (item)=>
-        @items[item.doc._id] = new Feed item.doc
+        @items.push new Feed item.doc
 
-      $rootScope.$apply()
       @update() unless noUpdate
       @items
 
-  @getById = (id)->
-    _.find @items, (item)-> item.id is id
+  @getById = (id)-> _.find @items, (item)-> item.id is id
 
   @insert = (data)->
     id = data.url.match(/:\/\/([^\/]+)/i)
@@ -38,21 +36,23 @@ angular.module('feedBundle').service 'Feeds', ($rootScope, Feed, db)->
 
     json.items = data.items if _.isArray(data.items)
 
-    json.folder = data.folder if data.folder
+    json.folderId = data.folderId if data.folderId
 
     db.feeds.put(json).catch (err)->console.log 'Error at feeds.insert', err
 
     feed = new Feed json
-    @items[feed.id] = feed
+    @items.push feed
 
     feed
 
   @remove = (feed)->
-    return unless confirm('Are you sure?')
+
+    return unless confirm('Are you sure?') #todo move out confirm
+
+    @items = _.without @items, feed
 
     db.feeds.get(feed.id).then (doc)=>
       db.feeds.remove(doc)
-      @get true
 
   @exists = (url)->
 

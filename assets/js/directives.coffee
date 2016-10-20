@@ -87,7 +87,7 @@ angular
 
         switch action
           when 'h' then Settings.set('unread', !Settings.unread) #read items
-          when 'm' then collapseAll() #collapse items #todo check
+          when 'm' then scope.collapseAll() #collapse items
           when 's' then $(".toggle_sidebar").trigger('click') #sidebar
 
         e.preventDefault()
@@ -160,3 +160,10 @@ angular
           console.log "## DOM rendering list took: " + ((new Date()).getTime() - window.start_date) + " ms"
 
   ]
+
+  .directive "browserLink", ->
+    (scope, elm, attrs)->
+      elm.attr('target', '_blank')
+      elm.on 'click', (e)->
+        require('nw.gui').Shell.openExternal( this.href )
+        e.preventDefault()

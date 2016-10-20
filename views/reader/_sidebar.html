@@ -2,12 +2,12 @@
   <div class='folders' folder-list> <!-- todo rewrite folder-list directive -->
     <div class='inner '>
       <div class='list'>
-        <div class='folder' ng-repeat='folder in Folders.items' ng-class='{selected:folder.isSelected()}' >
+        <div class='folder' ng-repeat='folder in Folders.items' ng-class='getFolderClass(folder)' >
           <div class='row' ng-hide='folder.editing'>
-            <div class='col-sm-7 name' ng-click='folder.select()'>{{folder.name}}</div>
+            <div class='col-sm-7 name' ng-click='selectFolder(folder)'>{{folder.name}}</div>
             <div class='col-sm-3 edit'>
               <!-- todo allow to edit active -->
-              <span ng-hide='folder.isSystem() || folder.id == Settings.folder'>
+              <span ng-hide='folder.isSystem() || folder == selectedFolder'>
                 <i class='glyphicon glyphicon-pencil' ng-click='editFolder(folder)' ></i>
                 <i class='glyphicon glyphicon-remove' ng-click='Folders.remove(folder)'></i>
               </span> &nbsp;
@@ -34,22 +34,22 @@
 
     <div class='title folder row'>
       <div class='col-sm-10'>
-        <i class='glyphicon glyphicon-folder-open'></i>&nbsp; {{Folders.getSelected().name}}
+        <i class='glyphicon glyphicon-folder-open'></i>&nbsp; {{selectedFolder.name}}
       </div>
-      <div class="col-sm-2 text-right">{{Folders.getSelected().unreadCount()}}</div>
+      <div class="col-sm-2 text-right">{{selectedFolder.unreadCount()}}</div>
     </div>
   </div>
 
-  <div class='no_feeds main_ctrls' ng-hide='Folders.getSelected().isBookmarks()'>
+  <div class='no_feeds main_ctrls' ng-hide='selectedFolder.isBookmarks()'>
     <div class="btn-group btn-group-sm">
       <button class='btn btn-dark btn_' onclick='location.hash = "#/settings/new/return" '>Add new source</button>
-      <a class="btn btn-dark btn-small feedback" href="https://github.com/sergerusso/FeedBundle/issues">Report issue</a>
+      <a class="btn btn-dark btn-small feedback" href="https://github.com/sergerusso/FeedBundle/issues" browser-link>Report issue</a>
     </div>
 
   </div>
 
   <div class='menu'>
-    <div ng-repeat='feed in Folders.getSelected().getFeeds()'>  <!-- Feeds.unread(feed.items) == 0 && !Settings.unread || -->
+    <div ng-repeat='feed in selectedFolder.getFeeds()'>  <!-- Feeds.unread(feed.items) == 0 && !Settings.unread || -->
 
       <div class='title_wrap' ng-class='{expanded: feed.expanded}'>
         <div class='title' ng-click='feed.expanded = !feed.expanded'>
