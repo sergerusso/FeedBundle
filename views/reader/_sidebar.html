@@ -52,7 +52,7 @@
     <div ng-repeat='feed in selectedFolder.getFeeds()'>  <!-- Feeds.unread(feed.items) == 0 && !Settings.unread || -->
 
       <div class='title_wrap' ng-class='{expanded: feed.expanded}'>
-        <div class='title' ng-click='feed.expanded = !feed.expanded'>
+        <div class='title' ng-click='toggleFeed(feed)'>
           <i class='glyphicon glyphicon-minus-sign' ng-show='feed.expanded'></i>
           <i class='glyphicon glyphicon-plus-sign' ng-hide='feed.expanded'></i>
           {{feed.title}}

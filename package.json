@@ -1,6 +1,6 @@
 {
   "name": "FeedBundle",
-  "version": "0.1",
+  "version": "0.2",
   "description": "RSS news feed reader",
   "main": "index.html",
   "author": "Serge Russo (contact@sergerusso.com)",

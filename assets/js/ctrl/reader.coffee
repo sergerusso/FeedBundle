@@ -39,6 +39,13 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
   $scope.collapseAll = ->
     $.each Feeds.items, ()->
       delete @expanded
+
+  $scope.toggleFeed = (feed) ->
+    feed.expanded = !feed.expanded
+
+    #detect double click
+    feed.markRead() if (new Date()).getTime() - ($scope._toggleFeedClick || 0) < 250
+    $scope._toggleFeedClick = (new Date()).getTime()
       
 
     
