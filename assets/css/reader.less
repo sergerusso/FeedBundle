@@ -260,6 +260,20 @@ body{
       background:#444;
       line-height: 14px;
       max-height: 34px;
+      position: relative;
+      .bookmark{
+        top:50%;
+        transform: translateY(-50%);
+        position: absolute;
+        color: #f89406;
+        font-size: 20px;
+        right: 10px;
+        opacity: 0;
+        transition: .3s opacity;
+        cursor:pointer;
+        z-index:2;
+      }
+
       &.full_title{
         max-height: none;
       }
@@ -270,6 +284,9 @@ body{
       &:hover{
         background:#fafafa;
         background:#444;
+        .bookmark{
+          opacity:1;
+        }
       }
       &.active{
         background:#eee;

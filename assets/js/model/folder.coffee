@@ -1,6 +1,6 @@
 # Created by Serge P <contact@sergerusso.com> on 10/18/16.
 
-angular.module('feedBundle').factory 'Folder', (db, Feeds)->
+angular.module('feedBundle').factory 'Folder', (db, Feeds, FeedComposite)->
 
   class Folder
 
@@ -12,15 +12,16 @@ angular.module('feedBundle').factory 'Folder', (db, Feeds)->
 
     unreadCount: ->
       count = 0
-      $.each @getFeeds(), ->
-        $.each @items, ->
-          count++ unless @read
+      @getFeeds().forEach (feed)->
+        count+= feed.unreadCount()
       count
 
     getFeeds: ->
 
-      return Feeds.items if @id is 'all'
-      Feeds.items.filter (feed)=> feed.folderId == @id
+      if @id is 'all'
+        Feeds.items
+      else
+        Feeds.items.filter (feed)=> feed.folderId == @id
 
     setName: (name)->
       @name = name
@@ -31,7 +32,6 @@ angular.module('feedBundle').factory 'Folder', (db, Feeds)->
         
     isSystem: -> !parseInt(@id)
 
-    isBookmarks: -> @id is 'bookmarks'
 
       
 

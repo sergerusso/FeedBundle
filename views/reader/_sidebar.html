@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <div class='no_feeds main_ctrls' ng-hide='selectedFolder.isBookmarks()'>
+  <div class='no_feeds main_ctrls' ng-hide='selectedFolder.isBookmarks'>
     <div class="btn-group btn-group-sm">
       <button class='btn btn-dark btn_' onclick='location.hash = "#/settings/new/return" '>Add new source</button>
       <a class="btn btn-dark btn-small feedback" href="https://github.com/sergerusso/FeedBundle/issues" browser-link>Report issue</a>
@@ -51,11 +51,11 @@
   <div class='menu'>
     <div ng-repeat='feed in selectedFolder.getFeeds()'>  <!-- Feeds.unread(feed.items) == 0 && !Settings.unread || -->
 
-      <div class='title_wrap' ng-class='{expanded: feed.expanded}'>
+      <div class='title_wrap' ng-class='{expanded: feed.expanded}' ng-hide="feed.isComposite" >
         <div class='title' ng-click='toggleFeed(feed)'>
           <i class='glyphicon glyphicon-minus-sign' ng-show='feed.expanded'></i>
           <i class='glyphicon glyphicon-plus-sign' ng-hide='feed.expanded'></i>
-          {{feed.title}}
+          {{feed.title}}   {{feed.compositeFeed}}
         </div>
 
         <div class="ctrls">
@@ -76,15 +76,20 @@
 
         </div>
       </div>
-
+      <!-- todo move to directive?-->
       <a href=""
-         ng-hide='item.read && !Settings.unread && !isActiveFeedItem(item)'
+         ng-hide='item.read && !Settings.unread && !isActiveFeedItem(item) && !selectedFolder.isBookmarks'
          ng-click='showFeedItem(item, feed)'
          class='item'
          ng-class='{active: isActiveFeedItem(item), read: item.read, full_title:Settings.full_title}'
-         ng-repeat='item in feed.items | visible_news :feed.expanded'
+         ng-repeat='item in feed.items | filter_news :feed'
          tooltip data-toggle="tooltip" data-placement="left" data-original-title="{{item.title}}">
         <span>{{item.title}}</span>
+        <span class="bookmark glyphicon "
+              ng-class="{'glyphicon-star-empty': !item.marked, 'glyphicon-star': item.marked}"
+              ng-click-no-prop="toggleBookmark(feed, item)">
+
+        </span>
       </a>
       <div class='no_feeds' ng-show='feed.unreadCount() == 0 && !Settings.unread && feed.expanded'>
         No news<br/> <a href ng-click="Settings.set('unread', 1)">Show all</a>

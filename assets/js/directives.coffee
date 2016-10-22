@@ -166,3 +166,13 @@ angular
       elm.on 'click', (e)->
         require('nw.gui').Shell.openExternal( this.href )
         e.preventDefault()
+
+  .directive "ngClickNoProp", ->
+    (scope, elm, attrs)->
+
+      elm.on 'click', (e)->
+
+        scope.$apply -> scope.$eval(attrs.ngClickNoProp)
+
+        e.stopPropagation()
+        e.preventDefault()

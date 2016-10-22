@@ -1,10 +1,10 @@
 angular
   .module('filters', [])
-  .filter 'visible_news', [()->
-    (feeds, expanded = false)->
+  .filter 'filter_news', [()->
+    (feeds, feed)->
 
       result = []
-      $.each feeds, -> result.push @ if expanded
+      $.each feeds, -> result.push @ if feed.expanded || feed.isComposite
 
       result
 

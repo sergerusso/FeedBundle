@@ -41,7 +41,7 @@ angular.module('feedBundle').service 'Feeds', (Feed, db)->
     db.feeds.put(json).catch (err)->console.log 'Error at feeds.insert', err
 
     feed = new Feed json
-    @items.push feed
+    @items.push feed #todo unshift?
 
     feed
 

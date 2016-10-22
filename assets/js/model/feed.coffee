@@ -3,7 +3,7 @@
 angular.module('feedBundle').factory 'Feed', ($http, db)->
   
   class Feed
-    constructor: (data)->
+    constructor: (data = {})->
       @title = data.title
       @url = data.url
       @id = data._id
@@ -23,6 +23,14 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
         @read = true if item is @ or !item
       @setItems @items #save
 
+
+    toggleMark: (item)->
+      #todo store unixtime for sorting
+      item.marked = !item.marked
+      delete item.marked unless item.marked
+
+      @setItems @items
+
     setItems: (items)->
       slice_to = if items.length > @feedSize then items.length else @feedSize
       @items = items.slice(0, slice_to)
@@ -40,6 +48,7 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
         doc.title = @title
         doc
       .catch (err)->console.log 'Error at feed.setTitle', err
+
 
     setUrl: (@url)->
 
