@@ -272,6 +272,7 @@ body{
         transition: .3s opacity;
         cursor:pointer;
         z-index:2;
+
       }
 
       &.full_title{
@@ -282,10 +283,15 @@ body{
         color:#888;
       }
       &:hover{
-        background:#fafafa;
         background:#444;
         .bookmark{
-          opacity:1;
+          opacity:0.6;
+          &:hover{
+            opacity:1;
+          }
+
+          &.glyphicon-star-empty:hover:before{ content: "\e006"; }
+          &.glyphicon-star:hover:before{ content: "\e007"; }
         }
       }
       &.active{

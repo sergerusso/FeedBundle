@@ -23,11 +23,12 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
         @read = true if item is @ or !item
       @setItems @items #save
 
-
     toggleMark: (item)->
-      #todo store unixtime for sorting
-      item.marked = !item.marked
-      delete item.marked unless item.marked
+
+      if item.marked
+        delete item.marked
+      else
+        item.marked = parseInt (new Date).getTime()/1000
 
       @setItems @items
 

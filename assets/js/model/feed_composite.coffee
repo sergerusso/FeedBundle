@@ -10,6 +10,7 @@ angular.module('feedBundle').factory 'FeedComposite', ($http, db, Feed)->
       @countRead = data.countRead
       @isComposite = true
 
+    #todo refactor this:
     unreadCount: ->
       count = 0
       @items.forEach (item)=>
