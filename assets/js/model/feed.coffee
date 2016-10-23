@@ -1,6 +1,6 @@
 # Created by Serge P <contact@sergerusso.com> on 10/18/16.
 
-angular.module('feedBundle').factory 'Feed', ($http, db)->
+angular.module('feedBundle').factory 'Feed', ($http, db, Settings)->
   
   class Feed
     constructor: (data = {})->
@@ -8,7 +8,6 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
       @url = data.url
       @id = data._id
       @folderId = data.folderId or "unsorted"
-      @feedSize = 300 #todo feedSize
       @items = data.items or []
 
     unreadCount: ->
@@ -33,7 +32,7 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
       @setItems @items
 
     setItems: (items)->
-      slice_to = if items.length > @feedSize then items.length else @feedSize
+      slice_to = if items.length > @feedSize then Settings.feedSize else items.length
       @items = items.slice(0, slice_to)
 
       db.feeds.upsert @id, (doc)=>
@@ -83,7 +82,7 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
             if item.url.indexOf('http') != 0
               item.url = @url.replace(/^(https?:\/\/.+?)\/.+$/, '\$1') + item.url
 
-            items.unshift({title: item.title, url: item.url}) if titles.indexOf(item.title) == -1
+            items.unshift(item) if titles.indexOf(item.title) == -1
 
           @setItems items
 
@@ -112,9 +111,15 @@ angular.module('feedBundle').factory 'Feed', ($http, db)->
 
         $items.each ->
           $this = $(this)
+          date_str = $this.find("pubDate").text() || $this.find("published").text() || $this.find("updated").text() || $this.find("date").text()
+          time = (new Date(date_str)).getTime() || (new Date).getTime()
+
+          console.log 'no date', $this.find("link").text() || $this.find("link").attr('href') unless date_str
+
           result.items.push
             title: $this.find("title").text(),
             url: $this.find("link").text() || $this.find("link").attr('href')
+            date: parseInt(time/1000)
 
         callback(result)
       , (err)->

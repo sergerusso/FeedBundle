@@ -259,8 +259,43 @@ body{
       border-radius: 4px;
       background:#444;
       line-height: 14px;
-      max-height: 34px;
       position: relative;
+
+
+
+
+      &.read{ color:#888; }
+
+      &:hover{
+
+        background:#444;
+
+        .bookmark{
+          opacity:0.6;
+          &:hover{
+            opacity:1;
+          }
+
+          &.glyphicon-star-empty:hover:before{ content: "\e006"; }
+          &.glyphicon-star:hover:before{ content: "\e007"; }
+        }
+
+      }
+
+      &.active{
+        background:#eee;
+        color:#333;
+      }
+
+
+      .title{
+        max-height: 28px;
+        overflow: hidden;
+
+        &.full_title{ max-height: none; }
+      }
+
+
       .bookmark{
         top:50%;
         transform: translateY(-50%);
@@ -274,33 +309,8 @@ body{
         z-index:2;
 
       }
-
-      &.full_title{
-        max-height: none;
-      }
-      overflow: hidden;
-      &.read{
-        color:#888;
-      }
-      &:hover{
-        background:#444;
-        .bookmark{
-          opacity:0.6;
-          &:hover{
-            opacity:1;
-          }
-
-          &.glyphicon-star-empty:hover:before{ content: "\e006"; }
-          &.glyphicon-star:hover:before{ content: "\e007"; }
-        }
-      }
-      &.active{
-        background:#eee;
-        color:#333;
-      }
     }
     .wrap{
-      padding-bottom:50px;
       position: relative;
       min-height:100%;
       .fb_wrapper{

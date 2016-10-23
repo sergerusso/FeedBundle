@@ -18,10 +18,16 @@ angular.module('feedBundle').factory 'Folder', (db, Feeds, FeedComposite)->
 
     getFeeds: ->
 
-      if @id is 'all'
-        Feeds.items
-      else
-        Feeds.items.filter (feed)=> feed.folderId == @id
+      feeds = if @id is 'all' then Feeds.items else Feeds.items.filter (feed)=> feed.folderId == @id
+      #sort
+      feeds.sort (a,b)->
+        a_part = a.items[0]?.date || 0
+        b_part = b.items[0]?.date || 0
+        return -1 if a_part > b_part
+        return 1 if a_part < b_part
+        return 0
+
+      feeds
 
     setName: (name)->
       @name = name

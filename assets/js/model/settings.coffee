@@ -6,9 +6,13 @@ angular.module('feedBundle')
     folder: "all"
     full_title: 0
     update_each: 10
+    feedSize: 100
   };
 
   _settings = Storage.read('settings') || {}
+
+  (_settings[k] = v unless _settings[k]?) for k,v of _defaults
+
 
   for own prop of _settings
     @[prop] = _settings[prop]
