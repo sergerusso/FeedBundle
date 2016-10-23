@@ -117,8 +117,8 @@ angular.module('feedBundle').factory 'Feed', ($http, db, Settings)->
           console.log 'no date', $this.find("link").text() || $this.find("link").attr('href') unless date_str
 
           result.items.push
-            title: $this.find("title").text(),
-            url: $this.find("link").text() || $this.find("link").attr('href')
+            title: $this.children("title").text(),
+            url: $this.children("link").text() || $this.children("link").attr('href')
             date: parseInt(time/1000)
 
         callback(result)
