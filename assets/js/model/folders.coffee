@@ -3,10 +3,10 @@
 angular.module('feedBundle').service 'Folders', (Folder, FolderBookmarks, FolderLatest, db)->
 
   @sys_folders = [
-    new Folder(_id:"all", name:'All feeds')
+    new Folder(_id:"all", name:'All feeds', isSystem: true)
     new FolderLatest
     new FolderBookmarks
-    new Folder(_id:"unsorted", name:'Unsorted')
+    new Folder(_id:"unsorted", name:'Unsorted', isSystem: true)
   ]
 
 

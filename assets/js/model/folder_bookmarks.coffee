@@ -5,7 +5,7 @@ angular.module('feedBundle').factory 'FolderBookmarks', (db, Feeds, Folder, Feed
   class FolderBookmarks extends  Folder
 
     constructor: (data = {})->
-      super _id:"bookmarks", name:"Bookmarks"
+      super _id:"bookmarks", name:"Bookmarks", isSystem: true
       @compositeFeed = new FeedComposite countRead:true
       @isBookmarks = true
       @isComposite = true
@@ -35,9 +35,7 @@ angular.module('feedBundle').factory 'FolderBookmarks', (db, Feeds, Folder, Feed
 
       [@compositeFeed]
 
-    setName: (@name)-> throw "Couldnt set name for a system folder"
 
-    isSystem: -> true
 
 
 

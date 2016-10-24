@@ -62,7 +62,7 @@ angular.module('feedBundle').controller 'settingsImportCtrl', ($scope, Feeds, Fo
 
     $.each( Folders.items, (k,folder) =>
 
-      return if folder.id in ['all', 'bookmarks']
+      return if folder.isSystem && folder.id != 'unsorted'
 
       feeds = []
       $.each folder.getFeeds(), ->

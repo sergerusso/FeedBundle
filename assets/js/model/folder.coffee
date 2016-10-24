@@ -7,6 +7,7 @@ angular.module('feedBundle').factory 'Folder', (db, Feeds, FeedComposite)->
     constructor: (data)->
       @id = data._id
       @name = data.name
+      @isSystem = data.isSystem
 
     getFeeds: ->
 
@@ -30,13 +31,15 @@ angular.module('feedBundle').factory 'Folder', (db, Feeds, FeedComposite)->
       feeds
 
     setName: (name)->
+      throw "Couldnt set name for a system folder" if @isSystem
+
       @name = name
+
       db.folders.upsert @id, (doc)=>
         doc.name = name
         doc
       .catch (err)->console.log 'Error at folder.setName', err
-        
-    isSystem: -> !parseInt(@id)
+
 
 
       

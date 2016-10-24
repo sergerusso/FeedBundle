@@ -5,8 +5,8 @@ angular.module('feedBundle').factory 'FolderLatest', (db, Feeds, Folder, FeedCom
 
   class FolderLatest extends  Folder
 
-    constructor: (data)->
-      super _id:"Latest", name:"Latest news"
+    constructor: ->
+      super _id:"Latest", name:"Latest news", isSystem: true
       @compositeFeed = new FeedComposite
       @isComposite = true
       @limit = 100
@@ -21,7 +21,7 @@ angular.module('feedBundle').factory 'FolderLatest', (db, Feeds, Folder, FeedCom
 
       Feeds.items.forEach (feed)=>
         feed.items.forEach (item)=>
-            results.push [feed,item] if results.length < @limit
+            results.push [feed,item]
 
       #sort
       results.sort (a,b)->
@@ -31,6 +31,8 @@ angular.module('feedBundle').factory 'FolderLatest', (db, Feeds, Folder, FeedCom
         return 1 if a_part < b_part
         return 0
 
+      results = results.slice(0, @limit)
+
       #push
       results.forEach (result)=>
         @compositeFeed.feeds.push result[0]
@@ -39,8 +41,6 @@ angular.module('feedBundle').factory 'FolderLatest', (db, Feeds, Folder, FeedCom
       [@compositeFeed]
 
     setName: (@name)-> throw "Couldnt set name for a system folder"
-
-    isSystem: -> true
 
 
 
