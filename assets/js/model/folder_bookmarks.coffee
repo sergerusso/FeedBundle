@@ -4,10 +4,11 @@ angular.module('feedBundle').factory 'FolderBookmarks', (db, Feeds, Folder, Feed
 
   class FolderBookmarks extends  Folder
 
-    constructor: (data)->
-      super data
+    constructor: (data = {})->
+      super _id:"bookmarks", name:"Bookmarks"
       @compositeFeed = new FeedComposite countRead:true
       @isBookmarks = true
+      @isComposite = true
 
     getFeeds: ->
 

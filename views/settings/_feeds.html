@@ -20,7 +20,7 @@
               <li ng-repeat='folder in Folders.items'
                   ng-class='{active:folder.id == selectedFolder.id}'
                   ng-click='setFolder(folder)'
-                  ng-hide='folder.isBookmarks'>
+                  ng-hide='folder.isComposite'>
                 <a href>{{folder.name}} ({{folder.getFeeds().length}})</a>
               </li>
             </ul>

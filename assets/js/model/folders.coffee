@@ -1,12 +1,12 @@
 # Created by Serge P <serge.rsb@gmail.com> on 10/18/16.
 
-angular.module('feedBundle').service 'Folders', (Folder, FolderBookmarks, db)->
+angular.module('feedBundle').service 'Folders', (Folder, FolderBookmarks, FolderLatest, db)->
 
   @sys_folders = [
     new Folder(_id:"all", name:'All feeds')
+    new FolderLatest
+    new FolderBookmarks
     new Folder(_id:"unsorted", name:'Unsorted')
-    new FolderBookmarks(_id:"bookmarks", name:'Bookmarks')
-    #new Folder(_id:"Latest", name:'Latest')  #todo implement latest folder
   ]
 
 

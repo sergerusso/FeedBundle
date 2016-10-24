@@ -32,7 +32,7 @@ angular.module('feedBundle').factory 'Feed', ($http, db, Settings)->
       @setItems @items
 
     setItems: (items)->
-      slice_to = if items.length > @feedSize then Settings.feedSize else items.length
+      slice_to = if items.length > Settings.feedSize then Settings.feedSize else items.length
       @items = items.slice(0, slice_to)
 
       db.feeds.upsert @id, (doc)=>
