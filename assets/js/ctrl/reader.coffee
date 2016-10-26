@@ -23,7 +23,7 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
   $scope.editFolder = (folder)->
     folder.newName = folder.name
     folder.editing = true
-
+    #todo refactor
     setTimeout -> $("#editFolder_"+folder.id).focus()
 
   $scope.saveFolderName = (folder)->

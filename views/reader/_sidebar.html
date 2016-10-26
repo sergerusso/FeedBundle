@@ -109,8 +109,9 @@
         </span>
       </a>
       <div class='no_feeds' ng-show='feed.unreadCount() == 0 && !Settings.unread && feed.expanded'>
-        No news<br/> <a href ng-click="Settings.set('unread', 1)">Show all</a>
-        <!-- todo fix styles -->
+        No new items<br/>
+        <a href ng-click="Settings.set('unread', 1)">Show all</a>
+
       </div>
 
     </div>

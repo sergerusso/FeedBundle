@@ -111,6 +111,13 @@ angular
     (scope, elm, attrs)->
       elm.find('.title').on 'click', ->
         elm.find('.inner').slideToggle()
+
+      timeout = null
+      elm.on 'mouseenter', -> clearTimeout timeout
+      elm.on 'mouseleave', ->
+        timeout = setTimeout ->
+          elm.find('.inner').slideUp()
+        , 300
   ])
   .directive('clearView', [ ()->
     (scope, elm, attrs)->
