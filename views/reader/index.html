@@ -1,5 +1,5 @@
 <div class='viewport' clear-view hotkeys>
-  <!-- todo implement back button -->
+  <!-- todo implement back button, deny location change from iframe -->
   <iframe id="viewFrame" ng-src='{{feedItem.url}}'
           ng-hide='frame_loading || !feedItem.url' view-frame></iframe>
   <div class='frame_loading' ng-show='frame_loading'>

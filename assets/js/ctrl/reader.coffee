@@ -24,6 +24,8 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
     folder.newName = folder.name
     folder.editing = true
 
+    setTimeout -> $("#editFolder_"+folder.id).focus()
+
   $scope.saveFolderName = (folder)->
     folder.setName folder.newName
     delete folder.newName
@@ -43,17 +45,19 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
   $scope.toggleFeed = (feed) ->
     feed.expanded = !feed.expanded
 
-    #detect double click
-    #todo ng-dblclick?
-    feed.markRead() if (new Date()).getTime() - ($scope._toggleFeedClick || 0) < 250
-    $scope._toggleFeedClick = (new Date()).getTime()
+  $scope.markRead = (feed)->
+    feed.markRead()
 
   $scope.toggleBookmark = (feed, item) ->
     feed.toggleMark(item)
 
     #todo prevent item disappearing
     #if $scope.selectedFolder.isBookmarks and !item.marked
-
+  $scope.removeFolder = (folder)->
+    toSelect = Folders.getById if folder.getFeeds().length then 'unsorted' else 'all'
+    Folders.remove(folder)
+    if $scope.selectedFolder == folder
+      $scope.selectFolder toSelect
 
       
 

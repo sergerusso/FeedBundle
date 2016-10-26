@@ -90,6 +90,7 @@ body{
           .badge{
             font-size: 10px;
             opacity: 0.4;
+            cursor:pointer;
             &.badge-warning{
               opacity:1;
               background-color: #f89406;
@@ -164,10 +165,10 @@ body{
           overflow-x: hidden;
           overflow-y:auto;
           .folder{
-            height: 22px;
+            height: 23px;
             &.selected{}
             &>div>div{ min-height: 0; cursor:pointer;}
-            &.selected >*{opacity: 0.2;font-style:italic;}
+            &.selected >*{font-style:italic; color:rgba(255,255,255, 0.3)}
             border:1px solid transparent;
             border-top:1px solid #777;
             margin-bottom:6px;
@@ -200,8 +201,9 @@ body{
             //border-radius: 0;
             line-height: 18px;
             color:#e4e4e4;
-            border:0px solid #666;
-            padding-right:25px;
+            border:0 solid #666;
+            padding-right:29px;
+            padding-left:5px;
             background: #666;
             box-sizing: border-box;
             -moz-box-sizing: border-box;
@@ -211,17 +213,13 @@ body{
             position: absolute;
             border-left:1px solid;
             padding-left:6px;
-            right:7px;
+            right:15px;
             top:3px;
             bottom:3px;
             color:#e4e4e4;
             &:hover{
               //color:#AAA;
             }
-          }
-          & *{
-            //line-height: 18px;
-            //height: 18px;
           }
         }
       }

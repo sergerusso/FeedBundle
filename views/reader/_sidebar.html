@@ -6,10 +6,9 @@
           <div class='row' ng-hide='folder.editing'>
             <div class='col-sm-7 name' ng-click='selectFolder(folder)'>{{folder.name}}</div>
             <div class='col-sm-3 edit'>
-              <!-- todo allow to edit active -->
-              <span ng-hide='folder.isSystem || folder == selectedFolder'>
+              <span ng-hide='folder.isSystem'>
                 <i class='glyphicon glyphicon-pencil' ng-click='editFolder(folder)' ></i>
-                <i class='glyphicon glyphicon-remove' ng-click='Folders.remove(folder)'></i>
+                <i class='glyphicon glyphicon-remove' ng-click='removeFolder(folder)'></i>
               </span> &nbsp;
             </div>
             <div class='col-sm-2 text-right' >{{folder.unreadCount()}}</div>
@@ -19,11 +18,14 @@
             <div class='row'>
               <div class='col-sm-10'>
                 <div class='input_box'>
-                  <input class='form-control' type='text' ng-model='folder.newName' placeholder='Enter new folder name...' />
-                  <i class='glyphicon glyphicon-ok' ng-click='saveFolderName(folder)'></i>
+                  <form ng-submit="saveFolderName(folder)">
+                    <input class='form-control' id="editFolder_{{folder.id}}" type='text' ng-model='folder.newName' placeholder='Enter new folder name...' />
+                    <i class='glyphicon glyphicon-ok' ng-click='saveFolderName(folder)'></i>
+                  </form>
                 </div>
               </div>
-              <div class='col-sm-2' >{{folder.unreadCount()}}</div>
+
+              <div class='col-sm-2 text-right' >{{folder.unreadCount()}}</div>
             </div>
           </div>
 
@@ -40,12 +42,22 @@
     </div>
   </div>
 
-  <div class='no_feeds main_ctrls' ng-hide='selectedFolder.isBookmarks'>
+  <div class='main_ctrls'>
     <div class="btn-group btn-group-sm">
-      <button class='btn btn-dark btn_' onclick='location.hash = "#/settings/new/return" '>Add new source</button>
+
+      <button class='btn btn-dark btn-sm'
+              ng-show='selectedFolder.latestNews'
+              ng-click='selectedFolder.getFeeds()[0].markRead()'>Mark read</button>
+
+      <button class='btn btn-dark btn_'
+              ng-hide='selectedFolder.latestNews'
+              onclick='location.hash = "#/settings/new/return" '>Add new source</button>
       <a class="btn btn-dark btn-small feedback" href="https://github.com/sergerusso/FeedBundle/issues" browser-link>Report issue</a>
     </div>
 
+
+  </div>
+  <div class='main_ctrls' ng-hide='selectedFolder.id == "latest"'>
   </div>
 
   <div class='menu'>
@@ -61,7 +73,11 @@
         <div class="ctrls">
           <img src='../../assets/images/warning-mini.png' ng-show='feed.error'/>
           <img src='../../assets/images/loader-mini.gif' ng-show='feed.updating'/>
-          <span class="badge" ng-class='{"badge-warning": feed.unreadCount() > 0 }'>{{feed.unreadCount()}}</span>
+          <span class="badge"
+                title="Double click to mark it as read"
+                ng-class='{"badge-warning": feed.unreadCount() > 0 }'
+                ondblclick="angular.element(this).scope().feed.markRead(); angular.element(this).scope().$apply()"
+          >{{feed.unreadCount()}}</span>
           <span class='dropdown'>
               <span class="badge options" data-toggle="dropdown">
                   <i class="glyphicon glyphicon-chevron-down"></i>

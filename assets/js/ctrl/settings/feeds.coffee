@@ -43,7 +43,6 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fee
     url = $scope.modal.feed.new_feed_url
 
     return if !url or $scope.modal.processing
-    #TODO check for dups
 
     $scope.modal.processing = true
     feed = new Feed url: url
@@ -98,18 +97,19 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fee
   $scope.editingFolder = {}
 
   $scope.editFolder = (folder)->
-    #todo focus
     folder._name = folder.name
     $scope.editingFolder = folder
+    $("#editFolderInput").focus()
 
   $scope.updateFolder = ->
     if $scope.editingFolder._name
       if $scope.editingFolder.id
         $scope.editingFolder.setName $scope.editingFolder._name
       else
-        #todo select it
         Folders.add $scope.editingFolder._name
-        .then -> $scope.$apply()
+        .then (folder)->
+          $scope.modal.feed.item._folderId = folder.id
+          $scope.$apply()
 
     $scope.editingFolder = {}
     

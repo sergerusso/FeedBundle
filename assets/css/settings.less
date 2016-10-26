@@ -158,9 +158,11 @@
     .inner{
       //
       padding-top:6px;
-      overflow:hidden;
+
       .list{
+        overflow:hidden;
         .folder{
+
           &>div{ min-height: 0; cursor:pointer;line-height: 20px;}
           .selected.name{font-weight: bold;}
           border:1px solid transparent;
@@ -174,6 +176,7 @@
 
       .new-folder{
         position: relative;
+        height: 26px;
         input{
           margin-bottom: 0;
           width:100%;
@@ -195,7 +198,7 @@
           border-left:1px solid;
           padding-left:6px;
           right:14px;
-          top:2px;
+          top:5px;
           color:#666;
           &:hover{
             //color:#AAA;

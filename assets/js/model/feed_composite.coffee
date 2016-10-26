@@ -19,8 +19,11 @@ angular.module('feedBundle').factory 'FeedComposite', ($http, db, Feed)->
       count
 
     markRead: (item)->
-      index = @items.indexOf item
-      @feeds[index].markRead item
+      if item
+        index = @items.indexOf item
+        @feeds[index].markRead item
+      else
+        feed.markRead() for feed in @feeds
 
     toggleMark: (item)->
       index = @items.indexOf item

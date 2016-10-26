@@ -45,7 +45,6 @@ angular.module('feedBundle').service 'Folders', (Folder, FolderBookmarks, Folder
 
     db.folders.get(folder.id).then (doc)=>
       db.folders.remove(doc)
-      @get()
 
 
   @get = ->

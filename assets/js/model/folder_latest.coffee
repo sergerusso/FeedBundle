@@ -9,6 +9,7 @@ angular.module('feedBundle').factory 'FolderLatest', (db, Feeds, Folder, FeedCom
       super _id:"Latest", name:"Latest news", isSystem: true
       @compositeFeed = new FeedComposite
       @isComposite = true
+      @latestNews = true
       @limit = 100
 
 
