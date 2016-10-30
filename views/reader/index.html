@@ -1,7 +1,8 @@
 <div class='viewport' clear-view hotkeys>
-  <!-- todo implement back button, deny location change from iframe -->
+  <!-- todo implement back button, allow to deny scripts -->
+
   <iframe id="viewFrame" ng-src='{{feedItem.url}}'
-          ng-hide='frame_loading || !feedItem.url' view-frame></iframe>
+          ng-hide='frame_loading || !feedItem.url' view-frame sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
   <div class='frame_loading' ng-show='frame_loading'>
     <img src='../../assets/images/loader-large.gif'/>
 

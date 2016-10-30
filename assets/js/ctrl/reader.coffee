@@ -59,6 +59,17 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
     if $scope.selectedFolder == folder
       $scope.selectFolder toSelect
 
+  $scope.$watch ->
+    Folders.getById('all').unreadCount()
+  , (unread,b)->
+
+    #add unread count badget
+    win = require('nw.gui').Window.get()
+
+    unread = "" if unread is 0
+    win.setBadgeLabel(unread.toString())
+
+
       
 
     

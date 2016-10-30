@@ -70,6 +70,7 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fee
       preserveFeedData feed
 
       $scope.modal.feed.item = feed
+      feed._folderId = Settings.folder
       $scope.modal.feed.step = "edit"
 
     feed.getXML callback
