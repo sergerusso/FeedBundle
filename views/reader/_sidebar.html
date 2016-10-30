@@ -99,8 +99,7 @@
          class='item'
          ng-class='{active: isActiveFeedItem(item), read: item.read, full_title:Settings.full_title}'
          ng-repeat='item in feed.items | filter_news :feed'
-         tooltip data-toggle="tooltip" data-placement="left" data-original-title="{{item.title}}">
-        <!--todo print date in  tooltip? -->
+        >
         <div class="title" ng-class='{full_title:Settings.full_title}'>{{item.title}}</div>
         <span class="bookmark glyphicon "
               ng-class="{'glyphicon-star-empty': !item.marked, 'glyphicon-star': item.marked}"

@@ -92,21 +92,6 @@ angular
         e.preventDefault()
         scope.$apply()
   ])
-  .directive('tooltip', ['Settings', (Settings)->
-    (scope, elm, attrs)->
-      upd = ->
-        elm.tooltip('destroy').tooltip({
-          container: '.page.ng',
-          trigger: if Settings.full_title then 'manual' else 'hover'
-          delay:200
-        })
-
-      do upd
-
-      scope.$watch 'Settings.full_title', upd
-
-
-  ])
   .directive('folderList', [ ()->
     (scope, elm, attrs)->
       elm.find('.title').on 'click', ->

@@ -269,13 +269,17 @@ body{
         background:#444;
 
         .bookmark{
-          opacity:0.6;
+          opacity:0.4;
           &:hover{
             opacity:1;
           }
 
           &.glyphicon-star-empty:hover:before{ content: "\e006"; }
           &.glyphicon-star:hover:before{ content: "\e007"; }
+        }
+
+        .title{
+          max-height: 56px;
         }
 
       }
@@ -289,8 +293,10 @@ body{
       .title{
         max-height: 28px;
         overflow: hidden;
+        transition: .7s max-height;
 
         &.full_title{ max-height: none; }
+
       }
 
 
