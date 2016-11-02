@@ -2,7 +2,9 @@
   <!-- todo implement back button, allow to deny scripts -->
 
   <iframe id="viewFrame" ng-src='{{feedItem.url}}'
-          ng-hide='frame_loading || !feedItem.url' view-frame sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          ng-hide='frame_loading || !feedItem.url' view-frame sandbox="allow-same-origin allow-forms allow-scripts" nwfaketop>
+
+  </iframe>
   <div class='frame_loading' ng-show='frame_loading'>
     <img src='../../assets/images/loader-large.gif'/>
 
@@ -36,7 +38,7 @@
       Show read </a></li>
 
     <li><a href ng-click="Feeds.update()"><i class='glyphicon glyphicon-refresh'></i> Update</a></li>
-    <li><a href ng-click="collapseAll()"><i class='glyphicon glyphicon-minus-sign'></i> Collapse all</a></li>
+    <!--<li><a href ng-click="collapseAll()"><i class='glyphicon glyphicon-minus-sign'></i> Collapse all</a></li>-->
     <li><a href='#/settings/help/' href><i class=' glyphicon glyphicon-question-sign'></i> Help</a></li>
   </ul>
 </div>

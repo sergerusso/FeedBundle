@@ -10,7 +10,7 @@ angular.module('feedBundle').factory 'FolderLatest', (db, Feeds, Folder, FeedCom
       @compositeFeed = new FeedComposite
       @isComposite = true
       @latestNews = true
-      @limit = 100
+      @limit = 200  #todo make editable
 
 
     getFeeds: ->

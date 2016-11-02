@@ -45,9 +45,14 @@ angular
       scope.$on 'destroy', ->
         clearInterval window.frameLoaderInsperctor
 
-
       elm.on 'load', ()->
         scope.frame_loading = false
+
+        $(elm[0].contentWindow.document).find("a").on 'click', ->
+          return if this.href.indexOf('http') != 0
+          require('nw.gui').Shell.openExternal( this.href )
+          return false
+
         scope.$apply()
   ])
   .directive('ngAutofocus', [()->

@@ -36,7 +36,7 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
     $scope.feedItem = item
 
   $scope.isActiveFeedItem = (item)->
-    $scope.feedItem == item
+    $scope.feedItem?.url == item.url
 
   $scope.collapseAll = ->
     $.each Feeds.items, ()->
