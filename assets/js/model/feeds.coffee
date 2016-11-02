@@ -23,7 +23,7 @@ angular.module('feedBundle').service 'Feeds', (Feed, db)->
 
   @getById = (id)-> _.find @items, (item)-> item.id is id
 
-  @insert = (data)->
+  @insert = (data, returnPromise)->
     id = data.url.match(/:\/\/([^\/]+)/i)
     id = id && id[1] || ""
     id = id.replace(/[^a-z0-9]/ig, '')
@@ -38,12 +38,12 @@ angular.module('feedBundle').service 'Feeds', (Feed, db)->
 
     json.folderId = data.folderId if data.folderId
 
-    db.feeds.put(json).catch (err)->console.log 'Error at feeds.insert', err
+    promise = db.feeds.put(json).catch (err)->console.log 'Error at feeds.insert', err
 
     feed = new Feed json
     @items.push feed
 
-    feed
+    if returnPromise then promise else feed
 
   @remove = (feed)->
 

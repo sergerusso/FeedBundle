@@ -15,7 +15,7 @@ angular
     $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 
 
-  .run (Feeds, Folders, Settings, $timeout, $rootScope, $q)->
+  .run (Feeds, Folders, Settings, $timeout, $rootScope, $q, db)->
 
     updateTimer = ()->
       $timeout ()->
@@ -30,8 +30,23 @@ angular
     $rootScope.Folders = Folders
 
     deferred = $q.defer()
+
     $rootScope.loadDefer = deferred.promise
 
-    Promise.all([Feeds.get(), Folders.get()]).then ->
-      deferred.resolve()
+    #seed data
+    seedPromise = new Promise (resolve)->
+
+      return resolve() if localStorage.dbInit
+
+      localStorage.dbInit = true
+
+      Feeds.insert
+        title: 'CNET News'
+        url: 'https://www.cnet.com/rss/news/'
+      , true
+      .then -> resolve()
+
+    seedPromise.then ->
+      Promise.all([Feeds.get(), Folders.get()]).then ->
+          deferred.resolve()
 
