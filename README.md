@@ -4,7 +4,7 @@
 Simple and beautiful cross-platform rss news reader.
 
 
-## How to build
-Just [package it](http://docs.nwjs.io/en/latest/For%20Users/Package%20and%20Distribute/#prepare-nwjs). It's a web app, but you need NW.js to deal with [same-origin policy ](https://en.wikipedia.org/wiki/Same-origin_policy)
+You can [package it](http://docs.nwjs.io/en/latest/For%20Users/Package%20and%20Distribute/#prepare-nwjs) or use build script (`node ./build.js`).
 
-Support for PHP/Node/Ruby proxy may be added in the future, so it can also be run on a web server.
+[Compiled binaries](https://github.com/sergerusso/FeedBundle/releases/) are also available. 
+
