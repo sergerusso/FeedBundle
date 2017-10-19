@@ -44,36 +44,41 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fee
 
     return if !url or $scope.modal.processing
 
-    $scope.modal.processing = true
-    feed = new Feed url: url
+    requestPermission(url).then ->
 
-    callback = (data)->
-      delete  $scope.modal.processing
+      $scope.modal.processing = true
+      feed = new Feed url: url
 
-      #console.log data
-      if data.error && data.resp
-        #try to find url
-        $html = $("<div></div>").append($.parseHTML(data.resp))
-        url = $html.find('link[type="application/rss+xml"],link[type="application/atom+xml"]').attr('href')
-        unless url
-          callback error:true
+      callback = (data)->
+        delete  $scope.modal.processing
+
+        #console.log data
+        if data.error && data.resp
+          #try to find url
+          $html = $("<div></div>").append($.parseHTML(data.resp))
+          url = $html.find('link[type="application/rss+xml"],link[type="application/atom+xml"]').attr('href')
+          unless url
+            callback error:true
+            return
+          feed.url = url;
+          feed.getXML callback
           return
-        feed.url = url;
-        feed.getXML callback
-        return
 
-      if data.error
-        $scope.modal.feed.step = "error"
-        return
+        if data.error
+          $scope.modal.feed.step = "error"
+          return
 
-      feed = Feeds.insert(data)
-      preserveFeedData feed
+        feed = Feeds.insert(data)
+        preserveFeedData feed
 
-      $scope.modal.feed.item = feed
-      feed._folderId = Settings.folder
-      $scope.modal.feed.step = "edit"
+        $scope.modal.feed.item = feed
+        feed._folderId = Settings.folder
+        $scope.modal.feed.step = "edit"
 
-    feed.getXML callback
+      feed.getXML callback
+    .catch ->
+      $scope.$apply -> $scope.modal.feed.step = "error"
+
 
   $scope.editFeed = (feed)->
     $scope.modal.feed.step = "edit"
@@ -91,6 +96,10 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fee
     item.setTitle item._title
     item.setUrl item._url
     item.setFolderId item._folderId
+
+    if item.url != item._url
+      removePermission(item.url)
+      requestPermission(item._url)
 
     Settings.set("folder", item._folderId);
 
@@ -118,6 +127,10 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fee
     $scope.modal.feed.item._folderId = 'unsorted' if $scope.modal.feed.item._folderId == folder.id
     Folders.remove(folder)
 
+  $scope.remove = (feed)->
+    removePermission(feed.url)
+    Feeds.remove(feed)
+
 
   #routing
   if($routeParams.action == 'new')
@@ -128,4 +141,3 @@ angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Fee
       item = Feeds.getById($routeParams.sub)
       return unless item
       $scope.editFeed item
-

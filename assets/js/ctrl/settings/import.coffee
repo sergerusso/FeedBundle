@@ -8,11 +8,9 @@ angular.module('feedBundle').controller 'settingsImportCtrl', ($scope, Feeds, Fo
   $scope.importFile = (input)->
     reader = new FileReader()
     reader.onload = (theFile)->
-
       $xml = $($.parseXML(reader.result));
 
       $scope.result = {};
-
       $xml.find("body > outline").each ->
         #top level
         folderName = $(this).attr('title')
@@ -31,6 +29,14 @@ angular.module('feedBundle').controller 'settingsImportCtrl', ($scope, Feeds, Fo
 
 
   $scope.importResult = ->
+    `
+    let urls = []
+    $.each($scope.result, (folderName, items)=> {
+      urls = [...urls, ...items.map(({url}) => url)]
+    })
+    requestPermission(urls);
+    //todo update afterward
+    `
 
     $.each $scope.result, (folderName, value)->
       Folders.add(folderName).then (folder)->
@@ -42,6 +48,10 @@ angular.module('feedBundle').controller 'settingsImportCtrl', ($scope, Feeds, Fo
             title: @title
             folderId: folder.id
           .fetch()
+
+          urls.push(@url)
+
+
 
     $scope.result = null
     $location.path('/settings/')

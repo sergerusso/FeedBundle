@@ -50,3 +50,5 @@ angular
       Promise.all([Feeds.get(), Folders.get()]).then ->
           deferred.resolve()
 
+    #todo permission warning
+

@@ -64,10 +64,12 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
   , (unread,b)->
 
     #add unread count badget
-    win = require('nw.gui').Window.get()
+    #todo chrome badget
+    if window.require
+      win = require('nw.gui').Window.get()
 
-    unread = "" if unread is 0
-    win.setBadgeLabel(unread.toString())
+      unread = "" if unread is 0
+      win.setBadgeLabel(unread.toString())
 
 
       

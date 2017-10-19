@@ -48,10 +48,11 @@ angular
       elm.on 'load', ()->
         scope.frame_loading = false
 
-        $(elm[0].contentWindow.document).find("a").on 'click', ->
-          return if this.href.indexOf('http') != 0
-          require('nw.gui').Shell.openExternal( this.href )
-          return false
+        if window.require
+          $(elm[0].contentWindow.document).find("a").on 'click', ->
+            return if this.href.indexOf('http') != 0
+            require('nw.gui').Shell.openExternal( this.href )
+            return false
 
         scope.$apply()
   ])
@@ -173,3 +174,13 @@ angular
 
         e.stopPropagation()
         e.preventDefault()
+
+  .directive "importUpload", ->
+    (scope, el, attrs)->
+
+      el.on('change', (e)->
+
+        scope.importFile(e.target)
+        #angular.element(this).scope().importFile(this)
+
+      )
