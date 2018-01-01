@@ -15,7 +15,7 @@ angular
     $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 
 
-  .run (Feeds, Folders, Settings, $timeout, $rootScope, $q, db)->
+  .run (Folders, Settings, $timeout, $rootScope, $q)->
 
     updateTimer = ()->
       $timeout ()->
@@ -50,5 +50,8 @@ angular
       Promise.all([Feeds.get(), Folders.get()]).then ->
           deferred.resolve()
 
+    document.addEventListener('feedUpdated', -> $rootScope.$apply())
     #todo permission warning
+
+
 

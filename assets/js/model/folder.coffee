@@ -1,6 +1,6 @@
 # Created by Serge P <contact@sergerusso.com> on 10/18/16.
 
-angular.module('feedBundle').factory 'Folder', (db, Feeds, FeedComposite)->
+angular.module('feedBundle').factory 'Folder', ()->
 
   class Folder
 

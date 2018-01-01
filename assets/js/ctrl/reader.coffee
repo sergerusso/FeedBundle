@@ -1,4 +1,4 @@
-window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
+window.readerCtrl = ($scope, Settings, Folders)->
   window.scp = $scope;
 
   $scope.db = db
@@ -63,13 +63,8 @@ window.readerCtrl = ($scope, Settings, Folders, db, Feeds)->
     Folders.getById('all').unreadCount()
   , (unread,b)->
 
-    #add unread count badget
-    #todo chrome badget
-    if window.require
-      win = require('nw.gui').Window.get()
-
-      unread = "" if unread is 0
-      win.setBadgeLabel(unread.toString())
+    unread = "" if unread is 0
+    setBadgetText(unread.toString())
 
 
       

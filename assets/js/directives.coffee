@@ -184,3 +184,17 @@ angular
         #angular.element(this).scope().importFile(this)
 
       )
+
+  .directive "dblclickRead", ->
+    (scope, el)->
+      el.on('dblclick', ()=>
+        scope.feed.markRead()
+        scope.$apply()
+
+      )
+
+  .directive "addNewFeed", ->
+    (scope, el)->
+      el.on('click', ()=>
+        location.hash = "#/settings/new/return"
+      )

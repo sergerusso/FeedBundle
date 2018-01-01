@@ -1,6 +1,6 @@
 # Created by Serge P <contact@sergerusso.com> on 10/19/16.
 
-angular.module('feedBundle').controller 'settingsImportCtrl', ($scope, Feeds, Folders, $routeParams, $location, Feed, Settings )->
+angular.module('feedBundle').controller 'settingsImportCtrl', ($scope, Folders, $routeParams, $location, Settings )->
 
 
   $scope.result = null;

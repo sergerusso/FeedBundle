@@ -1,6 +1,6 @@
 # Created by Serge P <contact@sergerusso.com> on 10/19/16.
 
-angular.module('feedBundle').controller 'settingsCtrl', ($scope, Feeds, Folders, $location, Feed, Settings, db )->
+angular.module('feedBundle').controller 'settingsCtrl', ($scope, Folders, $location, Settings )->
 
   $scope.$watch 'Settings.update_each', ->
     Settings.update_each = parseInt(Settings.update_each, 10) || 0

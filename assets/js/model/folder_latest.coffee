@@ -1,7 +1,7 @@
 # Created by Serge P <contact@sergerusso.com> on 10/24/16.
 
 
-angular.module('feedBundle').factory 'FolderLatest', (db, Feeds, Folder, FeedComposite)->
+angular.module('feedBundle').factory 'FolderLatest', (Folder)->
 
   class FolderLatest extends  Folder
 

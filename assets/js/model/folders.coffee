@@ -1,6 +1,6 @@
 # Created by Serge P <serge.rsb@gmail.com> on 10/18/16.
 
-angular.module('feedBundle').service 'Folders', (Folder, FolderBookmarks, FolderLatest, db)->
+angular.module('feedBundle').service 'Folders', (Folder, FolderBookmarks, FolderLatest)->
 
   @sys_folders = [
     new Folder(_id:"all", name:'All feeds', isSystem: true)

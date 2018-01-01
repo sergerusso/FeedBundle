@@ -1,5 +1,5 @@
 
-window.settingsRootCtrl = ($scope, Settings, $location, Feeds, Folders, $routeParams)->
+window.settingsRootCtrl = ($scope, Settings, $location, Folders, $routeParams)->
   window.scp2 = $scope;
 
   $scope.Settings = Settings

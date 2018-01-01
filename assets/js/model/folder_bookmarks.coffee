@@ -1,6 +1,6 @@
 # Created by Serge P <contact@sergerusso.com> on 10/22/16.
 
-angular.module('feedBundle').factory 'FolderBookmarks', (db, Feeds, Folder, FeedComposite)->
+angular.module('feedBundle').factory 'FolderBookmarks', (Folder)->
 
   class FolderBookmarks extends  Folder
 

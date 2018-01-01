@@ -1,6 +1,6 @@
 # Created by Serge P <contact@sergerusso.com> on 10/19/16.
 
-angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Feeds, Feed, Folders, $routeParams, $location, Settings, $rootScope )->
+angular.module('feedBundle').controller 'settingsFeedsCtrl', ($scope, Folders, $routeParams, $location, Settings, $rootScope )->
 
   $scope.modal =
     feed:

@@ -2,11 +2,6 @@
  * Created by Serge <contact@sergerusso.com> on 10/14/17.
  */
 
-let db = {
-  folders: new PouchDB('FeedBundle_folders', {auto_compaction: true}),
-  feeds: new PouchDB('FeedBundle_feeds', {auto_compaction: true})
-}
-
 
 chrome.browserAction.onClicked.addListener(function(tab) {
   chrome.tabs.create({'url': chrome.extension.getURL('index.html')}, function(tab) {
@@ -18,15 +13,25 @@ if(chrome.webRequest) {
   //todo chrome ext id
   chrome.webRequest.onHeadersReceived.addListener(({responseHeaders}) => ({
     responseHeaders: responseHeaders.filter(({name}) => !['x-content-type-options' ,'x-frame-options', 'content-security-policy', 'access-control-allow-origin'].includes(name.toLowerCase())).concat(
-      [{name:'Access-Control-Allow-Origin', value:'chrome-extension://jeeenoibfemgniafnggmbhnioakgmdbm'}]
+      //[{name:'Access-Control-Allow-Origin', value:'chrome-extension://jeeenoibfemgniafnggmbhnioakgmdbm'}]
 
     )
 
   }), {urls: ['*://*/*']}, ['blocking', 'responseHeaders']);
-  chrome.webRequest.onHeadersReceived.addListener(({url, responseHeaders}) => console.log(url, {
-    responseHeaders: responseHeaders.filter(({name}) => !['x-frame-options', 'content-security-policy', 'access-control-allow-origin'].includes(name.toLowerCase()))
 
-  }), {urls: ['*://*/*']}, ['blocking', 'responseHeaders']);
+/*  chrome.webRequest.onHeadersReceived.addListener(({responseHeaders}) => {
+
+    let headers = {
+      responseHeaders: responseHeaders.filter(({name}) => !['x-content-type-options' ,'x-frame-options', 'content-security-policy', 'access-control-allow-origin'].includes(name.toLowerCase())).concat(
+        //[{name:'Access-Control-Allow-Origin', value:'chrome-extension://jeeenoibfemgniafnggmbhnioakgmdbm'}]
+
+      )
+    }
+
+    console.log(headers)
+
+    return headers
+  }, {urls: ['*://!*!/!*']}, ['blocking', 'responseHeaders']);*/
 }
 
 
@@ -34,6 +39,7 @@ updatePermissions = ()=>{
 
 
   //todo promise chain
+  //Error while running permissions.request: This function must be called during a user gesture
   db.feeds.allDocs({include_docs:true}).then((result)=>{
     let urls = result.rows.map(item=>item.doc.url);
 
@@ -43,6 +49,7 @@ updatePermissions = ()=>{
       let toRemove = origins.filter(origin=>!urls.includes(origin))
       let toAdd = urls.filter(url=>!origins.includes(url))
       console.log({toRemove, toAdd});
+      window.toAdd = toAdd
 
       chrome.permissions.remove({
         origins:toRemove
@@ -61,3 +68,16 @@ updatePermissions = ()=>{
     })
   })
 }
+
+chrome.alarms.create("upd feeds", {
+  when: Date.now(),
+  periodInMinutes: 5
+})
+
+chrome.alarms.onAlarm.addListener(()=>{
+  console.log('updating')
+  Feeds.get().then(feeds=>{
+    let unread = feeds.reduce((sum, feed)=>sum+feed.unreadCount(), 0)
+    setBadgetText(unread);
+  })
+})
