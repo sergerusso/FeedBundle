@@ -7,7 +7,7 @@ const requestPermission = (origins)=>{
   if(!window.chrome) return Promise.resolve()
   //console.log(JSON.stringify(origins))
   origins = (Array.isArray(origins) ? origins : [origins]).map(origin=>(
-    origin.replace(/^https?:\/\/([^\/]+)(\/.*)?$/i, '*://$1/*')
+    origin//.replace(/^https?:\/\/([^\/]+)(\/.*)?$/i, '*://$1/*')
   ))
 
 
@@ -19,6 +19,7 @@ const requestPermission = (origins)=>{
       origins: Array.isArray(origins) ? origins : [origins]
     }, (granted)=> {
       granted ? resolve() : reject();
+      window.location.reload()
     })
 
   })

@@ -271,11 +271,11 @@ body{
         .bookmark{
           opacity:0.4;
           &:hover{
-            opacity:1;
+            opacity:1 !important;
           }
 
-          &.glyphicon-star-empty:hover:before{ content: "\e006"; }
-          &.glyphicon-star:hover:before{ content: "\e007"; }
+          /*&.glyphicon-star-empty:hover:before{ content: "\e006"; }
+          &.glyphicon-star:hover:before{ content: "\e007"; }*/
         }
 
         .title{
@@ -312,6 +312,9 @@ body{
         transition: .3s opacity;
         cursor:pointer;
         z-index:2;
+        &.marked{
+          opacity:0.4;
+        }
 
       }
     }

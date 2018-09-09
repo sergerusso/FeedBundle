@@ -27,7 +27,7 @@ class Feed{
     if(item.marked){
       delete item.marked
     }else{
-      item.marked = parseInt (new Date).getTime()/1000
+      item.marked = parseInt((new Date).getTime()/1000)
     }
 
     this.setItems(this.items); //save
@@ -40,7 +40,9 @@ class Feed{
     //slice_to = if items.length > Settings.feedSize then Settings.feedSize else items.length //todo use sttings
     let slice_to = items.length > 350 ? 350 : items.length;
 
-    this.items = items.slice(0, slice_to)
+    this.items = items.filter((item, idx)=>(
+      idx <= slice_to || item.marked
+    ))
 
 
     db.feeds.upsert(this.id, (doc)=> {

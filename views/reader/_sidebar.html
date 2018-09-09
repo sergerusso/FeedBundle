@@ -103,7 +103,7 @@
         >
         <div class="title" ng-class='{full_title:Settings.full_title}'>{{item.title}}</div>
         <span class="bookmark glyphicon "
-              ng-class="{'glyphicon-star-empty': !item.marked, 'glyphicon-star': item.marked}"
+              ng-class="{'glyphicon-star-empty': !item.marked, 'glyphicon-star': item.marked, marked:item.marked}"
               ng-click-no-prop="toggleBookmark(feed, item)">
 
         </span>
