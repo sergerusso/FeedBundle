@@ -1,4 +1,10 @@
 // Created by Serge P <contact@sergerusso.com> on 10/18/16.
+
+import Feed from '../../model/feed/feed.js'
+import db from '../../db.js'
+
+
+
 const Feeds = {
   items:[],
 
@@ -14,13 +20,13 @@ const Feeds = {
     return _.find(this.items, feed => feed.url == url)
   },
 
-  get(noUpdate){
+  fetch(noUpdate){
 
-    return db.feeds.allDocs({include_docs:true}).then (result=>{
-      this.items = result.rows.map(item=>new Feed(item.doc))
+    return db.feeds.toArray().then (result=>{
+      this.items = result.map(item=>new Feed(item))
 
       if(!noUpdate){
-        this.update()
+        this.update() //todo refactor feeds loa->update
       }
 
       return this.items;
@@ -30,14 +36,9 @@ const Feeds = {
 
   },
 
-  insert(data, returnPromise){
-    let id = data.url.match(/:\/\/([^\/]+)/i)
-    id = id && id[1] || ""
-    id = id.replace(/[^a-z0-9]/ig, '')
-    id+= "_"+Math.random().toString(36).substr(2,4)
+  insert(data){
 
     let json = {
-      _id: id,
       title: data.title,
       url: data.url
     }
@@ -50,12 +51,17 @@ const Feeds = {
     }
 
 
-    let promise = db.feeds.put(json).catch((err)=>console.log('Error at feeds.insert', err))
+    return db.feeds.add(json).then( id =>{
+      json.id = id;
 
-    let feed = new Feed(json)
-    this.items.push(feed)
+      let feed = new Feed(json)
+      this.items.push(feed) //todo no id
 
-    return returnPromise ? promise : feed;
+      return feed; //todo returnPromise ? promise :
+
+    });
+
+
 
   },
 
@@ -66,11 +72,9 @@ const Feeds = {
     this.items = _.without(this.items, feed);
 
 
-    db.feeds.get(feed.id).then(doc=>db.feeds.remove(doc))
+    return db.feeds.delete(feed.id)
   }
 
 }
 
-
-
-
+export default Feeds

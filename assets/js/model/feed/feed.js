@@ -1,9 +1,12 @@
 // Created by Serge P <contact@sergerusso.com> on 10/18/16.
+
+import db from '../../db.js'
+
 class Feed{
   constructor(data = {}) {
     this.title = data.title
     this.url = data.url
-    this.id = data._id
+    this.id = data.id
     this.folderId = data.folderId || "unsorted"
     this.items = data.items || []
   }
@@ -24,6 +27,7 @@ class Feed{
 
 
   toggleMark(item){
+    //todo cache table
     if(item.marked){
       delete item.marked
     }else{
@@ -44,40 +48,27 @@ class Feed{
       idx <= slice_to || item.marked
     ))
 
+    items = this.items.map(item => _.omit(_.clone(item), '$$hashKey'));
+    return db.feeds.update(this.id, {items})
 
-    db.feeds.upsert(this.id, (doc)=> {
-      doc.items = this.items.map(item => _.omit(_.clone(item), '$$hashKey'))
 
-      return doc
-    }).catch((err)=>console.log('Error at feed.setItems', err))
   }
 
 
   setTitle(title) {
     this.title = title
-
-    db.feeds.upsert(this.id, (doc)=> {
-      doc.title = title
-      return doc
-    }).catch((err)=>console.log('Error at feed.setTitle', err))
+    db.feeds.update(this.id, {title})
   }
 
 
   setUrl(url) {
     this.url = url
-
-    db.feeds.upsert(this.id, (doc)=> {
-      doc.url = url
-      return doc
-    }).catch((err)=>console.log('Error at feed.setUrl', err))
+    db.feeds.update(this.id, {url})
   }
+
   setFolderId(folderId) {
     this.folderId = folderId
-
-    db.feeds.upsert(this.id, (doc)=> {
-      doc.folderId = folderId
-      return doc
-    }).catch((err)=>console.log('Error at feed.setFolderId', err))
+    db.feeds.update(this.id, {folderId})
   }
 
   fetch(){
@@ -120,6 +111,8 @@ class Feed{
         reader.onerror = ()=>reject(reader.error)
       })
     }
+
+
 
     fetch(this.url).then((resp)=>{
       let search = resp.headers.get('Content-Type').match(/charset=([^\n]+)/),
@@ -178,6 +171,9 @@ class Feed{
   }
 
 }
+
+export default Feed;
+
 
 
     

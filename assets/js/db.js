@@ -1,18 +1,50 @@
-// Created by Serge P <contact@sergerusso.com> on 10/18/16.
+//sergerusso 2018
 
-let db = {
-  folders: new PouchDB('FeedBundle_folders', {auto_compaction: true}),
-  feeds: new PouchDB('FeedBundle_feeds', {auto_compaction: true}),
-  reset: ()=> Promise.all([db.feeds.destroy(), db.folders.destroy()])
+import Settings from './model/settings.js'
 
-}
+const db = new Dexie("feedbundle")
 
-
-
-
-
+db.version(1).stores({
+  folders: "++id", //id, name
+  feeds:"++id",  //id, title, url, folder, items
+  storage:"key",
+});
 
 
+db.on("populate", ()=>{
+
+  //todo set defaults
+  db.storage.add({
+    key:'settings',
+    value: Settings._defaults
+  })
+
+  /*Object.entries(this.constructor.storageDefaults).forEach( ([key, value]) =>{
+    this.storage.add({ key, value })
+  })
 
 
+   Feeds.insert
+   title: 'CNET News'
+   url: 'https://www.cnet.com/rss/news/'
+   , true
+   .then -> resolve()
 
+
+  this.sessions.add({
+    id: 1,
+    name: "_not_saved_",
+    urls: [],
+    titles: [],
+    favIcons: [],
+    tags: [],
+    windowsMap:[],
+    pinned:[]
+  });*/
+
+});
+
+
+db.open();
+
+export default db;

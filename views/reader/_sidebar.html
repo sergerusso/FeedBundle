@@ -98,10 +98,10 @@
          ng-hide='item.read && !Settings.unread && !isActiveFeedItem(item) && !selectedFolder.isBookmarks'
          ng-click='showFeedItem(item, feed)'
          class='item'
-         ng-class='{active: isActiveFeedItem(item), read: item.read, full_title:Settings.full_title}'
+         ng-class='{active: isActiveFeedItem(item), read: item.read, full_title:Settings.fullTitle}'
          ng-repeat='item in feed.items | filter_news :feed'
         >
-        <div class="title" ng-class='{full_title:Settings.full_title}'>{{item.title}}</div>
+        <div class="title" ng-class='{full_title:Settings.fullTitle}'>{{item.title}}</div>
         <span class="bookmark glyphicon "
               ng-class="{'glyphicon-star-empty': !item.marked, 'glyphicon-star': item.marked, marked:item.marked}"
               ng-click-no-prop="toggleBookmark(feed, item)">

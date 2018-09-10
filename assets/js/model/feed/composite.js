@@ -1,4 +1,5 @@
 // Created by Serge P <contact@sergerusso.com> on 10/22/16.
+import Feed from './feed.js'
 
 class FeedComposite extends Feed{
 
@@ -30,3 +31,5 @@ class FeedComposite extends Feed{
   }
 
 }
+
+export default FeedComposite;

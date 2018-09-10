@@ -16,18 +16,17 @@
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "background": {
-    "scripts": [
-      "assets/js/lib/pouchdb-6.0.7.min.js",
-      "assets/js/lib/pouchdb.upsert.min.js",
-      "assets/js/lib/underscore.js",
-      "assets/js/db.js",
-      "assets/js/adapter.js",
-      "assets/js/lib/jquery.min.js",
-      "assets/js/model/feed.js",
-      "assets/js/model/feed_composite.js",
-      "assets/js/model/feeds.js",
-      "assets/js/chrome.js"
-    ],
+//    "scripts": [
+//      "assets/js/lib/dexie.min.js",
+//      "assets/js/lib/dexie-observable.min.js",
+//      "assets/js/lib/underscore.js",
+//      "assets/js/adapter.js",
+//      "assets/js/db.js",
+//      "assets/js/model/feed/feeds.js",
+//      "assets/js/lib/jquery.min.js",
+//      "assets/js/chrome.js"
+//    ],
+    "page":"background.html",
     "persistent": false
   }
 }

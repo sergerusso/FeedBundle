@@ -1,9 +1,10 @@
-/**
- * Created by Serge <contact@sergerusso.com> on 10/14/17.
- */
+//sergerusso 2018
 
+import db from './db.js'
+import Feeds from './model/feed/feeds.js'
 
 chrome.browserAction.onClicked.addListener(function(tab) {
+  //todo close already open
   chrome.tabs.create({'url': chrome.extension.getURL('index.html')}, function(tab) {
     // Tab opened.
   });
@@ -48,7 +49,7 @@ if(chrome.webRequest) {
 }
 
 
-updatePermissions = ()=>{
+const updatePermissions = ()=>{
 
 
 
@@ -95,8 +96,9 @@ chrome.alarms.create("upd feeds", {
 
 chrome.alarms.onAlarm.addListener(()=>{
   console.log('updating')
-  Feeds.get().then(feeds=>{
+  Feeds.fetch().then(feeds=>{
+    console.log(feeds);
     let unread = feeds.reduce((sum, feed)=>sum+feed.unreadCount(), 0)
-    setBadgetText(unread);
+    setBadgetText(unread || "");
   })
 })
