@@ -1,22 +1,33 @@
 
 <div class='viewport settings' ng-switch on="view" >
-  <div class='feeds' ng-switch-default ng-include="'views/settings/_feeds.html'"></div>
-  <div class='general' ng-switch-when="general" ng-include="'views/settings/_settings.html'"></div>
+  <div class='feeds' ng-switch-default>
+    <div ng-include="'views/settings/_feeds.html'"></div>
+  </div>
+  <div class='general' ng-switch-when="general">
+    <div ng-include="'views/settings/_settings.html'"></div>
+  </div>
   <!-- <div class='feedback'  ng-switch-when="feedback"><% render 'pages/feedback' %></div> -->
-  <div class='import'  ng-switch-when="export_import"  ng-include="'views/settings/_import.html'"></div>
-  <div class='help' ng-switch-when="help"  ng-include="'views/settings/_help.html'"></div>
+  <div class='import'  ng-switch-when="export_import">
+    <div ng-include="'views/settings/_import.html'"></div>
+  </div>
+  <div class='help' ng-switch-when="help" >
+    <div ng-include="'views/settings/_help.html'"></div>
+  </div>
 </div>
 
 <div class='sidebar settings'>
   <div class='wrap'>
-    <div class='title_wrap' ng-class="menu_class('feeds')"><a href='#/settings/' class='title'><i class="glyphicon glyphicon-list-alt"></i> Feeds</a></div>
-    <div class='title_wrap' ng-class="menu_class('general')"><a href='#/settings/general'  class='title'><i class="glyphicon glyphicon-wrench"></i> Settings</a></div>
-    <div class='title_wrap' ng-class="menu_class('export_import')"><a href='#/settings/export_import' class='title'><i class="glyphicon glyphicon-retweet"></i> Export/import</a></div>
+    <div class='title_wrap' ng-class="menu_class('feeds')"><a href='#!/settings/' class='title'><i class="glyphicon glyphicon-list-alt"></i> Feeds</a></div>
+    <div class='title_wrap' ng-class="menu_class('general')"><a href='#!/settings/general'  class='title'><i class="glyphicon glyphicon-wrench"></i> Settings</a></div>
+    <div class='title_wrap' ng-class="menu_class('export_import')"><a href='#!/settings/export_import' class='title'><i class="glyphicon glyphicon-retweet"></i> Export/import</a></div>
     <!-- <div class='title_wrap' ng-class="menu_class('feedback')"><a href='#/settings/feedback' class='title'><i class="glyphicon glyphicon-envelope"></i> Send feedback</a></div> -->
     <!--<div class='title_wrap' ng-class="menu_class('changelog')"><a href='#/settings/changelog' class='title'><i class="glyphicon glyphicon-flag"></i> News</a></div>-->
-    <div class='title_wrap' ng-class="menu_class('help')"><a href='#/settings/help' class='title'><i class="glyphicon glyphicon-question-sign"></i> Help</a></div>
+    <div class='title_wrap' ng-class="menu_class('help')"><a href='#!/settings/help' class='title'><i class="glyphicon glyphicon-question-sign"></i> Help</a></div>
   </div>
 </div>
 <div class='btn-settings dropdown active'>
   <a class='btn btn-default' href='#/reader'><i class="glyphicon glyphicon-chevron-left"></i></a>
 </div>
+
+
+<feed-modal feed="feedModal"></feed-modal> <!-- todo it's duplicate -->

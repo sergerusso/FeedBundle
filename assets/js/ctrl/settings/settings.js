@@ -1,7 +1,6 @@
-
+import app from '../../app.js'
 import Settings from '../../model/settings.js'
-
-window.settingsCtrl = function($scope, $location ){
+app.controller('settingsCtrl',  function($scope, $location ){
 
   $scope.$watch('Settings.updateEach', () => {
     Settings.updateEach = parseInt(Settings.updateEach, 10) || 0
@@ -22,6 +21,6 @@ window.settingsCtrl = function($scope, $location ){
     //Settings.reset(true)
     //db.reset().then(() => location.reload())
   }
-}
+})
 
-export default angular
+export default app

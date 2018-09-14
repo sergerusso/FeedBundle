@@ -52,7 +52,7 @@
       <!--todo onclick-->
       <button class='btn btn-dark btn_'
               ng-hide='selectedFolder.latestNews'
-              add-new-feed>Add new source</button>
+              ng-click="addFeed()">Add new source</button>
       <a class="btn btn-dark btn-small feedback" href="https://github.com/sergerusso/FeedBundle/issues" browser-link>Report issue</a>
     </div>
 
@@ -72,8 +72,8 @@
         </div>
 
         <div class="ctrls">
-          <img src='../../assets/images/warning-mini.png' ng-show='feed.error'/>
-          <img src='../../assets/images/loader-mini.gif' ng-show='feed.updating'/>
+          <img src='/assets/images/warning-mini.png' ng-show='feed.error'/>
+          <img src='/assets/images/loader-mini.gif' ng-show='feed.updating'/>
           <span class="badge"
                 title="Double click to mark it as read"
                 ng-class='{"badge-warning": feed.unreadCount() > 0 }'
@@ -86,7 +86,7 @@
 
               <ul class="dropdown-menu" role="menu">
                 <li><a href ng-click='feed.markRead()' ng-show='feed.unreadCount() > 0'><i class='glyphicon glyphicon-eye-open'></i> Mark read</a></li>
-                <li><a href='#/settings/edit/{{feed.id}}'><i class='glyphicon glyphicon-pencil'></i> Edit</a></li>
+                <li><a href ng-click='editFeed(feed)'><i class='glyphicon glyphicon-pencil'></i> Edit</a></li>
                 <li><a href ng-click='Feeds.remove(feed)'><i class='glyphicon glyphicon-remove'></i> Remove</a></li>
               </ul>
           </span>

@@ -1,11 +1,10 @@
 // Created by Serge P <contact@sergerusso.com> on 10/19/16.
-
+import app from '../../app.js'
 import Folders from '../../model/folder/folders.js'
 import Feeds from '../../model/feed/feeds.js'
 import Settings from '../../model/settings.js'
 
-
-window.settingsImportCtrl = function($scope, $routeParams, $location) {
+app.controller('settingsImportCtrl',  function($scope, $routeParams, $location) {
 
 
   $scope.result = null;
@@ -147,6 +146,6 @@ window.settingsImportCtrl = function($scope, $routeParams, $location) {
       document.body.removeChild(a)
     }, 0);
   }
-}
+})
 
-export default angular;
+export default app;

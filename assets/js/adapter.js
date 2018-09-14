@@ -7,7 +7,7 @@ const requestPermission = (origins)=>{
   if(!window.chrome) return Promise.resolve()
   //console.log(JSON.stringify(origins))
   origins = (Array.isArray(origins) ? origins : [origins]).map(origin=>(
-    origin.replace(/^https?:\/\/([^\/]+)(\/.*)?$/i, '*://$1/*')
+    `*://${new URL(origin).host}/*`
   ))
 
 
@@ -31,7 +31,7 @@ const removePermission = (origins)=>{
   if(!window.chrome) return Promise.resolve()
 
   origins = (Array.isArray(origins) ? origins : [origins]).map(origin=>(
-    origin.replace(/^https?:\/\/([\/]+)(\/.*)?$/i, '*://$1/*')
+    `*://${new URL(origin).host}/*`
   ))
 
   return new Promise((resolve, reject)=>{

@@ -228,13 +228,6 @@ angular
       })
     }
   )])
-  .directive("addNewFeed", [()=>(
-    (scope, elm, attrs)=> {
-      elm.on('click', () => {
-        location.hash = "#/settings/new/return"
-      })
-    }
-  )])
 
   .filter('filter_news', [()=>(
     (feeds, feed)=> (

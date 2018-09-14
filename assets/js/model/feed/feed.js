@@ -2,6 +2,7 @@
 
 import db from '../../db.js'
 
+//todo remove items with the same url, dif names
 class Feed{
   constructor(data = {}) {
     this.title = data.title
@@ -113,10 +114,14 @@ class Feed{
     }
 
 
-
+//, {redirect:'manual'}
     fetch(this.url).then((resp)=>{
+      //console.log(this.url, resp);
+
+
       let search = resp.headers.get('Content-Type').match(/charset=([^\n]+)/),
           encoding = search && search[1] || 'UTF-8';
+
 
       return resp.blob().then(blob=>{
         let reader = new FileReader()
@@ -160,7 +165,7 @@ class Feed{
       })
 
       callback(result)
-      document.dispatchEvent(new Event('feedUpdated'));
+      document.dispatchEvent(new Event('feedUpdated')); //todo use promise chain
 
 
     }, (err)=>{
