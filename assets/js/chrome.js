@@ -3,11 +3,30 @@
 import db from './db.js'
 import Feeds from './model/feed/feeds.js'
 
+
 chrome.browserAction.onClicked.addListener(function(tab) {
   //todo close already open
-  chrome.tabs.create({'url': chrome.extension.getURL('index.html')}, function(tab) {
-    // Tab opened.
-  });
+
+    chrome.tabs.get(window.tabOpen || 0, function (tab, b) {
+
+      if(!tab){
+
+        chrome.tabs.create({'url': chrome.extension.getURL('index.html')}, function(tab) {
+          // Tab opened.
+          window.tabOpen = tab.id
+          //window.
+        });
+
+      }else{
+
+        chrome.tabs.update(tab.id, {active: true});
+        chrome.windows.update(tab.windowId, {focused: true});
+
+      }
+
+    })
+
+
 });
 
 if(chrome.webRequest) {

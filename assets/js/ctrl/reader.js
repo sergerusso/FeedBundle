@@ -45,7 +45,7 @@ export default function($rootScope, $scope){
   }
 
   $scope.isActiveFeedItem = (item)=> {
-    $scope.feedItem && ($scope.feedItem.url == item.url)
+    return $scope.feedItem && ($scope.feedItem.url == item.url)
   }
 
   $scope.collapseAll = ()=>{

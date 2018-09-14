@@ -13,7 +13,7 @@ db.version(1).stores({
 
 db.on("populate", ()=>{
 
-  //todo set defaults
+  //todo seeds data
   db.storage.add({
     key:'settings',
     value: Settings._defaults

@@ -45,8 +45,6 @@ angular
       }, 1000 * 60 * Settings.updateEach)
     }
 
-    //updateTimer(); todo enable
-
     window.db = db;
 
 
@@ -62,7 +60,7 @@ angular
 
         resolve()
 
-        //updateTimer(); todo enable
+        updateTimer();
 
       })
 

@@ -16,16 +16,6 @@
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "background": {
-//    "scripts": [
-//      "assets/js/lib/dexie.min.js",
-//      "assets/js/lib/dexie-observable.min.js",
-//      "assets/js/lib/underscore.js",
-//      "assets/js/adapter.js",
-//      "assets/js/db.js",
-//      "assets/js/model/feed/feeds.js",
-//      "assets/js/lib/jquery.min.js",
-//      "assets/js/chrome.js"
-//    ],
     "page":"background.html",
     "persistent": false
   }
