@@ -1,6 +1,3 @@
-import Settings from '../../model/settings.js'
-
-
 export default function($scope, $location, $routeParams){
   window.scp2 = $scope;
 

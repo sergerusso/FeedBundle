@@ -31,32 +31,6 @@ export default {
       return folder;
     } )
 
-    //todo DB add folder
-
-    /*
-
-    db.folders.query(((doc)-> emit(doc.name)), key:name, include_docs:true).then (result)=>
-      if result.rows.length
-        return new Folder result.rows[0].doc
-      else if @getByName name  #todo move to top
-        return @getByName name
-
-      #create new
-      id = (Math.max (parseInt(folder.id) or 0 for folder in @items)...)+1
-
-      json =
-        _id: id.toString(),
-        name: name
-
-
-      db.folders.put(json).catch (err)->console.log 'Error at folders.add', err
-
-      folder = new Folder json
-
-      @items.push folder
-      folder
-
-     */
   },
 
   remove(folder){

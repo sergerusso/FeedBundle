@@ -19,6 +19,10 @@ const requestPermission = (origins)=>{
       origins: Array.isArray(origins) ? origins : [origins]
     }, (granted)=> {
       granted ? resolve() : reject();
+
+      chrome.runtime.getBackgroundPage(function (backgroundPage) {
+        backgroundPage.location.reload()
+      });
       //window.location.reload()
     })
 

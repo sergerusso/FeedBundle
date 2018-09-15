@@ -13,34 +13,10 @@ db.version(1).stores({
 
 db.on("populate", ()=>{
 
-  //todo seeds data
   db.storage.add({
     key:'settings',
     value: Settings._defaults
   })
-
-  /*Object.entries(this.constructor.storageDefaults).forEach( ([key, value]) =>{
-    this.storage.add({ key, value })
-  })
-
-
-   Feeds.insert
-   title: 'CNET News'
-   url: 'https://www.cnet.com/rss/news/'
-   , true
-   .then -> resolve()
-
-
-  this.sessions.add({
-    id: 1,
-    name: "_not_saved_",
-    urls: [],
-    titles: [],
-    favIcons: [],
-    tags: [],
-    windowsMap:[],
-    pinned:[]
-  });*/
 
 });
 

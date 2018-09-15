@@ -1,8 +1,8 @@
 <div class='viewport' clear-view hotkeys>
-  <!-- todo implement back button, allow to deny scripts -->
+  <!-- todo implement back button; just main content -->
 
   <iframe id="viewFrame" ng-src='{{feedItem.url}}'
-          ng-hide='frame_loading || !feedItem.url' view-frame sandbox="allow-same-origin allow-forms allow-scripts" nwfaketop>
+          ng-hide='frame_loading || !feedItem.url' view-frame _sandbox="allow-forms allow-scripts" nwfaketop>
 
   </iframe>
   <div class='frame_loading' ng-show='frame_loading'>
@@ -19,7 +19,6 @@
 
   <div class="welcome" ng-show="!frame_loading && !feedItem " ng-include="'views/reader/_welcome.html'"></div>
 </div>
-
 <div class='sidebar' disable-select ng-include="'views/reader/_sidebar.html'">
 </div>
 

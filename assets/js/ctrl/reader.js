@@ -63,8 +63,6 @@ export default function($rootScope, $scope){
 
   $scope.toggleBookmark = (feed, item) => {
     feed.toggleMark(item)
-
-    //todo prevent item disappearing
     //if $scope.selectedFolder.isBookmarks and !item.marked
   }
 
@@ -77,7 +75,7 @@ export default function($rootScope, $scope){
     }
   }
 
-
+  //todo set only after update
   $scope.$watch(() => (
     Folders.getById('all').unreadCount()
   ), (unread,b)=> {

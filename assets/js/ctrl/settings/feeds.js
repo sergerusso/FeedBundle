@@ -1,5 +1,5 @@
 // Created by Serge P <contact@sergerusso.com> on 10/19/16.
-import app from '../../app.js'
+import app from '../../core/ng-module.js'
 
 import Folders from '../../model/folder/folders.js'
 import Settings from '../../model/settings.js'
@@ -26,7 +26,7 @@ app.controller('settingsFeedsCtrl', function($scope, $routeParams, $location, $r
 
 
   $scope.remove = (feed) => {
-    removePermission(feed.url)
+    //removePermission(feed.url) //todo only if ther is no such
     Feeds.remove(feed)
   }
 

@@ -5,10 +5,14 @@ import Folders from '../model/folder/folders.js'
 import Settings from '../model/settings.js'
 import db from '../db.js'
 
-export default ($scope)=>{
+export default ($timeout, $rootScope, $q)=>{
 
   window.db = db;
 
+  let $scope = $rootScope;
+
+  //todo permission warning
+  //todo auto backup
 
   $scope.Feeds = Feeds
   $scope.Folders = Folders

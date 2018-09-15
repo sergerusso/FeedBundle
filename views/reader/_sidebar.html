@@ -54,14 +54,17 @@
               ng-hide='selectedFolder.latestNews'
               ng-click="addFeed()">Add new source</button>
       <a class="btn btn-dark btn-small feedback" href="https://github.com/sergerusso/FeedBundle/issues" browser-link>Report issue</a>
+      <!--todo chrome store url-->
     </div>
 
 
   </div>
-  <div class='main_ctrls' ng-hide='selectedFolder.id == "latest"'>
-  </div>
 
   <div class='menu'>
+
+    <div ng-if="!Feeds.items.length " class="get-started" ng-click="addFeed()">
+      Get started by adding new feed
+    </div>
     <div ng-repeat='feed in selectedFolder.getFeeds()'>  <!-- Feeds.unread(feed.items) == 0 && !Settings.unread || -->
 
       <div class='title_wrap' ng-class='{expanded: feed.expanded}' ng-hide="feed.isComposite" >

@@ -1,5 +1,5 @@
 
-import Settings from './model/settings.js'
+import Settings from '../model/settings.js'
 
 //todo refactor all this
 
@@ -8,14 +8,17 @@ angular
   .directive('toggleSidebar', [()=>(
     (scope, elm, attrs)=> {
 
-      let $sidebar = $(".sidebar:visible"),
-        $viewport = $('.viewport'),
-        $btn = $(".btn-settings:visible"),
-        sidebar_width
+      let sidebar_width;
 
       elm.on('click', () => {
+        let $sidebar = $(".sidebar"),
+          $viewport = $('.viewport'),
+          $btn = $(".btn-settings");
+
+        sidebar_width = $sidebar.width()
+
         if (scope.sidebar_expanded) {
-          sidebar_width = $sidebar.width()
+
           $sidebar.animate({right: -sidebar_width})
           $viewport.animate({right: 0})
           $btn.animate({right: $btn.width() / 2})
@@ -49,18 +52,26 @@ angular
         }, 2000);
       })
 
+
       scope.$on('destroy', ()=> clearInterval(window.frameLoaderInsperctor))
 
       elm.on('load', ()=> {
         scope.frame_loading = false
 
-        if (window.require) {
-          $(elm[0].contentWindow.document).find("a").on('click', () => {
-            if (this.href.indexOf('http') != 0) return;
+/*
+todo does not work
+        $(elm[0].contentWindow.document).find("a").on('click', () => {
+          if (this.href.indexOf('http') != 0) return;
+
+          if( window.chrome) {
+            this.setAttribute("target", "_blank");
+          }else if(window.require){
             require('nw.gui').Shell.openExternal(this.href)
-            return false
-          })
-        }
+          }
+
+          return false
+        })*/
+
 
         scope.$apply()
       })

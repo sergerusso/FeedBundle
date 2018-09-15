@@ -55,9 +55,9 @@ const Feeds = {
       json.id = id;
 
       let feed = new Feed(json)
-      this.items.push(feed) //todo no id
+      this.items.push(feed)
 
-      return feed; //todo returnPromise ? promise :
+      return feed;
 
     });
 

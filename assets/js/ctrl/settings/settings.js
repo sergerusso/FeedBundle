@@ -1,4 +1,4 @@
-import app from '../../app.js'
+import app from '../../core/ng-module.js'
 import Settings from '../../model/settings.js'
 app.controller('settingsCtrl',  function($scope, $location ){
 
@@ -14,12 +14,9 @@ app.controller('settingsCtrl',  function($scope, $location ){
 
   $scope.deleteAll = () => {
     if (!confirm('Are you sure?')) return;
-    //todo update
 
     Dexie.delete('feedbundle').then(()=>location.reload());
 
-    //Settings.reset(true)
-    //db.reset().then(() => location.reload())
   }
 })
 

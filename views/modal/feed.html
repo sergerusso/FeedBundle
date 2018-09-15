@@ -6,20 +6,56 @@
             <div ng-switch on="feed.step">
                 <!-- add feed -->
                 <div ng-switch-default>
-                    <form onsubmit="return false;">
+                    <form ng-submit="addFeed()">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Add Feed</h4>
+                            <h4 class="modal-title">Add New Feed</h4>
                         </div>
 
                         <div class="modal-body">
 
-                            Enter feed or site url:<br/> <input class='form-control' name="feed_url" ng-model='feed.new_feed_url' type="text" ng-autofocus/>
+                            <label>Site URL:</label>
+                            <input class='form-control' name="feed_url" ng-model='feed.new_feed_url' type="text" placeholder="https://..."/>
+                            <div class="text-right">
+                                <small>
+                                    <i>
+                                        or rss address
+                                    </i>
+                                </small>
+                            </div>
+
+                            <div ng-if="Feeds.items.length > 5 || true" class="suggestions">
+                                <label>Suggestions:</label>
+                                <br/>
+
+                                <div class='dropdown ' ng-repeat="item in suggestions">
+                                    <button class='btn btn-primary btn-xs dropdown-toggle' data-toggle="dropdown">
+                                        {{item.name}}
+                                        <small><i class="glyphicon glyphicon-chevron-down"></i></small>
+                                    </button>
+
+
+                                      <ul class="dropdown-menu" role="menu">
+                                        <li ng-repeat="item in item.items">
+                                            <a href ng-click="selectSuggestion(item[1])">
+                                                {{item[0]}}
+                                            </a>
+                                        </li>
+
+                                      </ul>
+                              </div>
+
+
+                            </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true">Close</button>
-                            <button class="btn btn-primary" type="button" ng-click="addFeed($event)">{{modal.processing && 'Loading...' || 'Next'}}</button>
+                            <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                            <button class="btn btn-primary" type="submit">
+                                Next
+                                <i class="fa fa-spin fa-refresh" ng-if="processing"></i>
+
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -71,11 +107,11 @@
                 <div ng-switch-when="error">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Error</h4>
+                        <h4 class="modal-title">Error Occurred</h4>
                     </div>
                     <div class="modal-body">
                         <p>
-                            Sorry, we cannot parse this feed.
+                            Cannot find any rss source. Try to enter direct rss url.
                         </p>
                     </div>
                     <div class="modal-footer">

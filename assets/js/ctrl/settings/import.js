@@ -1,5 +1,5 @@
 // Created by Serge P <contact@sergerusso.com> on 10/19/16.
-import app from '../../app.js'
+import app from '../../core/ng-module.js'
 import Folders from '../../model/folder/folders.js'
 import Feeds from '../../model/feed/feeds.js'
 import Settings from '../../model/settings.js'
@@ -45,9 +45,6 @@ app.controller('settingsImportCtrl',  function($scope, $routeParams, $location) 
     })
 
     requestPermission(urls).then( ()=> {
-
-      //todo update afterward
-
 
       $.each($scope.result, (folderName, value) => {
         Folders.add(folderName).then(folder => {

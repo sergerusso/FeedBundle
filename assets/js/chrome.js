@@ -5,11 +5,10 @@ import Feeds from './model/feed/feeds.js'
 
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-  //todo close already open
 
     chrome.tabs.get(window.tabOpen || 0, function (tab, b) {
 
-      if(!tab){
+      if(chrome.runtime.lastError || !tab){
 
         chrome.tabs.create({'url': chrome.extension.getURL('index.html')}, function(tab) {
           // Tab opened.
@@ -31,9 +30,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 if(chrome.webRequest) {
   //todo chrome ext id
-  chrome.webRequest.onHeadersReceived.addListener(({responseHeaders, url}) => {
 
-    //console.log(url, (responseHeaders.find(({name})=>name == 'Location') || {}).value);
+  chrome.webRequest.onHeadersReceived.addListener(({responseHeaders, url}) => {
 
     return ({
       responseHeaders: responseHeaders.filter(({name}) => !['x-content-type-options' ,'x-frame-options', 'content-security-policy', 'access-control-allow-origin'].includes(name.toLowerCase())).concat(

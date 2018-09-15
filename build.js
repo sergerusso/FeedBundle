@@ -17,8 +17,6 @@ try{
   return
 }
 
-//todo compile coffeescript
-
 
 if(platforms.indexOf(platform) == -1){
   console.log("Please specify target platform (win32, win64, osx32, osx64, linux32, linux64)")
