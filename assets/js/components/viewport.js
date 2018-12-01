@@ -34,7 +34,7 @@ app
           <!--<a href>Find the problem</a>-->
         </div>
       </div>
-      <div class="welcome" ng-show="!loading && !item " ng-include="'views/reader/_welcome.html'"></div>
+      <welcome class="welcome" ng-show="!loading && !item "></welcome>      
     </div>
     `,
     scope: {

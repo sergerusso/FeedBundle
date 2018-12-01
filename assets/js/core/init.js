@@ -11,6 +11,7 @@ import '../components/feed-modal.js'
 import '../components/viewport.js'
 import '../components/switch.js'
 import '../components/report-button.js'
+import '../components/welcome.js'
 import '../onerror.js'
 
 app
