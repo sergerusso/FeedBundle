@@ -153,14 +153,17 @@ class Feed{
         $items.toArray().forEach( item=>{
           let $this = $(item),
             date_str = $this.find("pubDate").text() || $this.find("published").text() || $this.find("updated").text() || $this.find("date").text(),
-            time = (new Date(date_str)).getTime() || (new Date).getTime();
+            time = (new Date(date_str)).getTime() || (new Date).getTime(),
+            title = $this.children("title").text();
 
           if(!date_str) {
             //console.log('no date', $this.find("link").text() || $this.find("link").attr('href'))
           }
 
+          if(!title) return;
+
           result.items.push({
-            title: $this.children("title").text(),
+            title,
             url: $this.children("link").text() || $this.children("link").attr('href'),
             date: parseInt(time / 1000)
           })

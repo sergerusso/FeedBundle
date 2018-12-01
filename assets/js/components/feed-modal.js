@@ -225,7 +225,7 @@ app
           } else {
             Folders.add($scope.editingFolder._name)
               .then((folder) => {
-                $scope.feed.item._folderId = folder.id
+                $scope.feed.fields.folderId = folder.id
                 $scope.$apply()
               })
           }
@@ -235,8 +235,8 @@ app
       }
 
       $scope.removeFolder = (folder) => {
-        if ($scope.feed.item._folderId == folder.id) {
-          $scope.feed.item._folderId = 'unsorted'
+        if ($scope.feed.fields.folderId == folder.id) {
+          $scope.feed.fields.folderId = 'unsorted'
         }
         Folders.remove(folder)
       }

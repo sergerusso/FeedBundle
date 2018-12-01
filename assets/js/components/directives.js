@@ -52,25 +52,23 @@ angular
         }, 2000);
       })
 
+      //todo request permission if needed
+      //disable scripts
+
 
       scope.$on('destroy', ()=> clearInterval(window.frameLoaderInsperctor))
 
       elm.on('load', ()=> {
         scope.frame_loading = false
 
-/*
-todo does not work
-        $(elm[0].contentWindow.document).find("a").on('click', () => {
-          if (this.href.indexOf('http') != 0) return;
-
-          if( window.chrome) {
-            this.setAttribute("target", "_blank");
-          }else if(window.require){
+        //todo implementation for chrome (no way at the moment)
+        if (window.require) {
+          $(elm[0].contentWindow.document).find("a").on('click', () => {
+            if (this.href.indexOf('http') != 0) return;
             require('nw.gui').Shell.openExternal(this.href)
-          }
-
-          return false
-        })*/
+            return false
+          })
+        }
 
 
         scope.$apply()
