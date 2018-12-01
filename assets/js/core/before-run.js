@@ -42,6 +42,12 @@ export default ($timeout, $rootScope, $q)=>{
     console.log($scope.feedModal)
   }
 
+  $scope.viewportFontStyles = () => ({
+    fontSize: Settings.viewportFontSize + "px",
+    lineHeight: Settings.viewportLineHeight,
+    fontWeight: Settings.viewportFontWeight,
+  })
+
 
 
   $scope.loadDefer = new Promise( resolve => {

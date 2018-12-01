@@ -20,6 +20,7 @@ app
       </iframe>
       <div id="viewFrame"    
            class="text-container"
+           ng-style="fontStyle()"
            ng-hide='loading || !item.url' 
            ng-if="extractText">  
       </div>
@@ -40,7 +41,9 @@ app
     scope: {
       // same as '=customer'
       item: '=',
-      extractText:'='
+      extractText:'=',
+      fontStyle:'=',
+
     },
     controller: function($scope, $element, $rootScope, $timeout){
 

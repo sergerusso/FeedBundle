@@ -365,6 +365,10 @@ body{
       text-align: center;
       padding:0px 0 0px;
       color: #888;
+
+      .btn-group{
+        width:calc(100% - 12px);
+      }
       a{
         color:#EEE;
         text-decoration: underline;
@@ -374,7 +378,7 @@ body{
       }
       .btn{
         text-align: center;
-        width: 108px;
+        width: 50%;
         background-color: #222;
         color: #CACACA;
         border-color: #494949 !important;
@@ -425,14 +429,20 @@ body{
       border:0;
     }
     .text-container{
-      padding:5px;
+      padding:10px 15px 10px;
       background:#f8F8f8;
       height: 100vh;
       overflow: auto;
       h1{
         font-size:24px;
         margin:0 0 10px;
-        a{color:#222;}
+        a{
+          color: white;
+          margin: -10px -15px 0;
+          background: #333;
+          padding: 15px;
+          display: block;
+        }
       }
       .page{
         position: static;
@@ -456,9 +466,9 @@ body{
   }
 
 
-  .viewport{ right:230px; }
-  .sidebar { width:230px; }
-  .toggle { right:220px; }
+  .viewport{ right:250px; }
+  .sidebar { width:250px; }
+  .toggle { right:240px; }
 }
 
 

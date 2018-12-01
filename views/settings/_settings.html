@@ -1,18 +1,18 @@
 <div ng-controller="settingsCtrl">
 
-  <h3>Settings</h3>
+  <h3>General Settings</h3>
 
   <table class="table table-striped table-bordered">
     <tbody>
     <tr>
-      <td class='col-sm-4 title'>Show full news title</td>
+      <td class='col-sm-4 title'>Full title in sidebar</td>
       <td class='col-sm-8'>
         <button fb-switcher name='fullTitle'></button>
       </td>
     </tr>
 
     <tr>
-      <td class='col-sm-4 title'>Hide read news</td>
+      <td class='col-sm-4 title'>Hide viewed news</td>
       <td class='col-sm-8'>
         <button fb-switcher name='unread' reverse></button>
       </td>
@@ -29,15 +29,16 @@
         </div></div>
       </td>
     </tr>
-    <tr>
+
+    <!--<tr>
       <td class='col-sm-4 title'>Keep news</td>
       <td class='col-sm-8'>
         <input type='text' class='form-control input-sm text-center'  value='300' disabled/>
-        <!-- todo make it editable -->
+        &lt;!&ndash; todo make it editable &ndash;&gt;
       </td>
-    </tr>
+    </tr>-->
 
-    <tr>
+    <!--<tr>
       <td class='col-sm-4 title'>Theme</td>
       <td class='col-sm-8'>
         <div class='btn-group'>
@@ -52,7 +53,7 @@
           <button class='btn btn-default ' disabled>english</button>
         </div>
       </td>
-    </tr>
+    </tr>-->
     <tr>
       <td class='col-sm-4 title'>Reset</td>
       <td class='col-sm-8'>
@@ -65,5 +66,33 @@
 
     </tbody>
   </table>
+
+  <h3>Extract Text Mode</h3>
+
+  <div class="table table-bordered extract-text">
+    <div class="sliders">
+      <div>
+        <input type="range" step="1" min="8" max="30" ng-model="Settings.viewportFontSize" /><br/>
+        Font Size - {{Settings.viewportFontSize}}
+      </div>
+      <div>
+        <input type="range" min="0" step="0.1" max="5" ng-model="Settings.viewportLineHeight"/><br/>
+        Line space - {{Settings.viewportLineHeight}}
+      </div>
+      <div>
+        <input type="range" step="100" min="100" max="900" ng-model="Settings.viewportFontWeight"/><br/>
+        Font weight - {{Settings.viewportFontWeight}}
+      </div>
+    </div>
+
+
+    <div class="preview" ng-style="viewportFontStyles()">
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consequat odio massa, a semper nisi condimentum at. Curabitur vitae lacus justo. Integer dui nibh, dictum ut euismod id, interdum quis massa.
+
+Nam facilisis nulla nisi, rhoncus porttitor nunc placerat vitae. Sed vehicula, ipsum sed consectetur elementum, sem nunc varius libero, eget venenatis eros elit in risus. Sed eu hendrerit leo. Phasellus at ultricies mi. Nulla et elit elit. Duis convallis vitae nisi vel luctus.
+    </div>
+
+
+  </div>
 
 </div>

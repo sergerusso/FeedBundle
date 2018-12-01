@@ -1,13 +1,13 @@
 
 .page{
   .viewport.settings{
-    padding:25px 0;
+    padding:25px 10%;
+    height:100vh;
+    overflow: auto;
     &>div{
-      width:80%;
-      margin:0 auto;
-      height:100%;
-      overflow-x: hidden;
-      overflow-y: auto;
+      //width:80%;
+      //margin:0 auto;
+
     }
     line-height: 30px;
 
@@ -53,6 +53,31 @@
         vertical-align: middle;
         &.title{font-weight: bold;}
         input{margin-bottom:0;vertical-align: bottom}
+      }
+
+      .extract-text{
+        padding:15px;
+        background:white;
+        .sliders{
+          display:flex;
+          text-align:center;
+          justify-content: space-between;
+
+
+          &> div{
+            //margin-right:50px;
+            width:30%;
+            input{
+              width: 100%;
+            }
+          }
+        }
+        .preview{
+          padding:10px;
+          border-radius: 5px;
+          margin:10px 0 0;
+          background:#f6f6f6;
+        }
       }
     }
 

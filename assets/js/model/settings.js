@@ -8,13 +8,16 @@ export default {
     folder: "all",
     fullTitle: 0,
     updateEach: 10,
-    feedSize: 100
+    feedSize: 100,
+    viewportFontSize: 16,
+    viewportLineHeight: 1.4,
+    viewportFontWeight: 400
   },
   _settings:{},
 
   fetch(){
     return db.storage.get('settings').then( item =>{
-      let settings = item.value;
+      let settings = Object.assign({}, this._defaults, item.value);
       this._settings = settings;
       Object.assign(this, settings);
       return settings;

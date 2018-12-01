@@ -46,12 +46,12 @@
     <div class="btn-group btn-group-sm">
 
       <button class='btn btn-dark btn-sm'
-              ng-show='selectedFolder.latestNews'
+              ng-if='selectedFolder.latestNews'
               ng-click='selectedFolder.getFeeds()[0].markRead()'>Mark read</button>
 
       <!--todo onclick-->
       <button class='btn btn-dark btn_'
-              ng-hide='selectedFolder.latestNews'
+              ng-if='!selectedFolder.latestNews'
               ng-click="addFeed()">Add new source</button>
       <a class="btn btn-dark btn-small feedback" href="https://github.com/sergerusso/FeedBundle/issues" browser-link>Report issue</a>
       <!--todo chrome store url-->
