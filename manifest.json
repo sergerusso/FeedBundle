@@ -1,7 +1,7 @@
 {
-  "name": "FeedBundle",
-  "version": "0.90",
-  "description": "",
+  "name": "FeedBundle - Online RSS News Reader",
+  "version": "0.95",
+  "description": "Make your own collection of feeds, organize and browse it with FeedBundle.",
   "author":"Serge Russo <contact@sergerusso.com>",
   "manifest_version": 2,
   "permissions": ["alarms"],

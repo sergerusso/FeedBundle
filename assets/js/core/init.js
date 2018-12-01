@@ -8,6 +8,7 @@ import '../ctrl/settings/feeds.js'
 import '../ctrl/settings/settings.js'
 import '../ctrl/settings/import.js'
 import '../components/feed-modal.js'
+import '../components/viewport.js'
 
 app
   .config(config)

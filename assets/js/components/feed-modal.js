@@ -6,9 +6,150 @@ import Folders from '../model/folder/folders.js'
 
 import app from '../core/ng-module.js'
 
+let template = `
+<div class="modal fade" id="feedModal" tabindex="-1" role="dialog" aria-labelledby="feedModalLabel" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+
+            <div ng-switch on="feed.step">
+                <!-- add feed -->
+                <div ng-switch-default>
+                    <form ng-submit="addFeed()">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Add New Feed</h4>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <label>URL:</label>
+                            <input class='form-control' name="feed_url" ng-model='feed.new_feed_url' type="text" placeholder="https://..."/>
+                            <div class="text-right">
+                                <small>
+                                    <i>
+                                        rss link can also be automatically extracted from a site if present
+                                    </i>
+                                </small>
+                            </div>
+
+                            <div ng-if="Feeds.items.length > 5 || true" class="suggestions">
+                                <label>Suggestions:</label>
+                                <br/>
+
+                                <div class='dropdown ' ng-repeat="item in suggestions">
+                                    <button class='btn btn-primary btn-xs dropdown-toggle' data-toggle="dropdown">
+                                        {{item.name}}
+                                        <small><i class="glyphicon glyphicon-chevron-down"></i></small>
+                                    </button>
+
+
+                                      <ul class="dropdown-menu" role="menu">
+                                        <li ng-repeat="item in item.items">
+                                            <a href ng-click="selectSuggestion(item[1])">
+                                                {{item[0]}}
+                                            </a>
+                                        </li>
+
+                                      </ul>
+                              </div>
+
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                            <button class="btn btn-primary" type="submit">
+                                Next
+                                <i class="fa fa-spin fa-refresh" ng-if="processing"></i>
+
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div ng-switch-when="edit">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Edit Feed</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Name: <input class='form-control' ng-model="feed.fields.title" type="text"/><br/>
+                            Url: <input class='form-control' ng-model="feed.fields.url" type="text"/>
+                            
+                            <label class="checkbox" style="font-weight: normal !important;">
+                              <input type="checkbox" ng-model="feed.fields.extractText"> 
+                              Extract main content 
+                              <i class="fa fa-question-circle" 
+                                tooltip 
+                                data-placement="bottom" 
+                                data-html="true"
+                                data-original-title="By default FeedBundle loads full site when browsing, you can switch this option to load only main content.<br/>It might not work properly with some sites.">
+                               </i>
+                            </label>
+                            <br/>
+                            <!--<label class="checkbox">
+                              <input type="checkbox" ng-model="feed.item.proxy"> Use proxy (<a href='https://developer.mozilla.org/en-US/docs/HTTP/X-Frame-Options' target='_blank' tooltip  data-placement="bottom"  data-original-title="It is for sites with no frame-browsing support (X-Frame-Options: SAMEORIGIN)">?</a>)
+                            </label>-->
+                        </p>
+                        <div class='folders'>
+                            <div class='title'><i class='glyphicon glyphicon-folder-open'></i> Folder: {{Folders.getById(feed.fields.folderId).name}}</div>
+                            <div class='inner '>
+                                <div class='list'>
+                                    <div class='folder row' ng-repeat='folder in Folders.items' ng-hide="folder.isSystem">
+                                        <div class='col-sm-10 name' ng-class='{selected: folder.id == feed.fields.folderId}' ng-click='feed.fields.folderId = folder.id'>{{folder.name}}</div>
+                                        <div class='col-sm-2 text-right' ng-hide='folder.isSystem'>
+                                            <i class='glyphicon glyphicon-pencil edit' ng-click='editFolder(folder)'> </i>
+                                            <i class='glyphicon glyphicon-remove remove' ng-click='removeFolder(folder)'></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='new-folder '>
+
+                                    <form ng-submit="updateFolder()">
+                                        <input class='form-control' id="editFolderInput" type='text' ng-model='editingFolder._name' placeholder='Enter new folder name...' />
+                                        <i class='glyphicon glyphicon-ok' ng-click='updateFolder()'></i>
+                                    </form>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" type="button" style="float:left" data-dismiss="modal" ng-click='remove(feed.item)'>Delete</button>
+                        <button class="btn btn-default" type="button" data-dismiss="modal" >Close</button>
+                        <button class="btn btn-primary" type="submit" ng-click="saveFeed()" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+                <!-- error -->
+                <div ng-switch-when="error">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Error Occurred</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            No appropriate source found. Check url and try again.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" ng-click="feed.step = 'add'">Back</button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+`
+
 app
   .directive('feedModal', ()=>({
-    templateUrl:"views/modal/feed.html",
+    template,
     scope: {
       // same as '=customer'
       feed: '=',
@@ -168,8 +309,8 @@ app
             }
             $rootScope.editFeed(feed);
 
-            $scope.processing = false;
-            $scope.$apply();
+            $scope.processing = false
+            $scope.$apply()
           })
 
 
@@ -177,8 +318,9 @@ app
         }catch(e){
           console.error(e)
           $scope.$apply(()=>{
-            $scope.processing = false;
+            $scope.processing = false
             $scope.feed.step = "error"
+            //todo allow to send report
           })
         }
 
@@ -200,6 +342,7 @@ app
         item.setTitle(fields.title)
         item.setUrl(fields.url)
         item.setFolderId(fields.folderId)
+        item.setExtractText(fields.extractText)
 
         Settings.set("folder", item.folderId);
       }

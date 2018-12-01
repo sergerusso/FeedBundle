@@ -243,6 +243,18 @@ angular
       feeds.filter(el => feed.expanded || feed.isComposite)
     )
   )])
+  .directive('tooltip', ()=>(
+    (scope, elm, attrs)=>{
+
+      elm.tooltip('destroy').tooltip({
+        container: 'body > .page',
+        //trigger: 'hover',
+        delay:0
+      })
+    }
+  ))
+
+
 
 
 export default angular

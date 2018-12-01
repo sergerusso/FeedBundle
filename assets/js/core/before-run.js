@@ -36,8 +36,9 @@ export default ($timeout, $rootScope, $q)=>{
     $scope.feedModal = {
       step: 'edit',
       item: feed,
-      fields:_.pick(feed, ['title', 'url', 'folderId'])
+      fields:_.pick(feed, ['title', 'url', 'folderId', 'extractText']) //todo wtf?
     }
+
     console.log($scope.feedModal)
   }
 

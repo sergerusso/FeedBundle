@@ -42,6 +42,7 @@ export default function($rootScope, $scope){
   $scope.showFeedItem = (item, feed)=> {
     feed.markRead(item)
     $scope.feedItem = item
+    $scope.feed = feed
   }
 
   $scope.isActiveFeedItem = (item)=> {

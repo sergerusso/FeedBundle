@@ -1,26 +1,9 @@
-<div class='viewport' clear-view hotkeys>
-  <!-- todo implement back button; just main content -->
 
-  <iframe id="viewFrame" ng-src='{{feedItem.url}}'
-          ng-hide='frame_loading || !feedItem.url' view-frame _sandbox="allow-forms allow-scripts" nwfaketop>
+<!-- todo implement back button; just main content -->
+<viewport url="feedItem.url" item="feedItem" extract-text="feed.extractText"></viewport>
 
-  </iframe>
-  <div class='frame_loading' ng-show='frame_loading'>
-    <img src='../../assets/images/loader-large.gif'/>
 
-    <div class='' ng-show='frame_loading_long'>
-      Something went wrong.<br/>
-      <!-- <a href="#">Reload</a> TODO reload -->
-
-      <!--Try to turn on <a href='#/settings/edit/{{Feeds.viewFrame.id}}'>proxy mode</a> for this feed.<br/>-->
-      <!--<a href>Find the problem</a>-->
-    </div>
-  </div>
-
-  <div class="welcome" ng-show="!frame_loading && !feedItem " ng-include="'views/reader/_welcome.html'"></div>
-</div>
-<div class='sidebar' disable-select ng-include="'views/reader/_sidebar.html'">
-</div>
+<div class='sidebar' disable-select ng-include="'views/reader/_sidebar.html'"></div>
 
 <div class='btn-settings dropdown'>
   <a href class='tools btn btn-default' show_tools data-toggle="dropdown" ng-show='sidebar_expanded'><i class="glyphicon glyphicon-wrench"></i></a>

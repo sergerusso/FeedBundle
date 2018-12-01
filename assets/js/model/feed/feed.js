@@ -10,6 +10,7 @@ class Feed{
     this.id = data.id
     this.folderId = data.folderId || "unsorted"
     this.items = data.items || []
+    this.extractText = data.extractText
   }
 
 
@@ -69,6 +70,10 @@ class Feed{
   setFolderId(folderId) {
     this.folderId = folderId
     db.feeds.update(this.id, {folderId})
+  }
+  setExtractText(extractText) {
+    this.extractText = extractText
+    db.feeds.update(this.id, {extractText})
   }
 
   async fetch(){
