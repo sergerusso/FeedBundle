@@ -9,6 +9,8 @@ import '../ctrl/settings/settings.js'
 import '../ctrl/settings/import.js'
 import '../components/feed-modal.js'
 import '../components/viewport.js'
+import '../components/switch.js'
+import '../onerror.js'
 
 app
   .config(config)

@@ -1,5 +1,4 @@
 //sergerusso 2018
-//sergerusso 2018
 import Feeds from '../model/feed/feeds.js'
 import Feed from '../model/feed/feed.js'
 import Settings from '../model/settings.js'
@@ -37,7 +36,7 @@ app
       </div>
       <div class="welcome" ng-show="!loading && !item " ng-include="'views/reader/_welcome.html'"></div>
     </div>
-    `,transclude: true,
+    `,
     scope: {
       // same as '=customer'
       item: '=',

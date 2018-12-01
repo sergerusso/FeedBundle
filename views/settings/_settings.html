@@ -30,6 +30,15 @@
       </td>
     </tr>
 
+    <tr>
+      <td class='col-sm-4 title'>Error reporting</td>
+      <td class='col-sm-8'>
+        <switch options="[[true,'Yes'],[undefined,'Ask'],[false,'No']]"
+                selected="Settings.errorReporting"
+                on-select="saveField('errorReporting', value)"></switch>
+      </td>
+    </tr>
+
     <!--<tr>
       <td class='col-sm-4 title'>Keep news</td>
       <td class='col-sm-8'>

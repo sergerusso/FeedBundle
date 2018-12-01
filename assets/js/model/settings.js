@@ -11,7 +11,8 @@ export default {
     feedSize: 100,
     viewportFontSize: 16,
     viewportLineHeight: 1.4,
-    viewportFontWeight: 400
+    viewportFontWeight: 400,
+    errorReporting: undefined
   },
   _settings:{},
 
@@ -27,7 +28,7 @@ export default {
   set(key, value){
     this._settings[key] = value
     this[key] = value;
-    db.storage.update('settings', {value:this._settings})
+    return db.storage.update('settings', {value:this._settings})
 
   },
 

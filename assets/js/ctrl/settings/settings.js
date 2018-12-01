@@ -4,6 +4,7 @@ app.controller('settingsCtrl',  function($scope, $location ){
 
   $scope.Settings = Settings
 
+  $scope.saveField = (name, val) => Settings.set(name, val)
 
 
   $scope.$watch('Settings.updateEach', () => {
@@ -30,6 +31,7 @@ app.controller('settingsCtrl',  function($scope, $location ){
     Dexie.delete('feedbundle').then(()=>location.reload());
 
   }
+
 })
 
 export default app

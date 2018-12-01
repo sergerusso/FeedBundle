@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FeedBundle</title>
+
+    <link type="text/css" href="assets/js/lib/vex/css/vex.css" rel="stylesheet"/>
+    <link type="text/css" href="assets/js/lib/vex/css/vex-theme-plain.css" rel="stylesheet"/>
+    <!--<link type="text/css" href="assets/lib/selectize/selectize.default.css" rel="stylesheet"/>-->
+
+    <link type="text/css" href="assets/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <link type="text/css" href="assets/font/opensans/font.css" rel="stylesheet"/>
+
+    <style>
+        body, html { height: 100%;}
+
+        body {
+            background: linear-gradient(to bottom, #c9eaf5 0%, #d3f7df 100%);
+            font-family: 'Open Sans', sans-serif;
+            font-size: 13px;
+            padding:0;
+            margin:0;
+        }
+        *{outline:0;}
+
+
+
+
+            /*style vex*/
+        .vex.vex-theme-plain { padding: 30px 0 15px; }
+        .vex-overlay { display: none; }
+
+        .vex-content {
+            box-shadow: 0 0 60px 0px rgba(0, 0, 0, 0.2);
+            animation: vex-flyin 0.5s;
+            width: calc(100% - 60px) !important;
+
+        }
+        .text-center .vex-dialog-message{
+             text-align: center;
+        }
+
+        .vex-dialog-message{
+            font-size: 18px;
+            font-weight: 200;
+            line-height: normal;
+        }
+        .vex-closing .vex-content{ animation: vex-flyout 0.5s !important; }
+
+        .checkbox-label{
+            position: relative;
+            top: 3px;
+        }
+        /*todo move to shared.css*/
+        input[type=checkbox] {
+            display: none;
+        }
+        input[type=checkbox] + span::before{
+            font-family: FontAwesome;
+            font-size: 15px;
+            content: "\f096";
+            width: 20px;
+            height: auto;
+            display: inline-block;
+            vertical-align: middle;
+            color: #555555;
+        }
+
+        input[type=checkbox]:checked + span::before{
+             content: "\f046";
+         }
+
+        @keyframes vex-flyin {
+            0% {opacity: 0;transform: translateY(-40px);}
+            100% {opacity: 1;transform: translateY(0);}
+        }
+        @keyframes vex-flyout {
+            0% {opacity: 1;transform: translateY(0);}
+            100% {opacity: 0; transform: translateY(-40px);}
+        }
+    </style>
+</head>
+<body>
+
+
+<script src="assets/js/lib/jquery.min.js"></script>
+<!--<script src="assets/lib/selectize/selectize.min.js"></script>-->
+<script src="assets/js/lib/vex/js/vex.combined.js"></script>
+
+<script src="assets/js/chrome/dialog-window.js"></script>
+
+</body>
+</html>

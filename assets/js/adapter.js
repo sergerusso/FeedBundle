@@ -62,3 +62,12 @@ const setBadgetText = (text)=>{
     win.setBadgeLabel(text)
   }
 }
+
+
+window.sendGlobalRuntimeMessage = (msg)=>{
+  if(window.onRuntimeMessage){
+    onRuntimeMessage(msg)
+  }else{
+    chrome.runtime.sendMessage(msg);
+  }
+}
