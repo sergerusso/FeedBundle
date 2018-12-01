@@ -132,8 +132,27 @@ let template = `
                     </div>
                     <div class="modal-body">
                         <p>
-                            No appropriate source found. Check url and try again.
+                            No appropriate source found. Try to use direct link to RSS/ATOM feed.
                         </p>
+                        
+                        <br/>
+                        
+                        
+                        <small><i>  
+                            <report-button result="'Thanks. It will be checked.'"
+                                           message="'No feed data: ' + feed.new_feed_url">
+                                                       
+                                  <button 
+                                      class="btn btn-xs btn-primary"
+                                      ng-click="onSelect({value: value[0]})">
+                                      Report
+                                  </button>
+                                  
+                                  if you have the right link and still get this error.
+                                
+                            </report-button>
+                        </i></small>
+                      
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-default" ng-click="feed.step = 'add'">Back</button>

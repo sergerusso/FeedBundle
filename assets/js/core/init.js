@@ -10,6 +10,7 @@ import '../ctrl/settings/import.js'
 import '../components/feed-modal.js'
 import '../components/viewport.js'
 import '../components/switch.js'
+import '../components/report-button.js'
 import '../onerror.js'
 
 app
