@@ -115,7 +115,7 @@ body{
             border-color: #161616;
             border-top: 1px solid #FFF;
             &>li>a{
-              padding:3px 10px 3px 6px;
+              padding:4px 10px 4px 6px;
               line-height: normal;
               font-size: 12px;
             }
@@ -429,24 +429,77 @@ body{
       border:0;
     }
     .text-container{
-      padding:10px 15px 10px;
       background:#f8F8f8;
       height: 100vh;
       overflow: auto;
-      h1{
-        font-size:24px;
-        margin:0 0 10px;
-        a{
-          color: white;
-          margin: -10px -15px 0;
-          background: #333;
-          padding: 15px;
-          display: block;
+      a.header{
+        color: #444;
+        background: transparent;
+        padding: 19px 25px 21px;
+        display: block;
+        font-weight: 400;
+        font-size: 1.5em;
+        line-height: 1.2;
+
+        &:hover{
+          text-decoration: none;
         }
       }
       .page{
         position: static;
-        background: transparent;
+        background: white;
+
+        padding: 20px 25px 10px;
+
+        box-shadow: -3px 0 13px 0 #c1b8b1;
+
+        blockquote p, pre, output{
+          font-size: inherit;
+        }
+
+        legend{
+          font-size:1.5em;
+        }
+
+        img{
+          max-width: 100%;
+        }
+
+        h1,
+        .h1 {
+          font-size: 2.57em;
+        }
+
+        h2,
+        .h2 {
+          font-size: 2.14em;
+        }
+
+        h3,
+        .h3 {
+          font-size: 1.71em;
+        }
+
+        h4,
+        .h4 {
+          font-size: 1.28em;
+        }
+
+        h5,
+        .h5 {
+          font-size: 1em;
+        }
+
+        h6,
+        .h6 {
+          font-size: 0.85em;
+        }
+
+        p{
+          margin-bottom: 0.85em;
+        }
+
+
       }
     }
 
@@ -475,7 +528,7 @@ body{
 .btn-settings{
   position: absolute;
   bottom:20px;
-  right: 256px;
+  right: 276px;
   opacity: 0.5;
   padding-top:10px;
   &:hover,&.active,&.open{opacity:1}

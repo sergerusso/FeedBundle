@@ -1,4 +1,10 @@
 //sergerusso 2018
+
+let activeIds = []
+window.addEventListener('beforeunload', ()=>{
+  chrome.tabs.remove(activeIds)
+})
+
 export default (params, callback) => {
   let width = params.width || 600,
     height = params.height || 280,
@@ -21,26 +27,28 @@ export default (params, callback) => {
     height: Math.round(height + 22) //window header todo test windows
   }, async (win) => {
 
-    let tab = win.tabs[0],
+    let tab = win.tabs[0]
 
+    const onLoaded = () => {
+      dialog.winId = win.id;
+      chrome.tabs.sendMessage(tab.id, {dialog}, (...args) => {
+        activeIds = activeIds.filter(id => id != tab.id)
+        callback(...args)
+      });
+    }
+    const checkStatus = () => { //wait for loading
+      chrome.tabs.get(tab.id, async (tab) => {
+        if (tab.status == 'complete') {
+          onLoaded()
+        } else {
+          setTimeout(checkStatus, 20)
+        }
+      })
+    }
 
-      onLoaded = () => {
-        dialog.winId = win.id;
-        chrome.tabs.sendMessage(tab.id, {dialog}, callback);
-      },
-      checkStatus = () => { //wait for loading
-        chrome.tabs.get(tab.id, async (tab) => {
+    activeIds.push(tab.id)
 
-          if (tab.status == 'loading') {
-            setTimeout(checkStatus, 20);
-          } else {
-            setTimeout(onLoaded, 100);
-          }
-        })
-      };
-
-    setTimeout(checkStatus, 20);
-    //chrome.windows.remove(win.id);
+    setTimeout(checkStatus, 20)
 
 
   })

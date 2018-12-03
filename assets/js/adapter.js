@@ -18,9 +18,10 @@ const requestPermission = (origins)=>{
       permissions: ['webRequest', 'webRequestBlocking'],
       origins: Array.isArray(origins) ? origins : [origins]
     }, (granted)=> {
-      granted ? resolve() : reject();
+      granted ? resolve() : reject('no_permissions_granted');
 
       chrome.runtime.getBackgroundPage(function (backgroundPage) {
+        //todo only if needed
         backgroundPage.location.reload()
       });
       //window.location.reload()

@@ -50,18 +50,31 @@ app
       const extractText = async () => {
         let $el = $element.find(".text-container")
 
+        try {
+          $el.scrollTop(0)
 
-        let text = await (await fetch($scope.item.url)).text()
-        let doc = (new DOMParser).parseFromString(text, 'text/html')
-        let article = new Readability(doc).parse()
-        let content = article.content
+          let text = await (await fetch($scope.item.url)).text()
+          text = text.replace(/<\s*(script)[^><]*>[\s\S]*?<\s*\/\s*(script)\s*>/ig, '')
 
-        content = `<h1><a href="${$scope.item.url}">${$scope.item.title}</a></h1> ${content}`
-        content = content.replace(/<\s*(script)[^><]*>[\s\S]*?<\s*\/\s*(script)\s*>/ig, '');
 
-        $el.html(content)
+          let doc = (new DOMParser).parseFromString(text, 'text/html')
 
-        $timeout(() => $scope.loading = false )
+
+          let article = new Readability(doc).parse()
+          let content = article.content
+
+          content = `<a class='header' href="${$scope.item.url}">${$scope.item.title}</a> ${content}`
+            .replace(/<\s*(a)\s/ig, '<a target="_blank" ')
+
+          $el.html(content)
+
+          $timeout(() => $scope.loading = false)
+
+        }catch(e){
+          //todo handler
+          $timeout(() => $scope.loading_expired = true)
+
+        }
 
       }
 
@@ -69,9 +82,6 @@ app
 
         let loading_limit = 30000
 
-        clearInterval(window.frameLoaderInsperctor)
-
-        $scope.loading_expired = false
 
         let start = Date.now()
 
@@ -90,6 +100,10 @@ app
         if (!$scope.item) return
 
         $scope.loading = true
+
+        clearInterval(window.frameLoaderInsperctor)
+
+        $scope.loading_expired = false
 
         if($scope.extractText){
           extractText()

@@ -18,5 +18,8 @@ window.addEventListener("unhandledrejection", (event)=>{
 
 
   let errorReport = 'onunhandledrejection: '+ String( stack || event.reason || event.message)
+
+  if(String(event.reason).includes("Browser is shutting down")) return
+
   sendGlobalRuntimeMessage({errorReport})
 })

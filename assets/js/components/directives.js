@@ -198,8 +198,10 @@ angular
     (scope, elm, attrs)=> {
       elm.attr('target', '_blank')
       elm.on('click', (e) => {
-        require('nw.gui').Shell.openExternal(this.href)
-        e.preventDefault()
+        if(window.require) {
+          require('nw.gui').Shell.openExternal(this.href)
+          e.preventDefault()
+        }
       })
     }
   )])

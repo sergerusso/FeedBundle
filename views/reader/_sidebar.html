@@ -53,8 +53,8 @@
       <button class='btn btn-dark btn_'
               ng-if='!selectedFolder.latestNews'
               ng-click="addFeed()">Add new source</button>
-      <a class="btn btn-dark btn-small feedback" href="https://github.com/sergerusso/FeedBundle/issues" browser-link>Report issue</a>
-      <!--todo chrome store url-->
+      <a class="btn btn-dark btn-small feedback" href="https://chrome.google.com/webstore/detail/feedbundle-online-rss-new/phpkhhdfcdlkcmakbfieencikecnddck" browser-link>Report issue</a>
+      <!--todo url for nw.js-->
     </div>
 
 
@@ -75,7 +75,12 @@
         </div>
 
         <div class="ctrls">
-          <img src='/assets/images/warning-mini.png' ng-show='feed.error'/>
+          <img src='/assets/images/warning-mini.png'
+               ng-show='feed.error'
+               tooltip
+               data-placement="bottom"
+               data-original-title="Feed url is not valid. Content cannot be fetched."
+          />
           <img src='/assets/images/loader-mini.gif' ng-show='feed.updating'/>
           <span class="badge"
                 title="Double click to mark it as read"

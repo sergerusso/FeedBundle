@@ -4,7 +4,7 @@
   "description": "Make your own collection of feeds, organize and browse it with FeedBundle.",
   "author":"Serge Russo <contact@sergerusso.com>",
   "manifest_version": 2,
-  "permissions": ["alarms"],
+  "permissions": ["alarms", "storage", "unlimitedStorage"],
   "optional_permissions": [ "webRequest", "webRequestBlocking", "<all_urls>" ],
   "browser_action": {
     "default_icon": "assets/images/favicon.png",

@@ -86,7 +86,7 @@ let template = `
                                 tooltip 
                                 data-placement="bottom" 
                                 data-html="true"
-                                data-original-title="By default FeedBundle loads full site when browsing, you can switch this option to load only main content.<br/>It might not work properly with some sites.">
+                                data-original-title="By default FeedBundle displays full site when browsing, you can switch this option to show only main content.<br/><br/>It might not work properly with some sites.">
                                </i>
                             </label>
                             <br/>
@@ -159,6 +159,23 @@ let template = `
                         <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
                     </div>
                 </div>
+                <div ng-switch-when="no_perm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Error Occurred</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Seems like you just denied access to the site. <br/>
+                            Go back and try again.
+                        </p>
+                      
+                      
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" ng-click="feed.step = 'add'">Back</button>
+                    </div>
+                </div>
             </div>
 
         </div><!-- /.modal-content -->
@@ -207,7 +224,7 @@ app
           ]
         },
 
-        {
+        /*{
           name: 'CNN',
           items: [
             ['Top Stories', 'http://rss.cnn.com/rss/cnn_topstories.rss'],
@@ -224,17 +241,17 @@ app
             ['Most Recent', 'http://rss.cnn.com/rss/cnn_latest.rss'],
             ['CNN Underscored', 'http://rss.cnn.com/cnn-underscored.rss'],
           ]
-        },
+        },*/
         {
           name: ' Fox News',
           //JSON.stringify([...$0.querySelectorAll("a")].map( i => [i.innerText, "http:"+i.dataset.url]))
           items: [["Latest Headlines","http://feeds.foxnews.com/foxnews/latest"],["Most Popular","http://feeds.foxnews.com/foxnews/most-popular"],["Entertainment","http://feeds.foxnews.com/foxnews/entertainment"],["Health","http://feeds.foxnews.com/foxnews/health"],["Lifestyle","http://feeds.foxnews.com/foxnews/section/lifestyle"],["Opinion","http://feeds.foxnews.com/foxnews/opinion"],["Politics","http://feeds.foxnews.com/foxnews/politics"],["Science","http://feeds.foxnews.com/foxnews/science"],["Sports","http://feeds.foxnews.com/foxnews/sports"],["Tech","http://feeds.foxnews.com/foxnews/tech"],["Travel","http://feeds.foxnews.com/foxnews/internal/travel/mixed"],["U.S.","http://feeds.foxnews.com/foxnews/national"],["Video","http://feeds.foxnews.com/foxnews/video"],["World","http://feeds.foxnews.com/foxnews/world"]]
         },
-        {
-          name: 'HuffingtonPost',
-          //JSON.stringify([...$0.querySelectorAll("a")].map( i => [i.innerText, i.href]))
-          items: [["Asian Voices","https://www.huffingtonpost.com/section/asian-voices/feed"],["Black Voices","https://www.huffingtonpost.com/section/black-voices/feed"],["Books","https://www.huffingtonpost.com/section/books/feed"],["Business","https://www.huffingtonpost.com/section/business/feed"],["Celebrity","https://www.huffingtonpost.com/section/celebrity/feed"],["College","https://www.huffingtonpost.com/section/college/feed"],["Comedy","https://www.huffingtonpost.com/section/comedy/feed"],["Crime","https://www.huffingtonpost.com/section/crime/feed"],["Culture & Arts","https://www.huffingtonpost.com/section/arts/feed"],["Divorce","https://www.huffingtonpost.com/section/divorce/feed"],["Education","https://www.huffingtonpost.com/section/education/feed"],["Entertainment","https://www.huffingtonpost.com/section/entertainment/feed"],["Environment","https://www.huffingtonpost.com/section/green/feed"],["Food & Drink","https://www.huffingtonpost.com/section/taste/feed"],["Health","https://www.huffingtonpost.com/section/health/feed"],["Home & Living","https://www.huffingtonpost.com/section/huffpost-home/feed"],["HuffPost Code","https://www.huffingtonpost.com/section/huffpost-code/feed"],["HuffPost Personal","https://www.huffingtonpost.com/section/huffpost-personal/feed"],["Impact","https://www.huffingtonpost.com/section/impact/feed"],["Latino Voices","https://www.huffingtonpost.com/section/latino-voices/feed"],["Media","https://www.huffingtonpost.com/section/media/feed"],["Money","https://www.huffingtonpost.com/section/money/feed"],["OWN","https://www.huffingtonpost.com/section/own/feed"],["Opinion","https://www.huffingtonpost.com/section/opinion/feed"],["Parenting","https://www.huffingtonpost.com/section/parents/feed"],["Politics","https://www.huffingtonpost.com/section/politics/feed"],["Post 50","https://www.huffingtonpost.com/section/fifty/feed"],["Queer Voices","https://www.huffingtonpost.com/section/queer-voices/feed"],["Relationships","https://www.huffingtonpost.com/section/relationships/feed"],["Religion","https://www.huffingtonpost.com/section/religion/feed"],["Science","https://www.huffingtonpost.com/section/science/feed"],["Sports","https://www.huffingtonpost.com/section/sports/feed"],["Style & Beauty","https://www.huffingtonpost.com/section/style/feed"],["TV & Film","https://www.huffingtonpost.com/section/tv/feed"],["Tech","https://www.huffingtonpost.com/section/technology/feed"],["Teen","https://www.huffingtonpost.com/section/teen/feed"],["Travel","https://www.huffingtonpost.com/section/travel/feed"],["U.S. News","https://www.huffingtonpost.com/section/us-news/feed"],["Videos","https://www.huffingtonpost.com/section/video/feed"],["Weddings","https://www.huffingtonpost.com/section/weddings/feed"],["Weird News","https://www.huffingtonpost.com/section/weird-news/feed"],["Wellness","https://www.huffingtonpost.com/section/healthy-living/feed"],["Women","https://www.huffingtonpost.com/section/women/feed"],["World News","https://www.huffingtonpost.com/section/world-news/feed"]]
-        },
+        // {
+        //   name: 'HuffingtonPost',
+        //   //JSON.stringify([...$0.querySelectorAll("a")].map( i => [i.innerText, i.href]))
+        //   items: [["Asian Voices","https://www.huffingtonpost.com/section/asian-voices/feed"],["Black Voices","https://www.huffingtonpost.com/section/black-voices/feed"],["Books","https://www.huffingtonpost.com/section/books/feed"],["Business","https://www.huffingtonpost.com/section/business/feed"],["Celebrity","https://www.huffingtonpost.com/section/celebrity/feed"],["College","https://www.huffingtonpost.com/section/college/feed"],["Comedy","https://www.huffingtonpost.com/section/comedy/feed"],["Crime","https://www.huffingtonpost.com/section/crime/feed"],["Culture & Arts","https://www.huffingtonpost.com/section/arts/feed"],["Divorce","https://www.huffingtonpost.com/section/divorce/feed"],["Education","https://www.huffingtonpost.com/section/education/feed"],["Entertainment","https://www.huffingtonpost.com/section/entertainment/feed"],["Environment","https://www.huffingtonpost.com/section/green/feed"],["Food & Drink","https://www.huffingtonpost.com/section/taste/feed"],["Health","https://www.huffingtonpost.com/section/health/feed"],["Home & Living","https://www.huffingtonpost.com/section/huffpost-home/feed"],["HuffPost Code","https://www.huffingtonpost.com/section/huffpost-code/feed"],["HuffPost Personal","https://www.huffingtonpost.com/section/huffpost-personal/feed"],["Impact","https://www.huffingtonpost.com/section/impact/feed"],["Latino Voices","https://www.huffingtonpost.com/section/latino-voices/feed"],["Media","https://www.huffingtonpost.com/section/media/feed"],["Money","https://www.huffingtonpost.com/section/money/feed"],["OWN","https://www.huffingtonpost.com/section/own/feed"],["Opinion","https://www.huffingtonpost.com/section/opinion/feed"],["Parenting","https://www.huffingtonpost.com/section/parents/feed"],["Politics","https://www.huffingtonpost.com/section/politics/feed"],["Post 50","https://www.huffingtonpost.com/section/fifty/feed"],["Queer Voices","https://www.huffingtonpost.com/section/queer-voices/feed"],["Relationships","https://www.huffingtonpost.com/section/relationships/feed"],["Religion","https://www.huffingtonpost.com/section/religion/feed"],["Science","https://www.huffingtonpost.com/section/science/feed"],["Sports","https://www.huffingtonpost.com/section/sports/feed"],["Style & Beauty","https://www.huffingtonpost.com/section/style/feed"],["TV & Film","https://www.huffingtonpost.com/section/tv/feed"],["Tech","https://www.huffingtonpost.com/section/technology/feed"],["Teen","https://www.huffingtonpost.com/section/teen/feed"],["Travel","https://www.huffingtonpost.com/section/travel/feed"],["U.S. News","https://www.huffingtonpost.com/section/us-news/feed"],["Videos","https://www.huffingtonpost.com/section/video/feed"],["Weddings","https://www.huffingtonpost.com/section/weddings/feed"],["Weird News","https://www.huffingtonpost.com/section/weird-news/feed"],["Wellness","https://www.huffingtonpost.com/section/healthy-living/feed"],["Women","https://www.huffingtonpost.com/section/women/feed"],["World News","https://www.huffingtonpost.com/section/world-news/feed"]]
+        // },
         {
           name: 'Washington Post',
           //JSON.stringify([...$0.querySelectorAll("b > a.rss")].map( i => [i.innerText, i.href]))
@@ -244,10 +261,7 @@ app
           name: 'The Guardian',
           items: [["World news","https://www.theguardian.com/world/rss"],["UK news","https://www.theguardian.com/uk-news/rss"],["Science","https://www.theguardian.com/science/rss"],["Cities","https://www.theguardian.com/cities/rss"],["Global development","https://www.theguardian.com/global-development/rss"],["Football","https://www.theguardian.com/football/rss"],["Tech","https://www.theguardian.com/uk/technology/rss"],["Business","https://www.theguardian.com/uk/business/rss"],["Environment","https://www.theguardian.com/uk/environment/rss"],["Obituaries","https://www.theguardian.com/tone/obituaries/rss"], ['Sports','https://www.theguardian.com/sport/rss'], ['Culture','https://www.theguardian.com/culture/rss'], ['LifeStyle','https://www.theguardian.com/lifeandstyle/rss']]
         },
-        {
-          name: 'WSJ',
-          items: [["Opinion","http://www.wsj.com/xml/rss/3_7041.xml"],["World News","http://www.wsj.com/xml/rss/3_7085.xml"],["U.S. Business","http://www.wsj.com/xml/rss/3_7014.xml"],["Markets News","http://www.wsj.com/xml/rss/3_7031.xml"],["Technology: What's News","http://www.wsj.com/xml/rss/3_7455.xml"],["Lifestyle","http://www.wsj.com/xml/rss/3_7201.xml"]]
-        },
+
         {
           name: 'ABCNews',
           items: [["Top Stories","http://feeds.abcnews.com/abcnews/topstories"],["World Headlines","http://feeds.abcnews.com/abcnews/internationalheadlines"],["US Headlines","http://feeds.abcnews.com/abcnews/usheadlines"],["Politics Headlines","http://feeds.abcnews.com/abcnews/politicsheadlines"],["The Blotter from Brian Ross","http://feeds.abcnews.com/abcnews/blotterheadlines"],["Cuomo on the Case","http://feeds.abcnews.com/abcnews/thelawheadlines"],["Money Headlines","http://feeds.abcnews.com/abcnews/moneyheadlines"],["Technology Headlines","http://feeds.abcnews.com/abcnews/technologyheadlines"],["Health Headlines","http://feeds.abcnews.com/abcnews/healthheadlines"],["Entertainment Headlines","http://feeds.abcnews.com/abcnews/entertainmentheadlines"],["Travel Headlines","http://feeds.abcnews.com/abcnews/travelheadlines"],["ESPN Sports","http://feeds.abcnews.com/abcnews/sportsheadlines"],["World News Headlines","http://feeds.abcnews.com/abcnews/worldnewsheadlines"],["20/20 Headlines","http://feeds.abcnews.com/abcnews/2020headlines"],["Primetime Headlines","http://feeds.abcnews.com/abcnews/primetimeheadlines"],["Nightline Headlines","http://feeds.abcnews.com/abcnews/nightlineheadlines"],["Good Morning America Headlines","http://feeds.abcnews.com/abcnews/gmaheadlines"],["This Week Headlines","http://feeds.abcnews.com/abcnews/thisweekheadlines"]]
@@ -316,7 +330,7 @@ app
           data = await feed.getXML();
 
           if(data.error){
-            throw "No feed data";
+            throw "no_feed_data";
           }
 
           data.title = data.title || dom.querySelector('title').innerText;
@@ -335,10 +349,13 @@ app
 
 
         }catch(e){
-          console.error(e)
+          if(!['no_permissions_granted', 'no_feed_data'].includes(e)){
+            //todo report
+          }
+
           $scope.$apply(()=>{
             $scope.processing = false
-            $scope.feed.step = "error"
+            $scope.feed.step = e == 'no_permissions_granted' ? "no_perm" : "error"
             //todo allow to send report
           })
         }
@@ -363,7 +380,7 @@ app
         item.setFolderId(fields.folderId)
         item.setExtractText(fields.extractText)
 
-        Settings.set("folder", item.folderId);
+        //Settings.set("folder", item.folderId); //todo enable?
       }
 
 
