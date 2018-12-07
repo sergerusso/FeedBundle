@@ -11,8 +11,19 @@ class Feed{
     this.folderId = data.folderId || "unsorted"
     this.items = data.items || []
     this.extractText = data.extractText
+
+    this.diagnosing = false
+    this.broken = []
+    this.noPerms = []
+
   }
 
+  get isBroken(){
+    return this.broken.includes(this.url) || this.error
+  }
+  get isJailed(){
+    return this.noPerms.length
+  }
 
   unreadCount() {
     return this.items.filter(item => !item.read).length
@@ -103,6 +114,7 @@ class Feed{
 
     }else{
       this.error = true
+      this.diagnose(true)
     }
     this.updating = false
 
@@ -178,16 +190,86 @@ class Feed{
         document.dispatchEvent(new Event('feedUpdated')); //todo use promise chain
 
 
-      }, (err)=>{
+      }).catch((err)=>{
         callback({error: true})
+
         document.dispatchEvent(new Event('feedUpdated'));
+
+
       })
 
     })
 
   }
 
+  async diagnose(short){
+
+    if(this.diagnosing){
+      return
+    }
+
+    this.broken = []
+    this.noPerms = []
+
+    let {noPerms, broken} = this
+
+    let toTest = [
+      this.url,
+      ...this.items
+        .slice(0, short ? 0 : 5)
+        .map(i => i.url)
+    ]
+
+    //todo remove the same origins
+
+    this.diagnosing = true
+
+    //todo concurrents
+    for(let url of toTest){
+
+      let result = await permissions.testURL(url)
+
+      if(result === false) { //broken
+        broken.push(url)
+      }else if(result !== true){ //no permission
+        noPerms.push(result)
+      }
+
+    }
+
+    this.diagnosing = false
+
+    Object.assign(this, {broken, noPerms})
+
+
+    document.dispatchEvent(new Event('feedUpdated'));
+
+    //console.log('dia', this)
+
+    return {broken, noPerms}
+
+
+  }
+
+  async fix(fn){
+
+     if(this.isJailed){
+
+      await permissions.request(this.noPerms)
+
+      this.fetch()
+
+    }else {
+       fn(this)
+    }
+
+  }
+
+
+
 }
+
+
 
 export default Feed;
 

@@ -72,12 +72,45 @@ let template = `
                 <div ng-switch-when="edit">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Edit Feed</h4>
+                        <h4 class="modal-title">
+                        Edit Feed
+                        
+                        <i class="fa fa-spin fa-refresh" title="Diagnosing..." ng-if="feed.item.diagnosing"></i>
+                        </h4>
                     </div>
                     <div class="modal-body">
+                    
+                        <p class="alert alert-danger" ng-if="feed.item.noPerms.length">
+                            <i class="fa fa-warning"></i>
+                            This feed requires some additional permissions. 
+                            <button class="btn btn-primary btn-xs" ng-click="updatePermissions()">Resolve</button>
+                                                                         
+                        </p>
+                        <p class="alert alert-danger" ng-if="feed.item.isBroken">
+                            <i class="fa fa-warning"></i>
+                            Broken feed url!
+                                                                        
+                        </p>
+                        
+                        
                         <p>
-                            Name: <input class='form-control' ng-model="feed.fields.title" type="text"/><br/>
-                            Url: <input class='form-control' ng-model="feed.fields.url" type="text"/>
+                            Name:
+                            <input class='form-control' ng-model="feed.fields.title" type="text"/><br/>
+                            
+                            
+                            <span ng-class="[feed.item.isBroken ? 'text-danger' : '']">
+                                <i class="fa fa-warning" ng-if="feed.item.isBroken"></i>
+                                
+                                Url:
+                                    
+                            </span> 
+                             
+                            <input class='form-control' 
+                                    ng-style="{
+                                            borderColor: feed.item.isBroken ? '#a94442' : '',
+                                            color: feed.item.isBroken ? '#a94442' : ''
+                                            }" 
+                                    ng-model="feed.fields.url" type="text"/> <!-- todo update bootstrap -->
                             
                             <label class="checkbox" style="font-weight: normal !important;">
                               <input type="checkbox" ng-model="feed.fields.extractText"> 
@@ -130,7 +163,7 @@ let template = `
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title">Error Occurred</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body">                    
                         <p>
                             No appropriate source found. Try to use direct link to RSS/ATOM feed.
                         </p>
@@ -187,7 +220,6 @@ app
   .directive('feedModal', ()=>({
     template,
     scope: {
-      // same as '=customer'
       feed: '=',
     },
     controller: function($scope, $rootScope){
@@ -294,7 +326,7 @@ app
             url = $scope.feed.new_feed_url = "http://"+$scope.feed.new_feed_url;
           }
 
-          await requestPermission(url);
+          await permissions.request(url);
 
           $scope.$apply(() => $scope.processing = true)
 
@@ -356,7 +388,7 @@ app
           $scope.$apply(()=>{
             $scope.processing = false
             $scope.feed.step = e == 'no_permissions_granted' ? "no_perm" : "error"
-            //todo allow to send report
+            //todo check for redirect
           })
         }
 
@@ -365,14 +397,23 @@ app
 
 
 
-      $scope.saveFeed = () => {
+      $scope.saveFeed = async () => {
         let {item, fields} = $scope.feed
 
 
         if (item.url != fields.url) {
-          removePermission(item.url)
-          requestPermission(fields.url)//todo wait promise
-          console.log('req')
+
+          try {
+            await permissions.request(fields.url)
+            //passed
+            permissions.remove(item.url)
+            item.fetch()
+          }catch(e){
+            console.log(e)
+            alert('No permission given, url was not updated.')
+            fields.url = item.url
+          }
+
         }
 
         item.setTitle(fields.title)
@@ -418,6 +459,12 @@ app
           $scope.feed.fields.folderId = 'unsorted'
         }
         Folders.remove(folder)
+      }
+
+      $scope.updatePermissions = async () => {
+        await permissions.request($scope.feed.item.noPerms)
+        $scope.feed.item.diagnose()
+        $scope.feed.item.fetch()//todo check
       }
 
 

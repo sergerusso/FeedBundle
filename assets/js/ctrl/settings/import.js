@@ -44,7 +44,7 @@ app.controller('settingsImportCtrl',  function($scope, $routeParams, $location) 
       urls = [...urls, ...items.map(({url}) => url)]
     })
 
-    requestPermission(urls).then( ()=> {
+    permissions.request(urls).then( ()=> {
 
       $.each($scope.result, (folderName, value) => {
         Folders.add(folderName).then(folder => {

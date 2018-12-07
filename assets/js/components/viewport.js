@@ -26,8 +26,13 @@ app
       <div class='loading' ng-show='loading'>
         <img src='../../assets/images/loader-large.gif'/>
     
-        <div class='' ng-show='loading_expired'>
-          Something went wrong.<br/>
+        <div class='' ng-show='broken'>
+          <p><a ng-href="{{item.url}}" target="_blank">Content</a> cannot be loaded</p>          
+        </div>
+        
+        <div class='' ng-show='noPerms'>
+          <p>Some additional permissions required. </p>
+          <a class="btn btn-primary btn-xs" ng-click="resolvePermissions()"  >Resolve</a>
           <!-- <a href="#">Reload</a> TODO reload -->
     
           <!--Try to turn on <a href='#/settings/edit/{{Feeds.viewFrame.id}}'>proxy mode</a> for this feed.<br/>-->
@@ -48,6 +53,7 @@ app
 
 
       const extractText = async () => {
+        //todo process relative href
         let $el = $element.find(".text-container")
 
         try {
@@ -56,14 +62,16 @@ app
           let text = await (await fetch($scope.item.url)).text()
           text = text.replace(/<\s*(script)[^><]*>[\s\S]*?<\s*\/\s*(script)\s*>/ig, '')
 
-
           let doc = (new DOMParser).parseFromString(text, 'text/html')
-
 
           let article = new Readability(doc).parse()
           let content = article.content
 
-          content = `<a class='header' href="${$scope.item.url}">${$scope.item.title}</a> ${content}`
+          content = `
+               <div>
+                <a class='header' href="${$scope.item.url}">${$scope.item.title}</a> 
+                ${content}
+               </div> `
             .replace(/<\s*(a)\s/ig, '<a target="_blank" ')
 
           $el.html(content)
@@ -72,67 +80,95 @@ app
 
         }catch(e){
           //todo handler
-          $timeout(() => $scope.loading_expired = true)
+          testForErrors()
 
         }
 
       }
 
-      const setIframeTimeout = () => {
-
-        let loading_limit = 30000
 
 
-        let start = Date.now()
-
-        window.frameLoaderInsperctor = setInterval(() => {
-          if (Date.now() - start >= loading_limit) {
-            clearTimeout(window.frameLoaderInsperctor)
-
-            $scope.$apply(() => $scope.loading_expired = true)
-          }
-        }, 2000);
-
-      }
-
-
-      $scope.$watchGroup(['item.url', 'extractText'], ()=> {
+      const loadContent = ()=> {
         if (!$scope.item) return
 
         $scope.loading = true
 
-        clearInterval(window.frameLoaderInsperctor)
-
-        $scope.loading_expired = false
+        $scope.broken = false
+        $scope.noPerms = false
 
         if($scope.extractText){
           extractText()
-        }else{
-          setIframeTimeout()
         }
-      })
+        //else iframe loads automatically
 
-      //todo request permission if needed
-      //disable scripts
+      }
 
+      $element.find('iframe').on('load', async (e)=> {
 
-      $scope.$on('destroy', ()=> clearInterval(window.frameLoaderInsperctor))
+        //no way to catch rejection x-frame-option rejection
+        // so test it on each request :/
 
-      $element.find('iframe').on('load', ()=> {
-        $timeout(() => $scope.loading = false)
+        if(!await testForErrors()){
+          $timeout(() => $scope.loading = false)
+        }
+
 
         //todo implementation for chrome; no way at the moment (open links in new tab)
-        if (window.require) {
-          $(elm[0].contentWindow.document).find("a").on('click', () => {
-            if (this.href.indexOf('http') != 0) return;
-            require('nw.gui').Shell.openExternal(this.href)
-            return false
-          })
-        }
-
-
+        /*if (window.require) {
+         $(elm[0].contentWindow.document).find("a").on('click', () => {
+         if (this.href.indexOf('http') != 0) return;
+         require('nw.gui').Shell.openExternal(this.href)
+         return false
+         })
+         }*/
 
       })
+
+
+      const testForErrors = async ()=>{
+        let result = await permissions.testURL($scope.item.url)
+
+
+
+        if(result == String(result)){
+          $scope.noPerms = result
+        }else if(result === false){
+          $scope.broken = true
+        }
+
+        $scope.$apply()
+
+        return $scope.broken || $scope.noPerms
+
+      }
+
+
+      $scope.$watchGroup(['item.url', 'extractText'], loadContent)
+
+
+      $scope.resolvePermissions = async ()=>{
+
+        await permissions.request($scope.noPerms)
+
+        $scope.broken = false
+        $scope.noPerms = false
+
+        if($scope.extractText){
+
+          extractText()
+
+        }else{
+
+          $element.find('iframe').each((idx, e) => {
+            e.src = e.src
+          }) //refresh
+
+        }
+
+        $scope.$apply()
+
+      }
+
 
     }
   }))

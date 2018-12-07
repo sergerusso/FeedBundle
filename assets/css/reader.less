@@ -77,6 +77,10 @@ body{
         top:0px;
 
         line-height: 30px;
+
+        .error{
+          cursor: pointer;
+        }
           .open .badge.options,
           .badge.options:hover{
             background:#FFF;
@@ -400,6 +404,19 @@ body{
       color: #e9e9e9;
       text-align: center;
       font-weight: 200;
+      display:flex;
+      position: relative;
+      justify-content: center;
+
+      i{
+        position: absolute;
+        transform: scaleX(-1);
+        left:35px;
+      }
+      .text{
+        text-align: center;
+        width:140px;
+      }
     }
 
 

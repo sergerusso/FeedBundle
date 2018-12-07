@@ -63,7 +63,11 @@
   <div class='menu'>
 
     <div ng-if="!Feeds.items.length " class="get-started" ng-click="addFeed()">
-      Get started by adding new feed
+
+      <i class="fa fa-hand-pointer-o "></i>
+      <div class="text">
+        To get started, add a feed
+      </div>
     </div>
     <div ng-repeat='feed in selectedFolder.getFeeds()'>  <!-- Feeds.unread(feed.items) == 0 && !Settings.unread || -->
 
@@ -71,22 +75,28 @@
         <div class='title' ng-click='toggleFeed(feed)'>
           <i class='glyphicon glyphicon-minus-sign' ng-show='feed.expanded'></i>
           <i class='glyphicon glyphicon-plus-sign' ng-hide='feed.expanded'></i>
-          {{feed.title}}
+          {{feed.title}} <!--todo &amp in titles :/-->
         </div>
 
         <div class="ctrls">
+
           <img src='/assets/images/warning-mini.png'
+               ng-click="feed.fix(editFeed)"
+               class="error"
                ng-show='feed.error'
                tooltip
                data-placement="bottom"
-               data-original-title="Feed url is not valid. Content cannot be fetched."
+               data-original-title="{{feed.isJailed ? 'Some additional permissions required' : 'Empty response, check feed url'}}"
           />
+
           <img src='/assets/images/loader-mini.gif' ng-show='feed.updating'/>
+
           <span class="badge"
                 title="Double click to mark it as read"
                 ng-class='{"badge-warning": feed.unreadCount() > 0 }'
                 dblclick-read
           >{{feed.unreadCount()}}</span>
+
           <span class='dropdown'>
               <span class="badge options" data-toggle="dropdown">
                   <i class="glyphicon glyphicon-chevron-down"></i>

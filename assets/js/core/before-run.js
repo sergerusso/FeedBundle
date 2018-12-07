@@ -33,6 +33,8 @@ export default ($timeout, $rootScope, $q)=>{
   }
   $scope.editFeed = (feed)=>{
 
+    feed.diagnose()
+
     $scope.feedModal = {
       step: 'edit',
       item: feed,
@@ -71,7 +73,9 @@ export default ($timeout, $rootScope, $q)=>{
   })
 
 
-  document.addEventListener('feedUpdated', () => $scope.$apply())
+  document.addEventListener('feedUpdated', () => {
+    setTimeout(() => $scope.$apply(), 0)
+  })
 
   return $scope;
 }

@@ -16,6 +16,7 @@ window.addEventListener("unhandledrejection", (event)=>{
     alert("Database connection was closed.\nPlease reload the extension or restart browser.")
   }
 
+  if(event.reason == 'no_permissions_granted') return
 
   let errorReport = 'onunhandledrejection: '+ String( stack || event.reason || event.message)
 

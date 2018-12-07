@@ -1,8 +1,11 @@
 //sergerusso 2018
+window.onRedirect = []
 
-if(chrome.webRequest) {
-//todo chrome ext id
-  chrome.webRequest.onHeadersReceived.addListener(({responseHeaders, url}) => {
+
+  //todo chrome ext id
+
+
+  const onHeadersReceived = ({responseHeaders, url}) => {
 
     return ({
       responseHeaders: responseHeaders
@@ -11,12 +14,33 @@ if(chrome.webRequest) {
       //   [{name:'Access-Control-Allow-Origin', value:'*'}]
       // )
     })
-  }, {urls: ['*://*/*']}, ['blocking', 'responseHeaders']);
+  }
 
-  chrome.webRequest.onBeforeRedirect.addListener(({url, redirectUrl}) => {
-    //console.log(url, redirectUrl);
-    //todo update feedUrl
-  }, {urls: ['*://*/*']});
+  const onBeforeRedirect = ({url, redirectUrl}) => {
+
+    onRedirect.forEach(fn => fn({[url]: redirectUrl}))
+
+  }
+
+
+  const updateWebHooks = () => {
+
+    if(!chrome.webRequest) return
+
+    console.log('hook initiated')
+    chrome.webRequest.onHeadersReceived.removeListener(onHeadersReceived)
+    chrome.webRequest.onHeadersReceived.addListener(onHeadersReceived, {urls: ['*://*/*']}, ['blocking', 'responseHeaders'])
+
+    chrome.webRequest.onBeforeRedirect.removeListener(onBeforeRedirect)
+    chrome.webRequest.onBeforeRedirect.addListener(onBeforeRedirect, {urls: ['*://*/*']}, ['responseHeaders'])
+  }
+
+
+  updateWebHooks()
+
+  window.updateWebHooks = updateWebHooks
+
+
   // chrome.webRequest.onHeadersReceived.addListener(({responseHeaders}) => {
   //   console.log(12321, {
   //     responseHeaders: responseHeaders.concat(
@@ -44,5 +68,3 @@ if(chrome.webRequest) {
 
    return headers
    }, {urls: ['*://!*!/!*']}, ['blocking', 'responseHeaders']);*/
-
-}

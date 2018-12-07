@@ -50,7 +50,7 @@ const updatePermissions = ()=>{
 
 
     chrome.permissions.getAll(({origins})=>{
-      console.log(origins)
+
       let toRemove = origins.filter(origin=>!urls.includes(origin))
       let toAdd = urls.filter(url=>!origins.includes(url))
       console.log({toRemove, toAdd});
