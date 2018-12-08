@@ -26,7 +26,7 @@ const Feeds = {
       this.items = result.map(item=>new Feed(item))
 
       if(!noUpdate){
-        this.update() //todo refactor feeds loa->update
+        this.update() //todo refactor feeds loa->update not working now
       }
 
       return this.items;

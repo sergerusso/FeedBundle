@@ -19,7 +19,7 @@ class Feed{
   }
 
   get isBroken(){
-    return this.broken.includes(this.url) || this.error
+    return !this.isJailed && (this.broken.includes(this.url) || this.error)
   }
   get isJailed(){
     return this.noPerms.length
@@ -217,10 +217,10 @@ class Feed{
       this.url,
       ...this.items
         .slice(0, short ? 0 : 5)
-        .map(i => i.url)
+        .map(i => new URL(i.url).origin)
     ]
 
-    //todo remove the same origins
+    toTest = [...new Set(toTest)] //uniq
 
     this.diagnosing = true
 

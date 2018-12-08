@@ -86,6 +86,7 @@ chrome.alarms.create("upd feeds", {
 
 
 chrome.alarms.onAlarm.addListener(()=>{
+  //todo check in perm mode
   console.log('updating')
   Feeds.fetch().then(feeds=>{
     console.log(feeds);

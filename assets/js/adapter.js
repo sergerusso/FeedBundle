@@ -4,14 +4,20 @@
 
 
 const prepareOrigins = (origins) => {
-  return (Array.isArray(origins) ? origins : [origins]).map(origin=>(
-    `*://${new URL(origin).host}/*`
-  ))
+
+  return (Array.isArray(origins) ? origins : [origins]).map(origin=> {
+    let host = new URL(origin).hostname
+
+    //not treat permission ask with this
+    //host = "*."+ host.split(".").slice(-2).join(".") //wildcard + top domain
+
+    return `*://${host}/*`
+  })
 }
 
 //todo move out
 const permissions = {
-  request: (origins)=>{ //todo check each
+  request: (origins)=>{
 
     //requestPermission(angular.element($0).scope().$parent.$parent.$parent.Feeds.items.map(i=>i.url))
     if(!window.chrome) return Promise.resolve()
@@ -124,16 +130,17 @@ const permissions = {
 
       await fetch(url, {mode: 'no-cors'})
 
-      if(redirectMap[url]){
+      finalUrl = url
 
-        //todo 2 level redirect
-        finalUrl = redirectMap[url]
+      //2 level redirects
 
-      } else{
+      while(redirectMap[finalUrl]){
 
-        finalUrl = url
+        if(finalUrl == redirectMap[finalUrl]) break
 
+        finalUrl = redirectMap[finalUrl]
       }
+
 
 
     }catch(e){

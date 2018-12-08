@@ -11,7 +11,6 @@ export default ($timeout, $rootScope, $q)=>{
 
   let $scope = $rootScope;
 
-  //todo permission warning
   //todo auto backup
 
   $scope.Feeds = Feeds

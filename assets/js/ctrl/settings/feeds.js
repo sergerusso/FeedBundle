@@ -26,7 +26,7 @@ app.controller('settingsFeedsCtrl', function($scope, $routeParams, $location, $r
 
 
   $scope.remove = (feed) => {
-    //removePermission(feed.url) //todo only if ther is no such
+    //permission.remove(feed.url) //todo only if ther is no such
     Feeds.remove(feed)
   }
 

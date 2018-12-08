@@ -33,10 +33,6 @@ app
         <div class='' ng-show='noPerms'>
           <p>Some additional permissions required. </p>
           <a class="btn btn-primary btn-xs" ng-click="resolvePermissions()"  >Resolve</a>
-          <!-- <a href="#">Reload</a> TODO reload -->
-    
-          <!--Try to turn on <a href='#/settings/edit/{{Feeds.viewFrame.id}}'>proxy mode</a> for this feed.<br/>-->
-          <!--<a href>Find the problem</a>-->
         </div>
       </div>
       <welcome class="welcome" ng-show="!loading && !item "></welcome>      
@@ -53,36 +49,50 @@ app
 
 
       const extractText = async () => {
-        //todo process relative href
+        //todo https://news.yahoo.com/2019-best-places-revealed-glassdoor-180729801.html //bad html processing
+
+
+
         let $el = $element.find(".text-container")
 
+        $el.scrollTop(0)
+
+
+        let text
+
         try {
-          $el.scrollTop(0)
-
-          let text = await (await fetch($scope.item.url)).text()
-          text = text.replace(/<\s*(script)[^><]*>[\s\S]*?<\s*\/\s*(script)\s*>/ig, '')
-
-          let doc = (new DOMParser).parseFromString(text, 'text/html')
-
-          let article = new Readability(doc).parse()
-          let content = article.content
-
-          content = `
-               <div>
-                <a class='header' href="${$scope.item.url}">${$scope.item.title}</a> 
-                ${content}
-               </div> `
-            .replace(/<\s*(a)\s/ig, '<a target="_blank" ')
-
-          $el.html(content)
-
-          $timeout(() => $scope.loading = false)
-
+          text = await (await fetch($scope.item.url)).text()
         }catch(e){
-          //todo handler
-          testForErrors()
-
+          return testForErrors()
         }
+
+        text = text.replace(/<\s*(script)[^><]*>[\s\S]*?<\s*\/\s*(script)\s*>/ig, '')
+
+
+        let doc = (new DOMParser).parseFromString(text, 'text/html');
+
+        [...doc.querySelectorAll("a,img")].forEach(el=>{
+          let field = el.href ? 'href' : 'src'
+          el[field] = new URL(el.getAttribute(field), $scope.item.url)
+
+          if(el.href) el.target = '_blank'
+        })
+
+
+        let article = new Readability(doc).parse()
+        let content = article.content
+
+        content = `
+             <div>
+              <a class='header' href="${$scope.item.url}" target="_blank">${$scope.item.title}</a> 
+              ${content}
+             </div> `
+
+        $el.html(content)
+
+        $timeout(() => $scope.loading = false)
+
+
 
       }
 

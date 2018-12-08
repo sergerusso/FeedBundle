@@ -53,7 +53,10 @@
       <button class='btn btn-dark btn_'
               ng-if='!selectedFolder.latestNews'
               ng-click="addFeed()">Add new source</button>
-      <a class="btn btn-dark btn-small feedback" href="https://chrome.google.com/webstore/detail/feedbundle-online-rss-new/phpkhhdfcdlkcmakbfieencikecnddck" browser-link>Report issue</a>
+      <a class="btn btn-dark btn-small feedback"
+         href="https://chrome.google.com/webstore/detail/feedbundle-online-rss-new/phpkhhdfcdlkcmakbfieencikecnddck" browser-link>
+        Feedback
+      </a>
       <!--todo url for nw.js-->
     </div>
 
@@ -75,7 +78,8 @@
         <div class='title' ng-click='toggleFeed(feed)'>
           <i class='glyphicon glyphicon-minus-sign' ng-show='feed.expanded'></i>
           <i class='glyphicon glyphicon-plus-sign' ng-hide='feed.expanded'></i>
-          {{feed.title}} <!--todo &amp in titles :/-->
+          {{feed.title | decode_html}}
+
         </div>
 
         <div class="ctrls">
@@ -111,7 +115,7 @@
 
         </div>
       </div>
-      <!-- todo move to directive?-->
+      <!-- todo move to directive -->
       <a href=""
          ng-hide='item.read && !Settings.unread && !isActiveFeedItem(item) && !selectedFolder.isBookmarks'
          ng-click='showFeedItem(item, feed)'
@@ -119,7 +123,7 @@
          ng-class='{active: isActiveFeedItem(item), read: item.read, full_title:Settings.fullTitle}'
          ng-repeat='item in feed.items | filter_news :feed'
         >
-        <div class="title" ng-class='{full_title:Settings.fullTitle}'>{{item.title}}</div>
+        <div class="title" ng-class='{full_title:Settings.fullTitle}'>{{item.title | decode_html}}</div>
         <span class="bookmark glyphicon "
               ng-class="{'glyphicon-star-empty': !item.marked, 'glyphicon-star': item.marked, marked:item.marked}"
               ng-click-no-prop="toggleBookmark(feed, item)">

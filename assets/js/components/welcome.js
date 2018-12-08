@@ -41,7 +41,7 @@ app
           </div>
           
           <div class='copyright'>
-            <a href="http://www.sergerusso.com/" browser-link target="_blank">by serge</a>
+            <a href="http://www.sergerusso.com/" browser-link target="_blank">sergerusso {{currentYear}}</a>
           </div>
         </div>            
             
@@ -57,6 +57,9 @@ app
           window.open("https://www.facebook.com/sharer.php?u="+url, "facebook_share", "menubar=no,width=550,height=450,scrollbars=no")
         }
       }
+
+      $scope.currentYear = (new Date).getFullYear()
+
     }
   }))
 

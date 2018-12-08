@@ -33,48 +33,6 @@ angular
       })
     }
   )])
-  .directive('viewFrame', [()=>(
-    (scope, elm, attrs)=> {
-
-      let loading_limit = 30000
-
-      attrs.$observe('src', ()=> {
-        clearInterval(window.frameLoaderInsperctor)
-        if (!attrs.src) return;
-        scope.frame_loading = true
-        scope.frame_loading_long = false
-        let start = (new Date()).getTime()
-        window.frameLoaderInsperctor = setInterval(() => {
-          if ((new Date()).getTime() - start >= loading_limit) {
-            clearTimeout(window.frameLoaderInsperctor)
-            scope.$apply(() => scope.frame_loading_long = true)
-          }
-        }, 2000);
-      })
-
-      //todo request permission if needed
-      //disable scripts
-
-
-      scope.$on('destroy', ()=> clearInterval(window.frameLoaderInsperctor))
-
-      elm.on('load', ()=> {
-        scope.frame_loading = false
-
-        //todo implementation for chrome (no way at the moment)
-        if (window.require) {
-          $(elm[0].contentWindow.document).find("a").on('click', () => {
-            if (this.href.indexOf('http') != 0) return;
-            require('nw.gui').Shell.openExternal(this.href)
-            return false
-          })
-        }
-
-
-        scope.$apply()
-      })
-    }
-  )])
   .directive('ngAutofocus', [()=>(
     (scope, elm, attrs)=> {
       elm.focus()
@@ -244,6 +202,24 @@ angular
     (feeds, feed)=> (
       feeds.filter(el => feed.expanded || feed.isComposite)
     )
+  )])
+
+  .filter('url_host', [()=>(
+    (url)=> (
+      new URL(url).host
+    )
+  )])
+  .filter('decode_html', [()=>(
+    (html)=> {
+
+      html = html
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      return $("<div/>").html(html).text()
+
+
+    }
   )])
   .directive('tooltip', ()=>(
     (scope, elm, attrs)=>{
