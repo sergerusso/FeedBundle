@@ -7,15 +7,20 @@ import Folders from '../model/folder/folders.js'
 import app from '../core/ng-module.js'
 
 app
+  .directive('onIframeLoad', [()=>(
+    (scope, elm, attrs)=> {
+      elm.on("load", ()=>scope.$emit('onLoad', [1,2,3]))
+    }
+  )])
   .directive('viewport', ()=>({
     template:`
     <div class='viewport' clear-view hotkeys>
       <iframe id="viewFrame" 
               ng-src='{{extractText ? "" : item.url}}'
-              ng-hide='loading || !item.url || extractText' 
-              view-frame 
-              _sandbox="allow-forms allow-scripts" 
-              nwfaketop>  
+              ng-hide='loading || !item.url || extractText'
+              ng-if="!resetIframe"
+              on-iframe-load="123"
+              view-frame>  
       </iframe>
       <div id="viewFrame"    
            class="text-container"
@@ -32,7 +37,8 @@ app
         
         <div class='' ng-show='noPerms'>
           <p>Some additional permissions required. </p>
-          <a class="btn btn-primary btn-xs" ng-click="resolvePermissions()"  >Resolve</a>
+          <a class="btn btn-primary btn-xs" ng-click="resolvePermissions()"  >Resolve</a><br/><br/>
+          <a class="" ng-href="{{item.url}}" target="_blank">Open in new tab</a>
         </div>
       </div>
       <welcome class="welcome" ng-show="!loading && !item "></welcome>      
@@ -103,6 +109,9 @@ app
 
         $scope.loading = true
 
+        $scope.resetIframe = true //chrome does not send cookie to the same iframe with changed url :/
+        $timeout(() => $scope.resetIframe = false, 100); //to recreate iframe
+
         $scope.broken = false
         $scope.noPerms = false
 
@@ -113,7 +122,7 @@ app
 
       }
 
-      $element.find('iframe').on('load', async (e)=> {
+      $scope.$on('onLoad', async ()=>{
 
         //no way to catch rejection x-frame-option rejection
         // so test it on each request :/
@@ -131,14 +140,11 @@ app
          return false
          })
          }*/
-
       })
 
 
       const testForErrors = async ()=>{
         let result = await permissions.testURL($scope.item.url)
-
-
 
         if(result == String(result)){
           $scope.noPerms = result
@@ -149,7 +155,6 @@ app
         $scope.$apply()
 
         return $scope.broken || $scope.noPerms
-
       }
 
 

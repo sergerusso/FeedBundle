@@ -2,7 +2,6 @@
 
 import db from '../../db.js'
 
-//todo remove items with the same url, dif names
 class Feed{
   constructor(data = {}) {
     this.title = data.title
@@ -104,8 +103,12 @@ class Feed{
          if item.url.indexOf('http') != 0
             item.url = @url.replace(/^(https?:\/\/.+?)\/.+$/, '\$1') + item.url
          */
+        //todo remove items with the same url, dif names
         if(!titles.includes(item.title)) {
+
           items.unshift(item)
+        }else{
+          //todo put it and remove the old one to preserve sticky posts
         }
       })
 
@@ -121,6 +124,7 @@ class Feed{
   }
 
   getXML(){
+
     return new Promise(callback => {
       //todo move to helper
       //todo querySelector from plain html
