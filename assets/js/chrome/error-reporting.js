@@ -3,15 +3,16 @@ import createDialog from './create-dialog.js'
 import Settings from '../model/settings.js'
 import sendMail from '../send-mail.js'
 
+//TODO not persistent as service worker is killed, but still fine during it's short livecycle
 let counting = 0,
     blocked = false;
 
 const errorReporting = async (error, force) => {
   counting = (counting || 0) + 1;
 
-  if(counting >= 20 && !force){
+  if(counting >= 3 && !force){
 
-    if(counting == 20) {
+    if(counting == 3) {
       errorReporting("max error reporting", true)
       console.log("max error reporting", )
     }

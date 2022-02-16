@@ -1,6 +1,7 @@
 //sergerusso 2018
 
 import Settings from './model/settings.js'
+import Dexie from "/assets/js/lib/mod_dexie.min.js"
 
 const db = new Dexie("feedbundle")
 

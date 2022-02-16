@@ -3,11 +3,12 @@ import Feeds from '../model/feed/feeds.js'
 import Feed from '../model/feed/feed.js'
 import Settings from '../model/settings.js'
 import Folders from '../model/folder/folders.js'
+import {permissions} from "/assets/js/adapter.js"
 
 import app from '../core/ng-module.js'
 
 let template = `
-<div class="modal fade" id="feedModal" tabindex="-1" role="dialog" aria-labelledby="feedModalLabel" >
+<div class="modal fade" id="feedModal" tabindex="-1" role="dialog" aria-labelledby="feedModalLabel" data-backdrop="static" >
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -32,15 +33,21 @@ let template = `
                             </p>
                             
                             <label>URL:</label>
-                            <input class='form-control' name="feed_url" ng-model='feed.new_feed_url' type="text" placeholder="https://..."/>
-                            <div class="text-right">
-                                <small>
-                                    <i>
-                                        rss link can also be automatically extracted from a site if present
-                                    </i>
-                                </small>
-                            </div>
+                            <input class='form-control' name="feed_url" ng-model='feed.new_feed_url' type="text" placeholder="https://.../rss"/>
+                        
+                            <label>
+                              <input type="checkbox" ng-model='feed.use_regexp' style="position:relative; top:2px;"/> 
+                                use <a href="https://www.google.com/search?q=regex+guide" target="_blank" style="color:inherit; text-decoration:underline">regex</a> to extract news from any url
+                                <i class="fa fa-question-circle" 
+                                tooltip 
+                                data-placement="bottom" 
+                                data-html="true"
+                                data-original-title="Advanced feature that parses site's HTML with given rules and extracts titles and urls<br/><br/>Following named capturing groups should be present: <br/>title, url">
+                               </i>
+                              </label>
+                            <textarea ng-if='feed.use_regexp' ng-model='feed.new_feed_regexp' class='form-control' rows="10"></textarea>
 
+                            <br/>
                             <div ng-if="Feeds.items.length > 5 || true" class="suggestions">
                                 <label>Suggestions:</label>
                                 <br/>
@@ -95,8 +102,7 @@ let template = `
                         </p>
                         <p class="alert alert-danger" ng-if="feed.item.isBroken">
                             <i class="fa fa-warning"></i>
-                            Broken feed url!
-                                                                        
+                            Broken <a ng-href="{{feed.fields.url}}" target="_blank">feed url</a>!                                                                        
                         </p>
                         
                         
@@ -129,6 +135,21 @@ let template = `
                                 data-original-title="By default FeedBundle displays full site when browsing, you can switch this option to show only main content.<br/><br/>It might not work properly with some sites.">
                                </i>
                             </label>
+                            
+                            
+                            <label>
+                              <input type="checkbox" ng-model='feed.fields.use_regexp' /> 
+                                use <a href="https://www.google.com/search?q=regex+guide" target="_blank" style="color:inherit; text-decoration:underline">regex</a> to extract news from any url
+                                <i class="fa fa-question-circle" 
+                                tooltip 
+                                data-placement="bottom" 
+                                data-html="true"
+                                data-original-title="Advanced feature that parses site's HTML with given rules and extracts titles and urls<br/><br/>Following named capturing groups should be present: <br/>title, url">
+                               </i>
+                              </label>
+                            <textarea ng-if='feed.fields.use_regexp' ng-model='feed.fields.regexp' class='form-control' rows="10"></textarea>                            
+                            
+                            
                             <br/>
                             <!--<label class="checkbox">
                               <input type="checkbox" ng-model="feed.item.proxy"> Use proxy (<a href='https://developer.mozilla.org/en-US/docs/HTTP/X-Frame-Options' target='_blank' tooltip  data-placement="bottom"  data-original-title="It is for sites with no frame-browsing support (X-Frame-Options: SAMEORIGIN)">?</a>)
@@ -274,24 +295,6 @@ app
             ['Lifestyle', 'https://www.yahoo.com/lifestyle/rss'],
           ]
         },
-        {
-          name: 'CNN',
-          items: [
-            ['Top Stories', 'http://rss.cnn.com/rss/cnn_topstories.rss'],
-            ['World', 'http://rss.cnn.com/rss/cnn_world.rss'],
-            ['U.S.', 'http://rss.cnn.com/rss/cnn_us.rss'],
-            ['Business (CNNMoney.com)', 'http://rss.cnn.com/rss/money_latest.rss'],
-            ['Politics', 'http://rss.cnn.com/rss/cnn_allpolitics.rss'],
-            ['Technology', 'http://rss.cnn.com/rss/cnn_tech.rss'],
-            ['Health', 'http://rss.cnn.com/rss/cnn_health.rss'],
-            ['Entertainment', 'http://rss.cnn.com/rss/cnn_showbiz.rss'],
-            ['Travel', 'http://rss.cnn.com/rss/cnn_travel.rss'],
-            ['Video', 'http://rss.cnn.com/rss/cnn_freevideo.rss'],
-            ['CNN 10', 'http://rss.cnn.com/services/podcasting/cnn10/rss.xml'],
-            ['Most Recent', 'http://rss.cnn.com/rss/cnn_latest.rss'],
-            ['CNN Underscored', 'http://rss.cnn.com/cnn-underscored.rss'],
-          ]
-        },
         // {
         //   name: ' Fox News',
         //   //JSON.stringify([...$0.querySelectorAll("a")].map( i => [i.innerText, "http:"+i.dataset.url]))
@@ -342,7 +345,7 @@ app
         try {
 
           let url = $scope.feed.new_feed_url;
-
+          let regexp = $scope.feed.use_regexp ? $scope.feed.new_feed_regexp : ''
           if (!url || $scope.processing) return false
 
           $scope.newFeedRedirect = false
@@ -356,6 +359,7 @@ app
           await permissions.request(url);
 
           //check for redirect
+          /*
           let test = await permissions.testURL(url)
           if(test && test !== true ){
             // redirect
@@ -365,44 +369,29 @@ app
               $scope.newFeedRedirect = test
             })
             return
-          }
+          }*/
 
-
-          let resp = await fetch(url, {headers:{Accept: 'application/rss+xml, application/xhtml+xml, text/html'}}).then(async(r) => await r.text()),
-              dom = ( (dom, content) => (
-                (dom.innerHTML = content), dom
-              ))(document.createElement('html'), resp),
-
-              types = [
-                'application/rss+xml',
-                'application/atom+xml',
-                'application/rdf+xml',
-                'application/rss',
-                'application/atom',
-                'application/rdf',
-                'text/rss+xml',
-                'text/atom+xml',
-                'text/rdf+xml',
-                'text/rss',
-                'text/atom',
-                'text/rdf'
-              ],
-              link = dom.querySelector(`link[type="${types.join('.rss"],link[type="')}.rss"]`),
-              feed = new Feed({url}),
-              data;
-
-
-          if(link){
-            feed.url = new URL(link.getAttribute('href'), url).href; //to absolute
-          }
-
-          data = await feed.getXML();
+          let feed = new Feed({url, regexp})
+          let data = await feed.getXML();
 
           if(data.error){
-            throw "no_feed_data";
-          }
+            //try to find any link in possible html page
+            let resp = await fetch(url, {headers:{Accept: 'application/rss+xml, application/xhtml+xml, text/html'}}).then(async(r) => await r.text())
 
-          data.title = data.title || dom.querySelector('title').innerText;
+            let dom = ( (dom, content) => (
+              (dom.innerHTML = content), dom
+            ))(document.createElement('html'), resp)
+
+            let types = ['application/rss+xml', 'application/atom+xml', 'application/rdf+xml', 'application/rss', 'application/atom', 'application/rdf', 'text/rss+xml', 'text/atom+xml', 'text/rdf+xml', 'text/rss', 'text/atom', 'text/rdf' ]
+            let link = dom.querySelector(`link[type="${types.join('.rss"],link[type="')}.rss"]`)
+            if(link){
+              feed.url = new URL(link.getAttribute('href'), url).href; //to absolute
+              data = await feed.getXML();
+              data.title = data.title || dom.querySelector('title').innerText;
+            }
+
+            if(data.error) throw "no_feed_data";
+          }
 
           Feeds.insert(data).then(feed => {
 
@@ -437,13 +426,12 @@ app
         let {item, fields} = $scope.feed
 
 
-        if (item.url != fields.url) {
+        if (item.url != fields.url || item.isBroken) {
 
           try {
             await permissions.request(fields.url)
             //passed
-            //permissions.remove(item.url) //todo remove old perms?
-            item.fetch()
+            //item.fetch()
           }catch(e){
             console.log(e)
             alert('No permission given, url was not updated.')
@@ -453,6 +441,7 @@ app
         }
 
         item.setTitle(fields.title)
+        item.setRegexp(fields.regexp)
         item.setUrl(fields.url)
         item.setFolderId(fields.folderId)
         item.setExtractText(fields.extractText)

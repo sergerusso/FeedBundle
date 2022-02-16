@@ -53,6 +53,11 @@
       <button class='btn btn-dark btn_'
               ng-if='!selectedFolder.latestNews'
               ng-click="addFeed()">Add new source</button>
+      <!--glyphicon glyphicon-inbox
+      <button class='btn btn-dark btn_'
+              ng-if='!selectedFolder.latestNews'
+              ng-click="addFeed()"><i class="	glyphicon glyphicon-fullscreen"></i></button>-->
+
       <a class="btn btn-dark btn-small feedback"
          href="https://chrome.google.com/webstore/detail/feedbundle-online-rss-new/phpkhhdfcdlkcmakbfieencikecnddck" browser-link>
         Feedback
@@ -116,12 +121,12 @@
         </div>
       </div>
       <!-- todo move to directive -->
-      <a href=""
+      <a ng-href="{{item.url}}"
          ng-hide='item.read && !Settings.unread && !isActiveFeedItem(item) && !selectedFolder.isBookmarks'
-         ng-click='showFeedItem(item, feed)'
+         ng-click='showFeedItem(item, feed.isComposite ? feed.feeds[idx]: feed); $event.preventDefault()'
          class='item'
          ng-class='{active: isActiveFeedItem(item), read: item.read, full_title:Settings.fullTitle}'
-         ng-repeat='item in feed.items | filter_news :feed'
+         ng-repeat='(idx, item) in feed.items | filter_news :feed'
         >
         <div class="title" ng-class='{full_title:Settings.fullTitle}'>{{item.title | decode_html}}</div>
         <span class="bookmark glyphicon "

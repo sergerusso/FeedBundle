@@ -3,6 +3,8 @@ import app from '../../core/ng-module.js'
 import Folders from '../../model/folder/folders.js'
 import Feeds from '../../model/feed/feeds.js'
 import Settings from '../../model/settings.js'
+import {permissions} from "/assets/js/adapter.js"
+
 
 app.controller('settingsImportCtrl',  function($scope, $routeParams, $location) {
 
@@ -24,6 +26,8 @@ app.controller('settingsImportCtrl',  function($scope, $routeParams, $location) 
           let $outline = $(el);
           $scope.result[folderName].push({
             url: $outline.attr('xmlUrl'),
+            regexp: $outline.attr('regexp') || null,
+            extractText: !!$outline.attr('extractText'),
             title: $outline.attr('title'),
             text: $outline.attr('text'),
           })
@@ -59,12 +63,18 @@ app.controller('settingsImportCtrl',  function($scope, $routeParams, $location) 
              title: feed.title,
              folderId: folder.isSystem ? undefined : folder.id
              });*/
-
-            Feeds.insert({
+            let item = {
               url: feed.url,
               title: feed.title,
-              folderId: folder.isSystem ? undefined : folder.id
-            }).then( feed => feed.fetch() )
+              folderId: folder.isSystem ? undefined : folder.id,
+              extractText: feed.extractText || false
+            }
+            if(feed.regexp) {
+              item.use_regexp = true
+              item.regexp = feed.regexp
+            }
+
+            Feeds.insert(item).then( feed => feed.fetch() )
 
             urls.push(feed.url)
           })
@@ -99,7 +109,9 @@ app.controller('settingsImportCtrl',  function($scope, $routeParams, $location) 
 
       let feeds = []
       $.each(folder.getFeeds(), (idx, feed) => {
-        feeds.push({title: feed.title, url: feed.url})
+        let item = {title: feed.title, url: feed.url, extractText: feed.extractText}
+        if(feed.regexp) item.regexp = feed.regexp
+        feeds.push(item)
       })
 
       if (feeds.length) {
@@ -126,6 +138,8 @@ app.controller('settingsImportCtrl',  function($scope, $routeParams, $location) 
         //argh https://bugs.jquery.com/ticket/11166
         $subOutline[0].setAttribute('xmlUrl', subItem.url)
         $subOutline[0].setAttribute('htmlUrl', subItem.url.replace(/^(https?:\/\/[^\/]+).*$/, '$1'))
+        if(subItem.regexp) $subOutline[0].setAttribute('regexp', subItem.regexp)
+        if(subItem.extractText) $subOutline[0].setAttribute('extractText', '1')
       })
     })
 

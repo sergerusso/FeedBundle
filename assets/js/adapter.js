@@ -8,43 +8,36 @@ const prepareOrigins = (origins) => {
   return (Array.isArray(origins) ? origins : [origins]).map(origin=> {
     let host = new URL(origin).hostname
 
-    //not treat permission ask with this
-    //host = "*."+ host.split(".").slice(-2).join(".") //wildcard + top domain
-
     return `*://${host}/*`
   })
 }
 
-//todo move out
 const permissions = {
   request: (origins)=>{
 
-    //requestPermission(angular.element($0).scope().$parent.$parent.$parent.Feeds.items.map(i=>i.url))
     if(!window.chrome) return Promise.resolve()
-    //console.log(JSON.stringify(origins))
     origins = prepareOrigins(origins)
 
     origins = [...new Set(origins)] //uniq
 
-
-    //console.log(origins)
-
     return new Promise((resolve, reject)=>{
       chrome.permissions.request({
-        permissions: ['webRequest', 'webRequestBlocking'],
+        permissions: ['declarativeNetRequestWithHostAccess'],
         origins
       }, async (granted)=> {
 
-        chrome.runtime.getBackgroundPage(async(backgroundPage) =>{
+        //todo UPD investigate
+        //chrome.runtime.getBackgroundPage(async(backgroundPage) =>{
 
           if(granted) {
-            backgroundPage.updateWebHooks()
-            resolve()
+            setTimeout(()=>{
+              resolve()
+            }, 750)
           }else{
             reject('no_permissions_granted')
           }
 
-        })
+        //})
 
       })
 
@@ -60,7 +53,7 @@ const permissions = {
 
     return new Promise((resolve, reject)=>{
       chrome.permissions.remove({
-        permissions: ['webRequest', 'webRequestBlocking'],
+        permissions: ['declarativeNetRequestWithHostAccess'],
         origins
       }, (granted)=> {
         granted ? resolve() : reject();
@@ -77,7 +70,7 @@ const permissions = {
 
     return new Promise((resolve, reject)=>{
       chrome.permissions.contains({
-        permissions: ['webRequest', 'webRequestBlocking'],
+        permissions: ['declarativeNetRequestWithHostAccess'],
         origins
       }, (result)=>{
         resolve(result)
@@ -91,71 +84,43 @@ const permissions = {
     //first check if it's ok
 
     try{
-
-      await fetch(url, {
+      let r = await fetch(url, {
         method: "HEAD",
+        redirect:'follow',
+        mode: 'no-cors',
         headers:{
           origin:'',
           //'Content-Encoding':'identity'
         }
       })
 
-      return true //all right
-
-    }catch(e){}
-
-
-    //failed; next check for redirect
-
-    const collectRedirects = async ()=>{
-      //no location header in fetch; do logging in ext
-
-      let redirectMap = {}
-      let bgPage = await new Promise(resolve => chrome.runtime.getBackgroundPage(resolve))
-
-      const beforeRedirect = (redirect) => { Object.assign(redirectMap, redirect) }
-      const remove = () => bgPage.onRedirect = bgPage.onRedirect.filter(fn => fn != beforeRedirect())
-
-
-      bgPage.onRedirect.push(beforeRedirect)
-
-      return [redirectMap, remove]
+    }catch(e){
+      //not accessible
+      return false
     }
 
-    let [redirectMap, removeRedirectListener] = await collectRedirects()
+    try{
+      let r = await fetch(url, {
+        method: "HEAD",
+        redirect:'manual',
+        headers:{
+          origin:'',
+          //'Content-Encoding':'identity'
+        }
+      })
 
-    let finalUrl
-
-    try {
-
-      await fetch(url, {mode: 'no-cors'})
-
-      finalUrl = url
-
-      //2 level redirects
-
-      while(redirectMap[finalUrl]){
-
-        if(finalUrl == redirectMap[finalUrl]) break
-
-        finalUrl = redirectMap[finalUrl]
+      if(r.type == 'opaqueredirect'){
+         return false
       }
 
-
-
     }catch(e){
-      finalUrl = false //network err
-    }
-
-    removeRedirectListener() //todo check
-
-    //if there is redirect it's skipped now
-    if(finalUrl && await permissions.contains(finalUrl)){
-      return true
+      //no permissions
+      return url
     }
 
 
-    return finalUrl;
+    return true //all right
+
 
   }
 }
@@ -164,8 +129,8 @@ const setBadgetText = (text)=>{
 
   text = text.toString()
 
-  if(window.chrome){
-    chrome.browserAction.setBadgeText({text})
+  if(typeof chrome !== 'undefined'){
+    chrome.action.setBadgeText({text})
   }else{
 
     win = require('nw.gui').Window.get()
@@ -173,11 +138,13 @@ const setBadgetText = (text)=>{
   }
 }
 
+const sendGlobalRuntimeMessage = (msg) => {
 
-window.sendGlobalRuntimeMessage = (msg)=>{
-  if(window.onRuntimeMessage){
-    onRuntimeMessage(msg)
+  if(self.onRuntimeMessage){
+    self.onRuntimeMessage(msg);
   }else{
-    chrome.runtime.sendMessage(msg);
+    chrome.runtime.sendMessage(msg).catch(console.error);
   }
 }
+
+export {permissions, setBadgetText, sendGlobalRuntimeMessage}

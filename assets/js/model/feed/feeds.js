@@ -29,8 +29,7 @@ const Feeds = {
         this.update() //todo refactor feeds loa->update not working now
       }
 
-      return this.items;
-
+      return this;
 
     })
 
@@ -48,6 +47,12 @@ const Feeds = {
     }
     if(data.folderId){
       json.folderId = data.folderId
+    }
+    if(data.regexp){
+      json.regexp = data.regexp
+    }
+    if(data.extractText){
+      json.extractText = data.extractText
     }
 
 

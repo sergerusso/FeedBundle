@@ -1,6 +1,7 @@
 import Feeds from '../model/feed/feeds.js'
 import Folders from '../model/folder/folders.js'
 import Settings from '../model/settings.js'
+import {setBadgetText} from "/assets/js/adapter.js"
 
 export default function($rootScope, $scope){
   window.scp = $scope;
@@ -40,6 +41,7 @@ export default function($rootScope, $scope){
   }
 
   $scope.showFeedItem = (item, feed)=> {
+    console.log({item, feed})
     feed.markRead(item)
     $scope.feedItem = item
     $scope.feed = feed
@@ -52,6 +54,16 @@ export default function($rootScope, $scope){
   $scope.collapseAll = ()=>{
     Feeds.items.forEach(item=>{
       delete item.expanded
+    })
+  }
+  $scope.expandActive = ()=>{
+    Feeds.items.forEach(item=>{
+      if(item.unreadCount()){
+        item.expanded = 1
+      }else{
+        delete item.expanded
+      }
+
     })
   }
 

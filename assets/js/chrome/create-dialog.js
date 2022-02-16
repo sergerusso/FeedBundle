@@ -1,11 +1,11 @@
 //sergerusso 2018
 
 let activeIds = []
-window.addEventListener('beforeunload', ()=>{
-  chrome.tabs.remove(activeIds)
-})
+//window.addEventListener('beforeunload', ()=>{
+//  chrome.tabs.remove(activeIds)
+//})
 
-export default (params, callback) => {
+export default async (params, callback) => {
   let width = params.width || 600,
     height = params.height || 280,
     dialog = {
@@ -17,12 +17,13 @@ export default (params, callback) => {
       checkbox: params.checkbox
     };
 
+  let win = await chrome.windows.getCurrent()
 
   chrome.windows.create({
-    url: chrome.extension.getURL("dialog.html#" + height),
+    url: chrome.runtime.getURL("dialog.html#" + height),
     type: 'popup',
-    top: Math.round(screen.height / 2 - height * 1.5),
-    left: Math.round(screen.width / 2 - width / 2),
+    top: Math.round(win.height / 2 - height * 1.5 + win.top),
+    left: Math.round(win.width / 2 - width / 2 + win.left),
     width: Math.round(width),
     height: Math.round(height + 22) //window header todo test windows
   }, async (win) => {

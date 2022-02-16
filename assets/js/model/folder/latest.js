@@ -3,6 +3,8 @@
 import Folder from './folder.js'
 import Feeds from '../feed/feeds.js'
 import FeedComposite from '../feed/composite.js'
+import Settings from '/assets/js/model/settings.js'
+
 
 class FolderLatest extends  Folder{
 
@@ -22,8 +24,16 @@ class FolderLatest extends  Folder{
 
     let results = []
 
+    let count = 0
     Feeds.items.forEach( feed=> {
-      feed.items.forEach(item => results.push([feed, item]))
+      feed.items.forEach(item => {
+        if(count >= this.limit) return
+        count++
+        if(!Settings.unread && item.read){
+          count--
+        }
+        results.push([feed, item])
+      })
     });
 
     //sort
@@ -33,8 +43,10 @@ class FolderLatest extends  Folder{
       (b.date || 0) - (a.date || 0)
     ))
 
+    //hide u
 
-    results = results.slice(0, this.limit)
+
+    //results = results.slice(0, this.limit)
 
     //push
     results.forEach( result=> {

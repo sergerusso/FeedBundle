@@ -6,7 +6,7 @@ export default {
   _defaults: {
     unread: 1,
     folder: "all",
-    fullTitle: 0,
+    fullTitle: 1,
     updateEach: 10,
     feedSize: 100,
     viewportFontSize: 16,

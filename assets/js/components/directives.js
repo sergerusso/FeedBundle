@@ -67,22 +67,32 @@ angular
 
       $('body').on("keydown", (e) => {
         if (!e.ctrlKey) return;
+        let shift = !!(e.shiftKey)
 
         let action = keyCodes[e.keyCode]
 
         switch (action) {
           case 'h':
             Settings.set('unread', !Settings.unread);
+            e.preventDefault()
             break; //read items
           case 'm':
-            scope.collapseAll();
-            break;  //collapse items
+            if(shift){
+              //expand active
+              scope.$parent.expandActive();
+            }else{
+              //collapse item
+              scope.$parent.collapseAll();
+            }
+            e.preventDefault()
+            break;
           case 's':
             $(".toggle_sidebar").trigger('click');
+            e.preventDefault()
             break; //sidebar
         }
 
-        e.preventDefault()
+
         scope.$apply()
       })
     }
@@ -211,7 +221,7 @@ angular
   )])
   .filter('decode_html', [()=>(
     (html)=> {
-
+      if(!html) return ""
       html = html
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');

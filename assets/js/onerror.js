@@ -1,20 +1,16 @@
 //sergerusso 2018
+import {sendGlobalRuntimeMessage} from "/assets/js/adapter.js" //todo check if eveerything imported everywhere
 
-
-window.addEventListener('error', (e)=>{
+self.addEventListener('error', (e)=>{
   let errorReport = 'onerror: '+ String(e.error ? e.error.stack : e)
   sendGlobalRuntimeMessage({errorReport})
 })
 
-window.addEventListener("unhandledrejection", (event)=>{
+self.addEventListener("unhandledrejection", (event)=>{
 
   let {reason: {name, stack} = {}} = event || {};
 
-
-  if(name == 'DatabaseClosedError' && !window.databaseClosedAlert) {
-    window.databaseClosedAlert = true;
-    alert("Database connection was closed.\nPlease reload the extension or restart browser.")
-  }
+  if(name == 'DatabaseClosedError') return
 
   if(event.reason == 'no_permissions_granted') return
 

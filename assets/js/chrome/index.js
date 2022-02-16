@@ -3,25 +3,28 @@
 import db from '../db.js'
 import Feeds from '../model/feed/feeds.js'
 import errorReporting from './error-reporting.js'
-import './request-interception.js'
-import '../onerror.js'
+import {setBadgetText} from "/assets/js/adapter.js"
+import '/assets/js/onerror.js'   //TODO check/implement
 
-window.onRuntimeMessage = async (request) => {
-  if (request.errorReport) return errorReporting(request.errorReport);
+self.onRuntimeMessage = (request) => {
+  console.log('onRuntimeMessage', request)
+  if (request.errorReport) errorReporting(request.errorReport);
+  return true
 }
 
 chrome.runtime.onMessage.addListener(onRuntimeMessage);
 
+chrome.action.onClicked.addListener(async function(tab) {
 
-chrome.browserAction.onClicked.addListener(function(tab) {
+    let {tabOpen} = await chrome.storage.local.get('tabOpen')
 
-    chrome.tabs.get(window.tabOpen || 0, function (tab, b) {
+    chrome.tabs.get(parseInt(tabOpen) || 0, function (tab, b) {
 
       if(chrome.runtime.lastError || !tab){
 
-        chrome.tabs.create({'url': chrome.extension.getURL('index.html')}, function(tab) {
+        chrome.tabs.create({'url': chrome.runtime.getURL('index.html')}, function(tab) {
           // Tab opened.
-          window.tabOpen = tab.id
+          chrome.storage.local.set({'tabOpen': String(tab.id)})
           //window.
         });
 
@@ -34,14 +37,15 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
     })
 
-
 });
+
+chrome.runtime.onStartup.addListener(()=>{
+  chrome.storage.local.set({'tabOpen': String(0)})
+})
 
 
 
 const updatePermissions = ()=>{
-
-
 
   //todo promise chain
   //Error while running permissions.request: This function must be called during a user gesture
@@ -61,7 +65,7 @@ const updatePermissions = ()=>{
       }, ()=>{
         console.log(origins)
         chrome.permissions.request({
-          permissions: ['webRequest', 'webRequestBlocking'],
+          permissions: ['declarativeNetRequestWithHostAccess'],
           origins: toAdd
         }, function(granted) {
           // The callback argument will be true if the user granted the permissions.
@@ -74,23 +78,17 @@ const updatePermissions = ()=>{
   })
 }
 
-/*setTimeout(function(){
-  console.log(1)
-  window.location.reload()
-},10400);*/
-
 chrome.alarms.create("upd feeds", {
   when: Date.now(),
-  periodInMinutes: 5
+  periodInMinutes: 30
 })
 
 
 chrome.alarms.onAlarm.addListener(()=>{
   //todo check in perm mode
   console.log('updating')
-  Feeds.fetch().then(feeds=>{
-    console.log(feeds);
-    let unread = feeds.reduce((sum, feed)=>sum+feed.unreadCount(), 0)
+  Feeds.fetch().then(()=>{
+    let unread = Feeds.items.reduce((sum, feed)=>sum+feed.unreadCount(), 0)
     setBadgetText(unread || "");
   })
 })

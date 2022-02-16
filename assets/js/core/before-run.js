@@ -27,8 +27,12 @@ export default ($timeout, $rootScope, $q)=>{
     $scope.feedModal = {
       step: 'add',
       new_feed_url: '',
+      new_feed_regexp: `<a href="(?<url>.+?)" class="news_item">(?<title>.+?)</a>`,
+      use_regexp:false,
       item: null,
     }
+    //
+
   }
   $scope.editFeed = (feed)=>{
 
@@ -37,9 +41,9 @@ export default ($timeout, $rootScope, $q)=>{
     $scope.feedModal = {
       step: 'edit',
       item: feed,
-      fields:_.pick(feed, ['title', 'url', 'folderId', 'extractText']) //todo wtf?
+      fields:_.pick(feed, ['title', 'url', 'folderId', 'extractText', 'regexp']) //todo wtf?
     }
-
+    $scope.feedModal.fields.use_regexp = !!$scope.feedModal.fields.regexp
     console.log($scope.feedModal)
   }
 

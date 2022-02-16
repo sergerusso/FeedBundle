@@ -14,9 +14,9 @@ import '../components/report-button.js'
 import '../components/welcome.js'
 import '../onerror.js'
 
-app
-  .config(config)
-  .run(beforeRun)
+  app
+    .config(config)
+    .run(beforeRun)
 
 
 angular.bootstrap(document.body, ['feedBundle']);

@@ -29,8 +29,8 @@ nw = new NwBuilder({
   flavor:'normal',
   version: 'latest',
   zip:false,
-  winIco: 'assets/images/favicon.ico',
-  macIcns: 'assets/images/favicon.icns'
+  winIco: 'assets/images/icon.ico',
+  macIcns: 'assets/images/icon.icns'
 })
 
 console.log('Starting...');

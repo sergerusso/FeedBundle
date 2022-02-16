@@ -1,22 +1,35 @@
 {
   "name": "FeedBundle - Online RSS News Reader",
-  "version": "1.5.2",
-  "description": "Make your own collection of feeds, organize and browse it with FeedBundle.",
+  "version": "1.6.0",
+  "description": "Make your own collection of feeds, organize and read it with FeedBundle.",
   "author":"Serge Russo <contact@sergerusso.com>",
-  "manifest_version": 2,
-  "permissions": ["alarms", "storage", "unlimitedStorage"],
-  "optional_permissions": [ "webRequest", "webRequestBlocking", "<all_urls>" ],
-  "browser_action": {
-    "default_icon": "assets/images/favicon.png",
+  "manifest_version": 3,
+  "permissions": ["alarms", "storage", "unlimitedStorage", "declarativeNetRequestWithHostAccess"],
+  "optional_permissions": [  ],
+  "optional_host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_icon": "assets/images/icon.png",
     "default_title": "FeedBundle"
   },
   "icons": {
-    "48": "assets/images/favicon.png",
-    "128": "assets/images/favicon.png"
+    "48": "assets/images/icon.png",
+    "128": "assets/images/icon.png"
   },
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "minimum_chrome_version": "102",
   "background": {
-    "page":"background.html",
-    "persistent": true
+    "service_worker":"./assets/js/chrome/index.js",
+    "type": "module"
+  },
+  "declarative_net_request" : {
+    "rule_resources" : [{
+      "id": "ruleset_1",
+      "enabled": true,
+      "path": "declarative_net_request_rules.json"
+    }]
   }
 }

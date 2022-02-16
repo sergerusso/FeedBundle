@@ -4,6 +4,8 @@ import Feed from '../model/feed/feed.js'
 import Settings from '../model/settings.js'
 import Folders from '../model/folder/folders.js'
 
+import {permissions} from "/assets/js/adapter.js"
+
 import app from '../core/ng-module.js'
 
 app
@@ -67,7 +69,20 @@ app
         let text
 
         try {
-          text = await (await fetch($scope.item.url)).text()
+          text = await fetch($scope.item.url).then((resp)=>{
+
+            let search = resp.headers.get('Content-Type').match(/charset=([^\n]+)/),
+              encoding = search && search[1] || 'UTF-8';
+
+            return resp.blob().then(blob=>{
+              let reader = new FileReader()
+              reader.readAsText(blob, encoding)
+              return new Promise((resolve, reject) =>{
+                reader.onload = ()=>resolve(reader.result)
+                reader.onerror = ()=>reject(reader.error)
+              })
+            })
+          })
         }catch(e){
           return testForErrors()
         }

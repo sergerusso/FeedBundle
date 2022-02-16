@@ -8,7 +8,7 @@
     "frame": true,
     "toolbar": true,
     "width":1080,
-    "icon":"assets/images/favicon.png",
+    "icon":"assets/images/icon.png",
     "height": 640
   }
 }

@@ -1,11 +1,14 @@
 // Created by Serge P <contact@sergerusso.com> on 10/18/16.
-
+import {permissions} from "/assets/js/adapter.js"
+import XMLParser from '/assets/js/lib/mod_xmlParser.min.js'
+import _ from '/assets/js/lib/mod_underscore.js'
 import db from '../../db.js'
 
 class Feed{
   constructor(data = {}) {
     this.title = data.title
     this.url = data.url
+    this.regexp = data.regexp
     this.id = data.id
     this.folderId = data.folderId || "unsorted"
     this.items = data.items || []
@@ -29,12 +32,14 @@ class Feed{
   }
 
   markRead(targetItem){
+    let changed = false
     this.items.forEach(item =>{
-        if(!targetItem || item == targetItem){
+        if((!targetItem || item == targetItem) && !item.read){
           item.read = true
+          changed = true
         }
     })
-    this.setItems(this.items); //save
+    if(changed) this.setItems(this.items); //save
   }
 
 
@@ -70,6 +75,10 @@ class Feed{
     this.title = title
     db.feeds.update(this.id, {title})
   }
+  setRegexp(regexp) {
+    this.regexp = regexp
+    db.feeds.update(this.id, {regexp})
+  }
 
 
   setUrl(url) {
@@ -92,7 +101,7 @@ class Feed{
     delete this.error
 
     let resp = await this.getXML(),
-        titles = this.items.map(item => item.title),
+        urls = this.items.map(item => item.url),
         items = this.items.slice(0)
 
     if(resp.items && resp.items.length){
@@ -104,7 +113,7 @@ class Feed{
             item.url = @url.replace(/^(https?:\/\/.+?)\/.+$/, '\$1') + item.url
          */
         //todo remove items with the same url, dif names
-        if(!titles.includes(item.title)) {
+        if(!urls.includes(item.url)) {
 
           items.unshift(item)
         }else{
@@ -137,8 +146,7 @@ class Feed{
       }
 
 
-  //, {redirect:'manual'}
-      fetch(this.url, {}).then((resp)=>{
+      fetch(this.url, {redirect:'error'}).then((resp)=>{
         //console.log(this.url, resp);
 
 
@@ -152,30 +160,73 @@ class Feed{
           return fileReaderReady(reader)
         })
       }).then ( text=>{
-      //$.get(this.url).then(resp=>{
-        let $xml, $items,result;
-        //let text =resp
+        let $items, title;
+
         try {
-          $xml = $($.parseXML(text));
-          $items = $xml.find("item,entry")
+
+          if(this.regexp){
+            let regexp = this.regexp//.replaceAll("\\", "\\")
+
+            let matches = [...text.matchAll(new RegExp(regexp, 'ig'))]
+
+            if(!matches.length) throw new Error('no match for regexp')
+
+            let titleMatch = text.match(/<title>\s*([^>]+)\s*<\/title>/)
+            title = titleMatch && titleMatch[1] || 'Site Title'
+            $items = matches.map( (i, idx) => {
+              let link = i.groups.url
+              if(link.startsWith("/")){
+                let urlObj = new URL(this.url)
+                link = urlObj.origin + link
+              }
+              return {
+                link,
+                title: i.groups.title,
+                pubDate: Date.now() - idx
+              }
+
+            })
+
+          }else{ //xml
+            if(XMLParser.validate(text) !== true) return callback({error: true});
+
+            let $xml = XMLParser.parse(text, {ignoreAttributes: false});
+
+            if($xml.rss){
+              $items = $xml.rss.channel.item
+              title = $xml.rss.channel.title
+            }else if($xml.feed){
+              $items = $xml.feed.entry
+              title = $xml.feed.title
+
+            }else{
+              throw new Error('cannot find item element')
+            }
+          }
+
+
+          //console.log(title, $items, $xml, this.url)
+
         }catch(e) {
-          console.log(this.url, 'cannot parse xml')
+          console.log(this.url, 'cannot parse', e)
           callback({error: true}, {resp: text})
           return
         }
-        ;
-        //console.log($items, $xml.find('title:first').text());
-        result = {
-          title: $xml.find('title:first').text(),
+
+
+        let result = {
+          title,
+          regexp: this.regexp,
           url: this.url,
           items: []
         }
 
-        $items.toArray().forEach( item=>{
-          let $this = $(item),
-            date_str = $this.find("pubDate").text() || $this.find("published").text() || $this.find("updated").text() || $this.find("date").text(),
-            time = (new Date(date_str)).getTime() || (new Date).getTime(),
-            title = $this.children("title").text();
+        $items.forEach( item=>{
+
+          let  date_str = item.pubDate || item.published || item.updated || item.date
+          let  time = (new Date(date_str)).getTime() || (new Date).getTime()
+          let  title = item.title
+          //console.log(item.link)
 
           if(!date_str) {
             //console.log('no date', $this.find("link").text() || $this.find("link").attr('href'))
@@ -185,19 +236,20 @@ class Feed{
 
           result.items.push({
             title,
-            url: $this.children("link").text() || $this.children("link").attr('href'),
+            url: item.link['@_href'] || item.link,
             date: parseInt(time / 1000)
           })
         })
 
+
         callback(result)
-        document.dispatchEvent(new Event('feedUpdated')); //todo use promise chain
+        typeof document !== 'undefined' && document.dispatchEvent(new Event('feedUpdated')); //todo use promise chain
 
 
       }).catch((err)=>{
         callback({error: true})
 
-        document.dispatchEvent(new Event('feedUpdated'));
+        typeof document !== 'undefined' && document.dispatchEvent(new Event('feedUpdated'));
 
 
       })
@@ -246,7 +298,7 @@ class Feed{
     Object.assign(this, {broken, noPerms})
 
 
-    document.dispatchEvent(new Event('feedUpdated'));
+    typeof document !== 'undefined' && document.dispatchEvent(new Event('feedUpdated'));
 
     //console.log('dia', this)
 
@@ -279,5 +331,4 @@ export default Feed;
 
 
 
-    
-    
+
